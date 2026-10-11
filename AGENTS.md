@@ -116,9 +116,20 @@ Use three levels of repair:
 
 Keep exact substitutions visible in a dictionary or correction file. Avoid broad dictionary-based “spell correction”; it can damage names, quotations, dialect, archaic spelling, and technical language.
 
+Put mechanically safe, cross-book repairs in
+`conversion/common/ocr_corrections.py` and make every builder call
+`apply_common_ocr_corrections`. Keep book-specific and ambiguous corrections
+under `tmp/pdfs/<book>/`. Add a focused test for each shared rule, including a
+negative example when the damaged token can occur inside a valid word. Apply
+the shared normalizer after extraction and again after structural line/page
+joining, because dehyphenation can create new fused tokens.
+
 Pay special attention to:
 
 - fused words (`selfknowledge`, `Ihave`);
+- fused short phrases (`ina` for `in a`), which should be repaired with
+  case-preserving whole-word matches so substrings in names such as `Karenina`
+  are not damaged;
 - false hyphenation at line or page breaks;
 - spaces around em dashes;
 - zero/O and one/I confusion;
@@ -139,6 +150,13 @@ Each navigable section should normally have:
 - quotations as `<blockquote>`;
 - deliberate scene breaks as a semantic or styled divider;
 - stable identifiers for notes and links.
+
+Do not flatten dramatic dialogue into prose. When consecutive OCR lines begin
+with speaker labels such as `FRIAR:` and `ROMEO:`, preserve each speech as a
+separate paragraph inside a quotation/dialogue block. Preserve verse lineation
+with semantic block structure or explicit line breaks where the source makes
+it meaningful, and add a regression check against the collapsed speaker
+sequence.
 
 If the builder generates a chapter heading from the section map, remove the extracted printed heading from the body. Otherwise readers see a duplicated heading.
 
