@@ -23,21 +23,22 @@ project/
 ├── Source Book.pdf
 ├── AGENTS.md
 ├── conversion/
-│   ├── source-book/
-│   │   ├── build_epub.py
-│   │   ├── validate_epub.py
-│   │   ├── corrections.json       # optional book-specific substitutions
-│   │   ├── extracted-pages/       # optional retained diagnostic text
-│   │   └── build/                 # disposable unpacked EPUB tree
-│   └── validate_all.py
+│   └── common/                 # reusable, book-independent tools
+│       ├── detect_italics.py
+│       └── tessdata/
+├── tmp/
+│   └── pdfs/
+│       └── source-book/          # book-specific working material
+│           ├── build_epub.py
+│           ├── validate_epub.py
+│           ├── corrections.json
+│           └── extracted-pages/
 └── output/
     └── epub/
         └── Source Book.epub
 ```
 
-Use `tmp/` only for disposable renderings, text exports, and experiments. Builders, validators, correction data, and this manual are durable project assets and should live outside `tmp/` in future conversions.
-
-The builders for the books already in this project currently remain under `tmp/pdfs/`; move them only as a deliberate refactor because their path calculations depend on their present location.
+Keep general instructions and reusable, book-independent tools outside `tmp/`. In this project, book-specific builders, validators, OCR drivers, covers, regression assertions, formatting evidence, and extracted material belong under `tmp/pdfs/`; only the generalized method is intended to remain as durable repository guidance.
 
 ## End-to-end workflow
 
@@ -270,9 +271,27 @@ OCR may also mismatch quotation styles, such as a single opening mark paired wit
 
 Superscript note symbols may be OCRed as punctuation such as `!`, or as a combination such as `*!`. If later cleanup removes only the asterisk, it can leave a bizarre sentence ending such as `.!`. Confirm the source marker and preserve its note text, then remove the entire body marker before general punctuation cleanup. Scan the packaged EPUB for the stranded signature as a regression check.
 
+### Superscript numeric endnotes misread as symbols
+
+Raised endnote digits can be OCRed as ordinary symbols such as `®`, `°`, or `©`. Do not globally translate any one of these symbols into a digit: the same glyph may be legitimate elsewhere, and different raised digits can collapse to similar OCR output. Verify the printed page, identify the corresponding numbered note in the notes section, and apply a contextual repair. Represent the restored marker semantically as a linked superscript, for example `<a epub:type="noteref" href="notes.xhtml#note-id"><sup>9</sup></a>`, with a stable `id` on the destination note. Validate the source-to-note link in packaged XHTML and confirm that reader text export retains the digit.
+
 ### Running-head variants absorbed into prose
 
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
+
+### Formatting recovery from scanned books
+
+Plain OCR normally discards italics, boldface, small capitals, and other inline styles. First inspect whether the PDF text layer, hOCR, or ABBYY XML contains reliable style metadata. If it does, convert those spans into semantic EPUB markup such as `<em>` and `<strong>`. If the available OCR assigns generic or meaningless fonts, do not infer formatting globally from capitalization or vocabulary.
+
+For style-poor scans, maintain source-verified emphasis terms and contextual corrections. A short common word such as *the* must never be added to a global emphasis list: store the complete surrounding phrase and emphasize only the verified occurrence. Escape the prose first and then insert controlled semantic tags so OCR text cannot become arbitrary HTML. Prefer `<em>` over visual-only `<i>`, add regression assertions against the packaged XHTML, and expand the verified evidence as pages are reviewed. This recovers meaningful formatting incrementally without italicizing ordinary uses of ambiguous words.
+
+This project also includes `conversion/common/detect_italics.py`, which uses hOCR word boxes aligned to rendered pixels. For each word it tests a range of horizontal shear corrections and measures how strongly dark pixels align into vertical strokes. Right-slanted italic words typically show a positive best slant and a meaningful improvement over the zero-slant score. Use its JSON output to prioritize and document review; do not apply its candidates blindly. Exclude running heads and marginal furniture, correct OCR tokens, join adjacent candidates into spans, and store approved results with the book-specific material under `tmp/`.
+
+Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
+
+### Durable tools versus temporary products
+
+Do not leave reusable, book-independent algorithms or the general instruction manual in `tmp/`. Keep book-specific builders, validators, corrections, covers, fixtures, raw OCR, hOCR, unpacked EPUB trees, reader exports, caches, and exploratory measurements in `tmp/`. A useful technique discovered there should be generalized and documented here; only genuinely reusable code should be promoted to `conversion/common/`.
 
 ## Completion checklist
 
