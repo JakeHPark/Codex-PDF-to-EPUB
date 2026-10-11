@@ -1,0 +1,40 @@
+# Source books and generated ebook artifacts
+*.pdf
+*.epub
+output/
+tmp/
+
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments, caches, and secrets
+.venv/
+venv/
+.direnv/
+.env
+.env.*
+!.env.example
+.cache/
+result
+result-*
+
+# Logs and transient files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# Editor and operating-system metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
