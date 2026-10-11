@@ -48,3 +48,30 @@ spans against the rendered page, resolve OCR/token alignment, then emit semantic
 `<em>` markup and add regression assertions. Short italic words may need context;
 the detector only infers them when both neighboring words on the same line are
 already strong italic candidates.
+
+## Whole-book batch recovery
+
+Analyze every content page with resumable per-page output:
+
+```bash
+python3 conversion/common/batch_detect_italics.py \
+  "Source Book.pdf" tmp/pdfs/source-book/italics \
+  --first-page FIRST --last-page LAST --dpi 200 --workers 4 \
+  --tesseract /path/to/tesseract \
+  --tessdata conversion/common/tessdata
+```
+
+The batch runner deletes each temporary rendering and hOCR file after writing
+its JSON evidence. Repeating the command skips completed pages.
+
+Builders can call `mark_page_italics()` from `common/italic_markup.py` after
+page-local text cleanup and before pages are concatenated. The aligner uses OCR
+word order rather than a global vocabulary, so the same word can remain roman
+in one sentence and become `<em>` in another. Replace the private-use markers
+with markup only after HTML escaping, merge adjacent emphasis spans, and write
+the returned statistics to a book-specific report under `tmp/`.
+
+Audit the report for page coverage, weighted alignment, unmatched candidates,
+and unusually low-alignment pages. Finally render the finished EPUB through a
+real reader and compare isolated short emphasis, titles, long italic passages,
+notes, and roman controls with the corresponding PDF pages.

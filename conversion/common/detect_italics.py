@@ -47,17 +47,21 @@ def slant_measure(image, bbox, threshold, max_slant, step):
         return 0.0, 0.0, len(ink)
 
     def projection_score(slant):
-        columns = {}
+        # Italic type in these left-to-right books leans right, so the batch
+        # workflow searches zero and positive corrections only. A dense list
+        # is materially faster than a dictionary for page-scale analysis.
+        offset = round(slant * (height - 1)) + 1
+        columns = [0] * (width + offset + 2)
         for x, y in ink:
-            corrected_x = round(x - slant * (height - 1 - y))
-            columns[corrected_x] = columns.get(corrected_x, 0) + 1
-        return sum(value * value for value in columns.values()) / len(ink)
+            corrected_x = round(x - slant * (height - 1 - y)) + offset
+            columns[corrected_x] += 1
+        return sum(value * value for value in columns) / len(ink)
 
     zero_score = projection_score(0.0)
     steps = round(max_slant / step)
     candidates = [
         (projection_score(index * step), index * step)
-        for index in range(-steps, steps + 1)
+        for index in range(steps + 1)
     ]
     best_score, best_slant = max(candidates)
     gain = (best_score / zero_score - 1.0) if zero_score else 0.0
@@ -78,11 +82,20 @@ def detect(args):
             image, bbox, args.threshold, args.max_slant, args.step
         )
         alphabetic = sum(character.isalpha() for character in text)
-        likely = (
+        long_word = (
             alphabetic >= args.min_chars
             and slant >= args.min_slant
             and gain >= args.min_gain
         )
+        # Very short words contain too little geometry for the ordinary
+        # threshold, but strongly slanted examples are still recoverable.
+        # Keep this deliberately stricter than the long-word test.
+        short_word = (
+            args.short_min_chars <= alphabetic < args.min_chars
+            and slant >= args.short_min_slant
+            and gain >= args.short_min_gain
+        )
+        likely = long_word or short_word
         words.append(
             {
                 "text": text,
@@ -131,6 +144,9 @@ def detect(args):
             "min_chars": args.min_chars,
             "min_slant": args.min_slant,
             "min_gain": args.min_gain,
+            "short_min_chars": args.short_min_chars,
+            "short_min_slant": args.short_min_slant,
+            "short_min_gain": args.short_min_gain,
             "max_slant": args.max_slant,
             "step": args.step,
         },
@@ -157,6 +173,9 @@ def main():
     parser.add_argument("--min-chars", type=int, default=4)
     parser.add_argument("--min-slant", type=float, default=0.08)
     parser.add_argument("--min-gain", type=float, default=0.07)
+    parser.add_argument("--short-min-chars", type=int, default=2)
+    parser.add_argument("--short-min-slant", type=float, default=0.15)
+    parser.add_argument("--short-min-gain", type=float, default=0.15)
     parser.add_argument("--max-slant", type=float, default=0.45)
     parser.add_argument("--step", type=float, default=0.05)
     parser.add_argument("--include-all-words", action="store_true")

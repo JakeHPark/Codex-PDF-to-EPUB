@@ -67,6 +67,8 @@ SECTIONS = [
 
 Check every transition page visually or from layout-preserving text. A chapter can begin halfway through a PDF page. In that case, split at the heading rather than assigning the complete page to either neighboring chapter.
 
+Treat page ranges as search bounds, not ownership boundaries. Extract each physical page once, locate every printed heading with an explicit book-specific pattern, then give the text before that heading to the preceding section and the text after it to the new section. Generate the EPUB heading separately and discard the matched printed heading. `conversion/common/section_boundaries.py` implements this shared-page rule and deliberately fails when an expected heading cannot be found; do not fall back to removing everything before the first blank line. That fallback silently strands sentence continuations and duplicates headings.
+
 After changing one boundary, audit all later boundaries. A single mistaken offset often becomes progressive drift, causing each later chapter to lose its opening and inherit the next chapter’s heading.
 
 ### 3. Extract page text conservatively
@@ -81,6 +83,8 @@ For each page:
 - exclude blank divider pages and reverse-side bleed-through.
 
 Printed typography can confuse extractors. Drop caps and letter-spaced small capitals may become forms such as `A p pa R e n t ly`. Verify these against the rendered page and repair them explicitly.
+
+Some PDF text layers also leak invisible font-run delimiters as standalone characters. Confirm them against the page image before removing them. For example, an isolated `*` may be an internal italic-run marker rather than a printed ornament; genuine scene breaks usually have a distinct repeated or centered form that should be retained.
 
 ### 4. Reconstruct paragraphs across pages
 
@@ -121,6 +125,8 @@ Pay special attention to:
 - missing punctuation at page boundaries;
 - OCR fragments from illustrations or verso bleed-through;
 - headers inserted into prose.
+
+Font changes can damage adjacent text as well as formatting. A PDF may render `*Complete Writings*, Oxford` correctly while its embedded text says `Complete WritingsOxford`: the comma and space disappeared exactly where italic and roman runs meet. Word-only italic alignment cannot restore characters that are absent from the text layer. Compare aligned OCR tokens and geometry with the embedded text; when one embedded token equals two or more consecutive OCR words, split it at the OCR word boundaries and restore only OCR-observed edge punctuation and spacing. Likewise, repair an empty separator between two otherwise aligned words from OCR evidence. `conversion/common/italic_markup.py` performs these constrained repairs before adding emphasis markers and reports the number applied.
 
 ### 6. Generate semantic EPUB XHTML
 
@@ -286,6 +292,12 @@ Plain OCR normally discards italics, boldface, small capitals, and other inline 
 For style-poor scans, maintain source-verified emphasis terms and contextual corrections. A short common word such as *the* must never be added to a global emphasis list: store the complete surrounding phrase and emphasize only the verified occurrence. Escape the prose first and then insert controlled semantic tags so OCR text cannot become arbitrary HTML. Prefer `<em>` over visual-only `<i>`, add regression assertions against the packaged XHTML, and expand the verified evidence as pages are reviewed. This recovers meaningful formatting incrementally without italicizing ordinary uses of ambiguous words.
 
 This project also includes `conversion/common/detect_italics.py`, which uses hOCR word boxes aligned to rendered pixels. For each word it tests a range of horizontal shear corrections and measures how strongly dark pixels align into vertical strokes. Right-slanted italic words typically show a positive best slant and a meaningful improvement over the zero-slant score. Use its JSON output to prioritize and document review; do not apply its candidates blindly. Exclude running heads and marginal furniture, correct OCR tokens, join adjacent candidates into spans, and store approved results with the book-specific material under `tmp/`.
+
+Run formatting recovery across every content page, not merely a representative sample. `conversion/common/batch_detect_italics.py` renders and analyzes pages independently, caches one compact JSON record per page, and deletes temporary images and hOCR. `conversion/common/italic_markup.py` aligns those page-level word records with the builder’s extracted page text, inserts occurrence-level emphasis markers, and reports alignment and application counts. This preserves the distinction between an italic occurrence and a roman occurrence of the same word.
+
+Short words require a stricter classifier, not a global exception. The current detector uses the ordinary slant/gain threshold for words of four or more letters and substantially higher thresholds for two- or three-letter words. A short word inside a consistently italic run can also inherit the run classification. Retain exact contextual overrides only when image evidence cannot classify an isolated occurrence; do not use them as a substitute for the whole-book pass.
+
+After application, require complete evidence-page coverage, high weighted token alignment, no leaked private-use markers, semantic `<em>` markup in packaged XHTML, and reader-rendered spot checks covering isolated emphasis, multiword titles, long italic passages, notes, and nearby roman controls. Running heads may be detected in the page image, but they should remain unmatched because the builder removes them before formatting alignment.
 
 Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
 
