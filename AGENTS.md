@@ -158,6 +158,12 @@ with semantic block structure or explicit line breaks where the source makes
 it meaningful, and add a regression check against the collapsed speaker
 sequence.
 
+A single printed dramatic extract may be split into several OCR blocks by
+blank lines between speeches. Group all contiguous speeches into one
+`blockquote`; do not indent only the middle fragment. Every speech paragraph
+must share the same block-level left edge, while `<br/>` may preserve verse
+lines within a speech.
+
 If the builder generates a chapter heading from the section map, remove the extracted printed heading from the body. Otherwise readers see a duplicated heading.
 
 Part-title pages should contain the part heading only. Do not retain OCR from blank facing pages, ornamental backgrounds, or show-through text.
@@ -301,7 +307,13 @@ Superscript note symbols may be OCRed as punctuation such as `!`, or as a combin
 
 ### Superscript numeric endnotes misread as symbols
 
-Raised endnote digits can be OCRed as ordinary symbols such as `®`, `°`, or `©`. Do not globally translate any one of these symbols into a digit: the same glyph may be legitimate elsewhere, and different raised digits can collapse to similar OCR output. Verify the printed page, identify the corresponding numbered note in the notes section, and apply a contextual repair. Represent the restored marker semantically as a linked superscript, for example `<a epub:type="noteref" href="notes.xhtml#note-id"><sup>9</sup></a>`, with a stable `id` on the destination note. Validate the source-to-note link in packaged XHTML and confirm that reader text export retains the digit.
+Raised endnote digits can be OCRed as ordinary symbols such as `®`, `°`, or `©`. Finding even one is a whole-book audit trigger, not permission to patch only the reported sentence. Inventory every occurrence of those glyphs in body XHTML and in the page-level OCR, excluding verified legitimate uses such as a copyright notice in front matter.
+
+Do not globally translate any one symbol into a digit: the same glyph may be legitimate elsewhere, and different raised digits can collapse to similar OCR output. Recover each occurrence from layout evidence. Re-render the affected page at high resolution, use the stored word bounding box to crop the right edge of the token, run digit-only OCR over several crop widths, and check the candidate against the monotonically increasing note sequence and the corresponding entry in the notes section. Crops that are too wide can absorb the word's final letter and invent a leading `1`, so retain the votes and the reviewed selection as book-specific evidence under `tmp/`.
+
+Remove the entire OCR marker cluster, including false leading digits, quote shapes, asterisks, or question marks, while preserving genuine sentence punctuation and verified closing quotation marks. Represent the restored marker semantically as a linked superscript, for example `<a epub:type="noteref" href="notes.xhtml#note-id"><sup>9</sup></a>`, with a stable destination in the visible notes chapter. Validate every fragment target in packaged XHTML and confirm that reader text export retains the digit.
+
+Make this release-blocking: body XHTML must contain zero unresolved `°`, `®`, or `©` marker glyphs, zero leaked internal placeholders, and the expected number of recovered `<sup>` references. When a glyph class is discovered late, rebuild and rerun the check across the entire book rather than adding a single contextual exception.
 
 ### Running-head variants absorbed into prose
 
