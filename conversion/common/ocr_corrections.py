@@ -14,6 +14,15 @@ import re
 # and reviewable; this is not a general-purpose spell checker.
 COMMON_EXACT_REPLACEMENTS = {
     "‘““": "“",
+    # OCR engines often emit a printed double curly quote as two single curly
+    # quotes. Identical adjacent opening or closing singles cannot represent
+    # valid nested English quotation typography (nesting alternates styles).
+    "‘‘": "“",
+    "’’": "”",
+    "dan gerous": "dangerous",
+    "encour aged": "encouraged",
+    "dom inant": "dominant",
+    "imagina ble": "imaginable",
     "kind ofjustice": "kind of justice",
     "mest prodigious": "most prodigious",
     "th emselves": "themselves",
@@ -57,6 +66,16 @@ def apply_common_ocr_corrections(text: str) -> str:
     text = re.sub(
         r"\b(I|You|We|They|He|She|It)have\b",
         lambda match: f"{match.group(1)} have",
+        text,
+    )
+
+    # A primary double quotation is sometimes closed as single+double (and
+    # occasionally single+double+single). Repair only a short quote with no
+    # nested single opener, so valid nesting such as “He called it ‘no,’” is
+    # untouched. This handles OCR forms like “co-act,’” and “a lover,’”’.
+    text = re.sub(
+        r"“([^“”‘\n]{0,240}?)([.,!?;:])’”(?!’?[°®©*])’?",
+        lambda match: f"“{match.group(1)}{match.group(2)}”",
         text,
     )
     return text

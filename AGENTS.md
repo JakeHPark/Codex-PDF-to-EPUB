@@ -15,6 +15,9 @@ Update this guide whenever an error reveals a reusable lesson. Book-specific cor
 5. Validate the packaged EPUB and a reader-generated text export, not only intermediate XHTML.
 6. Keep conversion recipes reproducible. A correction belongs in the builder, not only in a generated EPUB.
 7. Prefer exact, verified repairs when a broad rule could alter legitimate text.
+8. Generalize detection more aggressively than correction. A shared audit may
+   flag an ambiguous mark across every book; rewriting it still requires
+   layout evidence or an unambiguous structural rule.
 
 ## Recommended project layout
 
@@ -273,6 +276,12 @@ Extraction can introduce spaces adjacent to an em dash. Normalize verified prose
 
 Print footnotes may be inserted into the main flow by PDF extraction. Separate them structurally, remove obsolete print markers, and force visible rendering when popup-note behavior is unreliable.
 
+### Front matter
+
+Omit generic front matter by default when converting a scanned book. Title, copyright, dedication, and other preliminary pages disproportionately contain decorative typography, sparse layouts, and bleed-through that OCR turns into broken text. Keep the cover, but begin the EPUB navigation and reading order at the first substantive section. Remove any generated front-matter document from the manifest, spine, and navigation as well as from the visible contents.
+
+Retain front matter only when the user explicitly requests it or when a preliminary section contains substantively necessary material. In that case, visually verify every retained page and give it the same structural and formatting review as the main text; do not pass raw preliminary-page OCR through merely for completeness.
+
 ### Bleed-through and divider pages
 
 OCR can turn faint reverse-side printing or decorative pages into convincing-looking gibberish. A mostly blank page is not necessarily usable text. Compare suspicious output with a page image and exclude it when appropriate.
@@ -301,9 +310,39 @@ OCR may duplicate a closing quotation mark, but repeated quote characters can al
 
 OCR may also mismatch quotation styles, such as a single opening mark paired with a double closing mark. Compare the phrase with the rendered source page before normalizing it; apostrophes and genuinely nested quotations make global quote substitution unsafe.
 
+Run a stack-based typographic-quotation audit over every page before packaging.
+Treat curly opening and closing marks structurally, ignore a right single mark
+as an apostrophe only when it follows a word and no single quotation is open,
+and flag mismatched or unclosed marks for page-image review. This distinguishes
+valid nesting such as `“He called it ‘no,’”` from corrupt forms such as
+`“co-act,’”` and `“all the world loves a lover,’”’` without globally replacing
+quote clusters. `conversion/common/epub_quality.py` implements this audit.
+
+Write ambiguous quotation findings to a book-specific review report under
+`tmp/`. The report should be regenerated during validation and used to drive
+rendered-page review; it is not itself permission to rewrite every flagged
+mark. Switch the audit to release-blocking only after the report has been
+reviewed or reduced to explicitly documented exceptions.
+
+Normalize adjacent identical curly singles—`‘‘` to `“` and `’’` to `”`—in the
+shared OCR layer. They are a common extraction of one printed double quote and
+cannot be valid nested English typography, since nested quotation levels
+alternate styles. Do not extend this into a general single-to-double quote
+replacement; isolated marks still require stack context or page-image review.
+
+A primary double quotation ending with the OCR cluster `,’”` or `,’”’` may be
+normalized structurally when the quoted span contains no nested single opener:
+retain the punctuation and one closing double quote. This fixes the pattern,
+not a memorized phrase, while preserving a valid nested form such as
+`“He called it ‘no,’”`.
+
 ### Stranded footnote-marker punctuation
 
 Superscript note symbols may be OCRed as punctuation such as `!`, or as a combination such as `*!`. If later cleanup removes only the asterisk, it can leave a bizarre sentence ending such as `.!`. Confirm the source marker and preserve its note text, then remove the entire body marker before general punctuation cleanup. Scan the packaged EPUB for the stranded signature as a regression check.
+
+Numeric endnotes can also be OCRed as an ASCII or curly apostrophe, with or without an asterisk: `denaturing.'*`, `attached.’`, and genuine closing quotation marks can all look deceptively similar in plain text. Textual shape alone must never decide whether such a mark is punctuation or a note. Before stripping symbols, inventory every sentence-final apostrophe-like candidate across the whole body. For each candidate, use its stored word box and baseline position, render a high-resolution crop, run digit-only OCR at several crop widths, and reconcile the result with the chapter's monotonic note sequence and the corresponding notes entry. Record every reviewed decision under the book-specific `tmp/` material, including whether a genuine closing quotation mark must remain. Support multiple recovered markers on one page without relying on the page number as a unique key.
+
+Convert confirmed markers to the same semantic linked-superscript form as other numeric notes. Treat unconfirmed marks as punctuation candidates and resolve them from the rendered source and sentence context; do not globally delete ASCII or curly apostrophes after full stops. Add packaged-XHTML checks for all reviewed cases, for leaked raw marker clusters, for every note target, and for the expected whole-book reference count.
 
 ### Superscript numeric endnotes misread as symbols
 
@@ -313,7 +352,7 @@ Do not globally translate any one symbol into a digit: the same glyph may be leg
 
 Remove the entire OCR marker cluster, including false leading digits, quote shapes, asterisks, or question marks, while preserving genuine sentence punctuation and verified closing quotation marks. Represent the restored marker semantically as a linked superscript, for example `<a epub:type="noteref" href="notes.xhtml#note-id"><sup>9</sup></a>`, with a stable destination in the visible notes chapter. Validate every fragment target in packaged XHTML and confirm that reader text export retains the digit.
 
-Make this release-blocking: body XHTML must contain zero unresolved `°`, `®`, or `©` marker glyphs, zero leaked internal placeholders, and the expected number of recovered `<sup>` references. When a glyph class is discovered late, rebuild and rerun the check across the entire book rather than adding a single contextual exception.
+Make this release-blocking: all packaged XHTML—not only the main body—must contain zero unresolved `°`, `®`, or `©` marker glyphs (apart from individually verified legitimate uses), zero leaked internal placeholders, and the expected number of recovered `<sup>` references. Also inspect reader-exported text, because page-bottom bleed-through in the notes can be joined to a valid note on the following page and evade body-only checks. When a glyph class is discovered late, rebuild and rerun the check across the entire book rather than adding a single contextual exception.
 
 ### Running-head variants absorbed into prose
 
@@ -338,6 +377,14 @@ Marginal section numbers and ornamental boxes may be inserted into the first pro
 ### Durable tools versus temporary products
 
 Do not leave reusable, book-independent algorithms or the general instruction manual in `tmp/`. Keep book-specific builders, validators, corrections, covers, fixtures, raw OCR, hOCR, unpacked EPUB trees, reader exports, caches, and exploratory measurements in `tmp/`. A useful technique discovered there should be generalized and documented here; only genuinely reusable code should be promoted to `conversion/common/`.
+
+The reusable portion of endnote repair belongs in
+`conversion/common/endnote_recovery.py`; only the reviewed glyph decisions and
+source-specific closing punctuation belong under `tmp/`. Use
+`conversion/common/page_reconstruction.py` before joining physical pages so a
+detached marginal fragment cannot be absorbed into the next heading. Run
+`conversion/common/epub_quality.py` against the final container to enforce
+front-matter policy, marker cleanliness, note counts, and fragment targets.
 
 ## Completion checklist
 

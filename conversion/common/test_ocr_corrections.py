@@ -24,6 +24,14 @@ class CommonOcrCorrectionsTest(unittest.TestCase):
             "Their fact-based religion was most prodigious.",
         )
 
+    def test_false_internal_word_spaces(self):
+        self.assertEqual(
+            apply_common_ocr_corrections(
+                "dan gerous claims encour aged the dom inant but imagina ble account"
+            ),
+            "dangerous claims encouraged the dominant but imaginable account",
+        )
+
     def test_whole_token_dictionary(self):
         self.assertEqual(
             apply_common_ocr_corrections("It restedupon a shelf upona table."),
@@ -35,6 +43,28 @@ class CommonOcrCorrectionsTest(unittest.TestCase):
             apply_common_ocr_corrections("‘““Quoted words”"),
             "“Quoted words”",
         )
+
+    def test_doubled_single_curly_marks_become_double_quotes(self):
+        self.assertEqual(
+            apply_common_ocr_corrections("‘‘Quoted words,’’ then prose."),
+            "“Quoted words,” then prose.",
+        )
+
+    def test_malformed_primary_double_quote_cluster(self):
+        self.assertEqual(
+            apply_common_ocr_corrections(
+                "opposites “co-act,’” and (“all the world loves a lover,’”’ because)"
+            ),
+            "opposites “co-act,” and (“all the world loves a lover,” because)",
+        )
+
+    def test_valid_nested_single_quote_is_untouched(self):
+        source = "“He called it ‘no,’” she said."
+        self.assertEqual(apply_common_ocr_corrections(source), source)
+
+    def test_quote_cleanup_does_not_consume_layout_marker_evidence(self):
+        source = "“Nothing better.’”°"
+        self.assertEqual(apply_common_ocr_corrections(source), source)
 
 
 if __name__ == "__main__":
