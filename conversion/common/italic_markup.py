@@ -72,6 +72,48 @@ def repair_fused_word_boundaries(text, detected):
     source = list(WORD_RE.finditer(text))
     detected_words = [normalize_word(item["text"]) for item in detected]
     source_words = [normalize_word(match.group(0)) for match in source]
+
+    # Find unambiguous one-to-many matches even when nearby OCR errors make the
+    # word-level diff group a larger replacement. This catches, for example,
+    # ``CalifornianApril`` against ``Californian,`` + ``April``.
+    broad_insertions = []
+    detected_groups = {}
+    for detected_start in range(len(detected_words)):
+        for width in range(2, 5):
+            pieces = detected[detected_start:detected_start + width]
+            if len(pieces) != width or len({item.get("line") for item in pieces}) != 1:
+                continue
+            key = "".join(detected_words[detected_start:detected_start + width])
+            detected_groups.setdefault(key, []).append(pieces)
+    for source_index, source_word in enumerate(source_words):
+        candidates = detected_groups.get(source_word, [])
+        if len(candidates) != 1:
+            continue
+        pieces = candidates[0]
+        consumed = 0
+        offsets = []
+        observed_punctuation = False
+        for left_piece, right_piece in zip(pieces, pieces[1:]):
+            left_word = WORD_RE.search(left_piece["text"])
+            right_word = WORD_RE.search(right_piece["text"])
+            if not left_word or not right_word:
+                offsets = []
+                break
+            consumed += len(left_word.group(0))
+            if consumed >= len(source[source_index].group(0)):
+                offsets = []
+                break
+            separator = left_piece["text"][left_word.end():] + " " + right_piece["text"][:right_word.start()]
+            observed_punctuation = observed_punctuation or any(not char.isspace() for char in separator)
+            offsets.append((source[source_index].start() + consumed, separator))
+        if observed_punctuation:
+            broad_insertions.extend(offsets)
+    for position, separator in reversed(sorted(set(broad_insertions))):
+        text = text[:position] + separator + text[position:]
+
+    source = list(WORD_RE.finditer(text))
+    source_words = [normalize_word(match.group(0)) for match in source]
+
     matcher = difflib.SequenceMatcher(None, detected_words, source_words, autojunk=False)
     pairs = []
     for block in matcher.get_matching_blocks():
@@ -117,8 +159,7 @@ def repair_fused_word_boundaries(text, detected):
         if detected[detected_a].get("line") != detected[detected_b].get("line"):
             continue
         left, right = source[source_a], source[source_b]
-        if text[left.end():right.start()]:
-            continue
+        existing_separator = text[left.end():right.start()]
         left_token = detected[detected_a]["text"]
         right_token = detected[detected_b]["text"]
         left_word = WORD_RE.search(left_token)
@@ -127,13 +168,21 @@ def repair_fused_word_boundaries(text, detected):
             continue
         trailing = left_token[left_word.end():]
         leading = right_token[:right_word.start()]
+        if existing_separator:
+            # OCR has distinct words but the text layer has punctuation with no
+            # following space (often another font-run join such as ``,Grey``).
+            if any(char.isspace() for char in existing_separator):
+                continue
+            if trailing == existing_separator and not leading:
+                insertions.append((right.start(), " "))
+            continue
         separator = trailing + " " + leading
         insertions.append((left.end(), separator))
 
     insertions = sorted(set(insertions))
     for position, separator in reversed(insertions):
         text = text[:position] + separator + text[position:]
-    return text, len(insertions)
+    return text, len(broad_insertions) + len(insertions)
 
 
 def escape_emphasis_markers(escaped_text):

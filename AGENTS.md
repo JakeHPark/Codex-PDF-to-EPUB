@@ -128,6 +128,8 @@ Pay special attention to:
 
 Font changes can damage adjacent text as well as formatting. A PDF may render `*Complete Writings*, Oxford` correctly while its embedded text says `Complete WritingsOxford`: the comma and space disappeared exactly where italic and roman runs meet. Word-only italic alignment cannot restore characters that are absent from the text layer. Compare aligned OCR tokens and geometry with the embedded text; when one embedded token equals two or more consecutive OCR words, split it at the OCR word boundaries and restore only OCR-observed edge punctuation and spacing. Likewise, repair an empty separator between two otherwise aligned words from OCR evidence. `conversion/common/italic_markup.py` performs these constrained repairs before adding emphasis markers and reports the number applied.
 
+Audit citations as a separate corpus after ordinary prose cleanup. Search packaged XHTML for implausible years (`1.999`), letter-for-digit dates (`April l` or `April i`), split publication words (`Re view`), malformed page labels, missing spaces after closing emphasis or commas, and titles whose `<em>` span stops midway. OCR is useful evidence, but do not replace whole citations blindly: it may fuse punctuation-heavy strings such as `1,1999,p.5;and`. Render every flagged citation, apply contextual corrections for ambiguous digits, and add the corrected full citation plus the malformed signatures to regression tests.
+
 ### 6. Generate semantic EPUB XHTML
 
 Each navigable section should normally have:
