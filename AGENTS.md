@@ -253,6 +253,8 @@ Print footnotes may be inserted into the main flow by PDF extraction. Separate t
 
 OCR can turn faint reverse-side printing or decorative pages into convincing-looking gibberish. A mostly blank page is not necessarily usable text. Compare suspicious output with a page image and exclude it when appropriate.
 
+Do not wait for a reader to find these pages. Before packaging, rank every included OCR page by word count, mean alphabetic-token length, and the proportion of one- or two-letter tokens. Render the outliers, especially pages at chapter ends and before part dividers. Maintain a book-specific set of visually verified blank/bleed-through pages and exclude them before paragraph assembly; never add their gibberish to a cleanup dictionary. Add distinctive OCR fragments from every excluded page to regression tests so a later range change cannot reintroduce them.
+
 ### Decorative initials
 
 Large, spaced, or mixed-case opening letters may be extracted as multiple fragments. These irregular forms require source-verified substitutions rather than a broad whitespace rule.
