@@ -296,6 +296,14 @@ Large, spaced, or mixed-case opening letters may be extracted as multiple fragme
 
 If a chapter title is generated from metadata, strip the printed title from extracted body text. Check that it appears exactly once in a reader export.
 
+Printed headings may consist of several blank-line-delimited display blocks,
+such as a large main title followed by an italic subtitle. Do not remove only
+the first block. Normalize the words of each consecutive opening block and
+remove every block whose words are still accounted for by the generated title;
+stop at the first block containing words outside that title. This preserves the
+opening prose while preventing a subtitle from surviving as a duplicate body
+paragraph. `conversion/common/section_boundaries.py` implements this rule.
+
 ### Cascading section-boundary drift
 
 An incorrect start page can place a new chapter’s heading and opening paragraph at the end of the previous EPUB section, while the new section begins in mid-sentence or mid-word. Audit all downstream boundaries whenever one such error is found.

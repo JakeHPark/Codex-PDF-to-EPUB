@@ -7,6 +7,7 @@ from pathlib import Path
 from endnote_recovery import index_records_by_page, replace_visible_token
 from epub_quality import find_endnote_like_punctuation, find_typographic_quote_issues, validate_epub_policies
 from page_reconstruction import drop_detached_boundary_debris
+from section_boundaries import strip_opening_display_blocks
 
 
 class EndnoteRecoveryTest(unittest.TestCase):
@@ -39,6 +40,28 @@ class PageBoundaryTest(unittest.TestCase):
         previous, removed = drop_detached_boundary_debris("A paragraph.\n\nPS", "More prose")
         self.assertEqual(previous, "A paragraph.\n\nPS")
         self.assertEqual(removed, [])
+
+
+class GeneratedHeadingTest(unittest.TestCase):
+    def test_main_title_and_subtitle_are_both_removed(self):
+        source = (
+            "Interlude on\nTwo Strange Couples:\n\n"
+            "Hal and Falstaff, Montaigne and La Boétie\n\n"
+            "As a farewell to Shakespeare, we will look at one connection."
+        )
+        body, removed = strip_opening_display_blocks(
+            source,
+            "Interlude on Two Strange Couples: Hal and Falstaff, Montaigne and La Boétie",
+        )
+        self.assertEqual(len(removed), 2)
+        self.assertTrue(body.startswith("As a farewell to Shakespeare"))
+
+    def test_opening_prose_is_not_removed(self):
+        body, removed = strip_opening_display_blocks(
+            "1. A Chapter\n\nActual prose starts here.", "1. A Chapter"
+        )
+        self.assertEqual(len(removed), 1)
+        self.assertEqual(body, "Actual prose starts here.")
 
 
 class QuoteAuditTest(unittest.TestCase):

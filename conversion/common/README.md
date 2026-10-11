@@ -41,6 +41,9 @@ Other shared safeguards:
   damaged token.
 - `page_reconstruction.py` prevents a detached marginal fragment from being
   fused to a structural heading on the following physical page.
+- `section_boundaries.py` removes all consecutive printed display blocks
+  represented by a generated title, including a separately styled subtitle,
+  while stopping before the first real prose block.
 - `epub_quality.py` audits curly-quotation nesting, inventories punctuation
   that may be a damaged superscript, verifies every XHTML fragment link,
   rejects unresolved marker glyphs and private-use placeholders, enforces an

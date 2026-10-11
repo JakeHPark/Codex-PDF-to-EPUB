@@ -1,6 +1,43 @@
 """Heading-aware section slicing for PDFs whose chapters share pages."""
 
+from collections import Counter
 import re
+import unicodedata
+
+
+def _heading_words(value):
+    normalized = unicodedata.normalize("NFKD", value).casefold()
+    normalized = "".join(
+        char for char in normalized if not unicodedata.combining(char)
+    )
+    return re.findall(r"[a-z0-9]+", normalized)
+
+
+def strip_opening_display_blocks(text, generated_title):
+    """Remove every leading printed-title block covered by a generated title.
+
+    Display headings often contain a main title and an italic subtitle separated
+    by a blank line. A builder that removes only the first block leaves the
+    subtitle as false opening prose. Preserve the historical one-block fallback
+    for heavily damaged OCR, then remove further blocks only when all their
+    normalized words are still accounted for by the generated section title.
+    """
+    blocks = [block for block in re.split(r"\n\s*\n", text.strip()) if block.strip()]
+    if not blocks:
+        return "", []
+    remaining = Counter(_heading_words(generated_title))
+    removed = [blocks.pop(0)]
+    for word in _heading_words(removed[0]):
+        if remaining[word]:
+            remaining[word] -= 1
+    while blocks:
+        words = _heading_words(blocks[0])
+        counts = Counter(words)
+        if not words or any(counts[word] > remaining[word] for word in counts):
+            break
+        removed.append(blocks.pop(0))
+        remaining.subtract(counts)
+    return "\n\n".join(blocks).strip(), removed
 
 
 def split_at_heading(text, heading_pattern):
