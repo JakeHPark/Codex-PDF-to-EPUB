@@ -43,6 +43,30 @@ project/
 
 Keep general instructions and reusable, book-independent tools outside `tmp/`. In this project, book-specific builders, validators, OCR drivers, covers, regression assertions, formatting evidence, and extracted material belong under `tmp/pdfs/`; only the generalized method is intended to remain as durable repository guidance.
 
+## Prefer a complete structured web edition when available
+
+Before starting OCR, check whether the user has supplied—or an authoritative
+source offers—a complete HTML edition. Prefer that structured text when its
+chapter coverage and provenance can be verified. Record the source URL and
+inventory every chapter before building so a partial web mirror is never
+mistaken for the whole book.
+
+Treat web editions as source recovery too: remove site navigation, headers,
+footers, advertisements, and other chrome while preserving the book's semantic
+markup, paragraph order, emphasis, quotations, and chapter hierarchy. Download
+all book illustrations into the EPUB; never hotlink remote assets. Keep each
+image at its original position in the reading order and wrap it in a semantic
+`<figure>` with an adjacent `<figcaption>`. Prefer the source caption; if it is
+absent, use a meaningful source-provided description such as `alt` text and
+flag generic or missing descriptions for review rather than inventing facts.
+Use responsive image CSS so illustrations fit the reading viewport without
+distortion.
+
+Validation for HTML-derived EPUBs must prove that every expected chapter was
+included, every local image reference resolves and appears in the manifest,
+no remote image URL remains, and every content image renders inline with its
+caption in a representative reader export or preview.
+
 ## End-to-end workflow
 
 ### 1. Inspect the source
