@@ -368,6 +368,25 @@ retain the punctuation and one closing double quote. This fixes the pattern,
 not a memorized phrase, while preserving a valid nested form such as
 `“He called it ‘no,’”`.
 
+### Apostrophes versus quotation marks
+
+Do not infer punctuation from glyph shape alone. ASCII `'`, left and right
+curly singles, and tiny raised note digits can collapse to the same OCR token.
+An ASCII apostrophe is not automatically an endnote marker, and a curly right
+single is not automatically legitimate punctuation. Classify each occurrence
+from its role: internal contractions and possessives are apostrophes; balanced
+single marks may delimit a nested quotation; a lone mark at the beginning of a
+quotation that later closes with `”` may be a damaged double opener; and a
+sentence-final mark above the baseline may be a numeric note reference.
+
+Use a quotation-stack audit and sentence context to find candidates, then use
+the rendered page and word geometry to decide ambiguous cases. Never globally
+replace bare apostrophes with opening double quotes, never globally delete
+apostrophes after punctuation, and never curl every ASCII apostrophe without
+checking whether it is a quote delimiter or a note marker. Preserve reviewed
+decisions in book-specific evidence, but keep this classification procedure and
+its regression checks in the shared workflow.
+
 ### Stranded footnote-marker punctuation
 
 Superscript note symbols may be OCRed as punctuation such as `!`, or as a combination such as `*!`. If later cleanup removes only the asterisk, it can leave a bizarre sentence ending such as `.!`. Confirm the source marker and preserve its note text, then remove the entire body marker before general punctuation cleanup. Scan the packaged EPUB for the stranded signature as a regression check.
