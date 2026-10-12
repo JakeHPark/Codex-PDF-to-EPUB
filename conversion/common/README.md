@@ -9,6 +9,8 @@ Examples:
 
 - `ina` becomes `in a`, but `Karenina` remains unchanged.
 - `Ihave` becomes `I have`.
+- the standalone OCR token `8c` becomes `&` when it is the ampersand glyph;
+  whole-token matching leaves forms such as `18c` intact.
 - `selfknowledge` becomes `self-knowledge`.
 - the impossible duplicated opening sequence `‘““` becomes one opening double
   quotation mark; plausible nested sequences are not changed.
@@ -36,6 +38,10 @@ python3 conversion/common/test_ocr_corrections.py
 
 Other shared safeguards:
 
+- `digital_pdf.py` provides `continues_wrapped_caption` for caption lines that
+  switch fonts after a bold table label. Use the caption boundary to start the
+  panel at its first actual table row, and stop it before the next numbered
+  subsection so the heading and opening prose remain in reading order.
 - `endnote_recovery.py` applies reviewed layout evidence without assuming one
   marker per page and preserves inline emphasis markers while replacing a
   damaged token.

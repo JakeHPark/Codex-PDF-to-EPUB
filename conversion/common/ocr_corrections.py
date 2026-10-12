@@ -31,6 +31,10 @@ COMMON_EXACT_REPLACEMENTS = {
 # Fused tokens repaired only when they occupy a complete word.  This prevents
 # a short OCR signature from changing a legitimate substring of a longer word.
 COMMON_TOKEN_REPLACEMENTS = {
+    # On the verified Blake quotation in Life Is a Miracle, OCR read the
+    # ampersand as `8c`. Keep this whole-token-only because `8c` can also be
+    # meaningful in technical text.
+    "8c": "&",
     "factbased": "fact-based",
     "ofliterature": "of literature",
     "selfknowledge": "self-knowledge",

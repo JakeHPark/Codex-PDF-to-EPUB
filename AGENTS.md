@@ -143,13 +143,27 @@ Use three levels of repair:
 
 Keep exact substitutions visible in a dictionary or correction file. Avoid broad dictionary-based “spell correction”; it can damage names, quotations, dialect, archaic spelling, and technical language.
 
+OCR may mistake an ampersand for the standalone token `8c`. In the verified
+Blake quotation in *Life Is a Miracle*, `..., 8c is productive ...` should read
+`..., & is productive ...`. Apply this only as a whole-token correction and
+confirm it against the rendered source; `8c` can be meaningful in technical
+contexts. The shared correction dictionary records this narrowly bounded token
+repair for future OCR conversions.
+
 Put mechanically safe, cross-book repairs in
-`conversion/common/ocr_corrections.py` and make every builder call
+`conversion/common/ocr_corrections.py` and make every OCR-based builder call
 `apply_common_ocr_corrections`. Keep book-specific and ambiguous corrections
 under `tmp/pdfs/<book>/`. Add a focused test for each shared rule, including a
 negative example when the damaged token can occur inside a valid word. Apply
 the shared normalizer after extraction and again after structural line/page
 joining, because dehyphenation can create new fused tokens.
+
+Do not run OCR spelling or quotation repairs on clean digital PDF or HTML
+text merely for consistency. Preserve the source unless the extraction itself
+introduces a demonstrated defect. Decode saved HTML explicitly as UTF-8 when
+that is its recorded encoding; a fragment without a charset declaration must
+not be left to a parser's legacy-encoding default. Check for mojibake in the
+packaged text as well as in a reader preview.
 
 Pay special attention to:
 
@@ -194,6 +208,60 @@ lines within a speech.
 If the builder generates a chapter heading from the section map, remove the extracted printed heading from the body. Otherwise readers see a duplicated heading.
 
 Part-title pages should contain the part heading only. Do not retain OCR from blank facing pages, ornamental backgrounds, or show-through text.
+
+### Mixed text, tables, graphs, and diagrams
+
+Inventory every numbered figure and table, every embedded image, and every
+continued panel before assembly. Image extraction alone misses tables drawn
+with text and ruling lines, vector diagrams, and labels placed over images.
+Record each object's source page, bounding rectangle, caption, and reading-order
+position. Account for rotated landscape pages and multipage continuations.
+
+Use semantic HTML tables where row/column associations and merged headers can
+be reconstructed and checked against the source. For complex statistical tables
+or diagrams, a verified high-resolution crop is preferable to guessing cells or
+flattening columns into prose. Preserve the entire object, including units,
+legends, significance keys, and table notes. Keep a readable caption adjacent
+to each responsive inline image; do not hotlink assets. Retain enough resolution
+to enlarge dense panels. Document when tables remain images rather than
+searchable, accessible HTML tables.
+
+Exclude each captured object's text from the prose stream, but do not discard
+ordinary text above or below it. A floating table or figure may interrupt a
+sentence at a physical page break. Reconstruct the interrupted paragraph before
+placing the float at the next safe paragraph boundary; do not force the reader
+to resume mid-sentence in a new paragraph after a picture. Keep continued table
+panels adjacent and label them as continuations, not as new tables.
+
+For table crops, detect and keep every wrapped caption line as caption text,
+even when the PDF changes fonts after the bold table number. Start the image at
+the first table header/data row (or its top rule), never at a caption
+continuation. End the image before the next numbered subsection heading and
+its prose; heading fonts may be the same size as table text, so use both font
+and heading structure. Place the extracted heading and opening prose after the
+table in reading order. Compare the caption, crop top/bottom, and neighboring
+text against the rendered PDF page to catch caption fragments and section text
+leaking across those boundaries.
+
+Validate object coverage against the inventory, inspect every crop edge for
+clipped labels or leaked prose, and check representative narrow and wide objects
+in a reader preview. Compare the retained prose separately from captured object
+text, so a completeness check cannot quietly excuse missing text as graphics.
+
+### Preserve substantive front matter
+
+Do not apply a blanket "remove front matter" rule to a whole book. An earlier
+general instruction to remove front matter applies only to generic publisher
+material; this specific preservation rule takes precedence for authored sections.
+Omit publisher advertisements, series lists, copyright/imprint pages, and blank
+leaves when they are not part of the reading experience. Preserve authored
+forewords, prefaces, introductions, prologues, and other substantive opening
+sections, and put them in the book's original reading order before the main
+chapters. Distinguish a standalone introduction in the preliminary pages from
+a numbered Introduction that is already a main chapter; include both when the
+source contains both. Check the contents page and the PDF pages themselves
+before setting the extraction start page. Record explicitly which preliminary
+sections were retained and which publisher matter was omitted.
 
 ### 7. Handle footnotes explicitly
 
@@ -410,6 +478,31 @@ Make this release-blocking: all packaged XHTML—not only the main body—must c
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
 
 ### Formatting recovery from scanned books
+
+For digitally typeset PDFs, first inspect embedded font glyphs as well as font
+names, sizes, and baselines. Some fonts encode small capitals and superscript
+digits as glyph variants (`N.sc`, `one.super`) while the text map returns an
+ordinary lowercase letter or digit at the ordinary body size and baseline.
+Size-based superscript detection misses these. `conversion/common/digital_pdf.py`
+maps CFF glyph names from PyMuPDF's text trace back to positioned characters.
+Use verified `.sc` variants for semantic small-cap spans and `.super` variants
+for superscripts; reconcile numeric references with the complete notes sequence
+and validate every forward and return link. Not every font exposes these names:
+absence of a recognized glyph suffix is not proof of absent formatting.
+
+Retain line coordinates until paragraphs and quotations have been reconstructed.
+A single indented first line usually begins an ordinary paragraph; a sustained
+inset across consecutive lines denotes a block quotation or list. Determine
+the block first, then detect paragraph indents relative to that block's left
+edge. Otherwise every quotation line becomes a separate paragraph and keeps
+its broken hyphenation. Reconstruct multicolumn indexes column by column, not
+by globally sorting all lines by their vertical position.
+
+For digital sources, compare the complete retained character stream and italic
+character stream with the packaged output, allowing only the explicitly
+documented whitespace/dehyphenation transformations. Inspect all unusually
+short paragraphs and any paragraph ending with a hyphen. Exact character
+coverage does not prove correct paragraph grouping, so retain both checks.
 
 Plain OCR normally discards italics, boldface, small capitals, and other inline styles. First inspect whether the PDF text layer, hOCR, or ABBYY XML contains reliable style metadata. If it does, convert those spans into semantic EPUB markup such as `<em>` and `<strong>`. If the available OCR assigns generic or meaningless fonts, do not infer formatting globally from capitalization or vocabulary.
 
