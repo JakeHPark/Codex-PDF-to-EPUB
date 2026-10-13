@@ -248,6 +248,105 @@ clipped labels or leaked prose, and check representative narrow and wide objects
 in a reader preview. Compare the retained prose separately from captured object
 text, so a completeness check cannot quietly excuse missing text as graphics.
 
+### Floating instructional panels and nested exercise lists
+
+Count semantic figures separately from PDF image placements. One anatomical
+illustration may consist of many bitmap tiles, vector paths, arrows, and text
+labels. Inventory all these components before defining a crop; an extracted
+bitmap alone is not proof that the complete illustration was recovered.
+
+Captions can appear above, below, or beside their artwork. A short caption's
+width does not define the panel width. Use verified separator rules, neighboring
+panels, image placements, and labels to establish boundaries, with explicit
+source-reviewed overrides for irregular layouts. Inspect every crop edge in
+contact sheets made from the actual packaged assets. Check bitmap coverage
+against placement rectangles, and inspect vector lines and labels separately;
+complete bitmap coverage cannot detect a clipped vector label or leaked artwork
+from a neighboring figure. Keep continued panels together in reading order.
+
+An instructional panel may contain ordinary prose and nested numbered/lettered
+steps around photographs. Recover those descriptions as semantic paragraphs and
+lists. If the corresponding print text is removed from a rendered image, retain
+the original step numbers and letters beside the pictures so readers can match
+them to the reflowed descriptions. Perform removal on a copy of the source,
+preserving photographs and diagram strokes, and verify the resulting assets.
+Do not duplicate entire exercise descriptions inside images and as body text.
+
+Measure list indentation relative to the current column's left edge. Alternating
+page margins or a column change do not create a new nesting level. Preserve list
+continuity and explicit numbering across pages; use full-width headings to split
+column-reading bands, then read each column in order. Place floats at complete
+paragraph or list-item boundaries, and check that combined multi-step panels do
+not become children of only the final step. Validate legal list structure and
+inspect representative numbered lists with nested alphabetic steps in a reader.
+
+Small type outside a captured object can be substantive: qualifications,
+footnotes, exercise cautions, and cross-references often use the same small fonts
+as figure labels. Audit excluded lines by font and position before release.
+Reconcile every exclusion with a captured object or an explicitly documented
+omission; retained-text coverage alone cannot expose wrongly excluded notes.
+Keep recovered notes visibly separate from the main paragraphs and preserve
+their relationship to the relevant figure, table, or passage.
+
+A source may already replace an illustration with an availability or rights
+notice. Retain the notice and original caption, record the missing source
+artwork, and report that limitation. Do not treat it as a failed extraction or
+invent a substitute. Complex tables and blank assessment forms may remain
+verified, enlargable images; document their lack of searchable cell text.
+
+Compare the retained source character stream in verified reading order with
+packaged prose, allowing only documented transformations. Check styling and
+paragraph/list grouping separately, then verify that a reader export retains
+every complete paragraph. Rebuild these checks after any crop or font-role
+change, because changing object boundaries also changes which text is retained.
+
+### Sidebar notes are independent text streams
+
+A marginal note can overlap the vertical span of ordinary prose or a list.
+Never sort its lines together with neighboring body lines by height: that
+interleaves two independent sentences and can split list items. Identify a
+sidebar from its complete text block, sustained narrow width, smaller type,
+and position relative to the main text column. Small type alone is insufficient;
+figure labels, captions, table cells, and footnotes can share that font.
+
+Read and join all wrapped lines within the sidebar first, preserving genuine
+paragraphs, bullets, and emphasis. Render it as a visible semantic `<aside>`,
+with restrained styling and no fixed width that makes it unreadable on a small
+screen. For textbook sidebars, default to introductory placement: put a marginal
+quotation or aphorism near the beginning of its source page's material, before
+the first complete body paragraph, and after the generated section title when
+it opens a section. If the page begins with a sentence continued from the
+preceding page, finish that sentence/paragraph before inserting the sidebar.
+Do not routinely defer introductory material to the page end or past an
+author's closing sign-off. Treat explicit qualifications, cross-references,
+and table/list notes as contextual exceptions: place them after the complete
+paragraph or list they qualify, with source evidence recorded in the builder. A note that
+qualifies a nested list belongs after that list, not inside its final bullet.
+Do not reproduce print-only line breaks or describe an editorial sidebar as a
+quotation. Remove a leading print-marker asterisk only after its role and
+association have been confirmed; keep substantive asterisks elsewhere.
+
+Do not limit recognition to one small font size, a list of page numbers, or
+blocks already classified as notes. A pull quote or marginal commentary may use
+larger type and initially be mistaken for body text or an inset quotation.
+Inventory narrow blocks that occupy a separate horizontal region and overlap
+main-column prose vertically, then review typography and neighboring content.
+Treat italic/bold variants of the same font family as the same family when
+using font differences as evidence. Weight font-family evidence by text length;
+a tiny bullet or alphabetic marker in a different font does not define the
+surrounding prose. Ordinary narrow exercise instructions must
+remain list content, so record rejected candidates as well as confirmed ones.
+`conversion/common/sidebars.py` implements this reusable candidate search;
+its tests cover both margins, multiple sizes, inset quotations, and narrow
+instructions that must not be reclassified.
+
+Audit every similar marginal block when one failure is found. Compare main-body
+reading order and sidebar text separately, and add checks that the recovered
+note is one complete paragraph, neighboring sentences remain complete, and
+list numbering/nesting continues correctly after the note. Verify placement
+in a reader, because character counts can pass even when two text streams have
+been interleaved.
+
 ### Preserve substantive front matter
 
 Do not apply a blanket "remove front matter" rule to a whole book. An earlier
@@ -504,6 +603,14 @@ remove every block whose words are still accounted for by the generated title;
 stop at the first block containing words outside that title. This preserves the
 opening prose while preventing a subtitle from surviving as a duplicate body
 paragraph. `conversion/common/section_boundaries.py` implements this rule.
+
+Large preliminary-section titles can sit in a margin and be extracted after
+the page's body text. Audit opening-page display text independently of its PDF
+block order and horizontal position. When a verified printed title matches the
+generated heading, classify and remove it before prose ordering; a fallback
+that treats every large front-matter font as body text can append “Preface” or
+“Introduction” to an author's sign-off. Check every substantive preliminary
+section for one correctly placed heading and no leaked title in body paragraphs.
 
 ### Cascading section-boundary drift
 
