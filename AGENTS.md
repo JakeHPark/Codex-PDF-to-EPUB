@@ -905,6 +905,58 @@ Continue accepting reader corrections. Each time:
 - add a narrow automated check or correction where safe;
 - record the generalized lesson here without cluttering the guide with every isolated typo.
 
+### Pāli and other scholarly transliterations
+
+Treat diacritics as substantive letters, not decorative accents. For Romanized
+Pāli, explicitly audit `ā ī ū ṅ ñ ṭ ḍ ṇ ḷ ṃ`, their capitals, and any additional
+letters used in Sanskrit, Sinhala names, or cited languages. Do not restore a
+word from an accentless dictionary or a familiar Buddhist term alone: similar
+forms can have different meanings, and editions may use different spellings,
+compound divisions, or transliteration conventions. The authoritative printed
+source decides the reading; another transcription is alignment evidence.
+
+A digitally typeset PDF can look correct while its selectable text is corrupt.
+Legacy transliteration fonts may put `ā`, `ī`, or `ṇ` in code positions that
+extract as unrelated Latin accents. Even a TrueType cmap or a glyph named
+`aacute` can describe the legacy position rather than the printed character.
+Inventory every non-ASCII character by font, make a labelled atlas of rendered
+glyphs with word context, and verify the complete mapping, including rare
+letters and capitals. Keep edition-specific maps and their page evidence in
+the book's builder. Apply them only to the demonstrated font/encoding; preserve
+genuine accents in French titles, German names, and other languages. Check
+ordinary punctuation and apparently mathematical characters too, since a legacy
+font may reuse those positions for letters.
+
+When actual OCR is necessary, retain high-resolution word crops and compare
+independent recognition with the source. Italics, tiny underdots, macrons,
+overdots, and tildes need special attention. Classify combining marks by their
+position relative to the base letter; do not turn every accent into a macron
+or every `n` into a retroflex nasal. Normalize verified Unicode to NFC and
+test both searching and reader display. Never remove diacritics merely to make
+the ebook searchable. Use a Unicode font with the required glyph coverage if a
+reader preview exposes missing letters or badly placed marks.
+
+Recover emphasis independently from spelling. Align positioned source font
+spans with the corrected text, including punctuation at run boundaries and
+words split across lines. A Pāli word is not automatically italic, and an
+italic span is not necessarily Pāli: English explanations, quotations, titles,
+and bibliographic citations also have source typography. A structured reference
+can contain correct words while inventing emphasis, losing it, or leaking
+Markdown asterisks and editorial placeholders. Audit those separately, and
+verify the whole retained italic character stream where the font evidence is
+reliable. Do not carry the reference's extra abbreviations, rewritten wording,
+or unfinished editorial notes into a source-faithful edition.
+
+Keep genuine hyphens inside Pāli compounds and grammatical analyses. A physical
+line-ending hyphen is only a candidate for removal; compare the complete word
+with independent occurrences and the printed source before joining it. Retain
+semantic verse lineation, numbered paragraphs, commentary notes, and internal
+chapter/paragraph references. Pāli glossaries are substantive content, even
+when a nonfunctional print-page index is omitted. Validate every glossary entry
+and every note target, and inspect representative long italic terms, stacked
+diacritics, verse, glossary columns, and dense tables in a reader. Record which
+complex tables remain source images and therefore lack searchable interiors.
+
 ### Sentence dashes represented by ordinary hyphens
 
 OCR may reduce sentence dashes to ASCII hyphens, and the source itself may use
