@@ -400,6 +400,40 @@ paragraph contains two separate labels. Check reader output and a rendered
 profile as well as source character coverage; coverage alone cannot detect
 merged fields.
 
+### Use an older EPUB as an edition reference
+
+When a revised PDF and an older EPUB are both supplied, the revised PDF is the
+textual authority. Inventory edition-specific chapters, preliminary sections,
+notes, bibliography, index, maps and tables before assembly. Do not assume that
+an unchanged chapter title means unchanged prose, note numbering, or pagination.
+Use the older EPUB to clarify semantic hierarchy, paragraph structure, emphasis
+and verified compound spellings only where the revised source agrees. Record
+exact matches and differences; never substitute the old chapter wholesale or
+silently undo an author's revision. Rebuild metadata and navigation for the
+revised edition, including new material and revised index page targets.
+
+For digital PDFs, reconcile the complete retained character stream and italic
+stream with packaged XHTML, after documented ligature, whitespace and verified
+line-break transformations. Keep separate coverage checks for notes and objects;
+reordering a captured table into cells cannot excuse missing surrounding prose.
+Recover raised note digits from actual spans/geometry, inventory every note, and
+validate the full chapter sequence plus all forward and return links. A note
+marker may sit a few points away from the usual margin; use its raised-number
+span rather than one exact x coordinate to identify the entry.
+
+Read tables by positioned characters when the extractor merges an adjacent
+numeric cell into a label's text run. Reconstruct and verify wrapped row labels,
+column headers, each value, and table notes; do not treat one PDF line or span as
+one cell. Keep responsive maps adjacent to captions and verify them in a reader.
+
+Determine list blocks before ordinary paragraph indents: list continuation lines
+can share the same indentation as normal paragraph openings. Retain each whole
+bullet or numbered item across lines, then use block boundaries and source gaps
+to return to prose. Empty page anchors must not interfere with dehyphenation;
+remove the last visible hyphen, not an intervening zero-width marker. Check every
+expected print-page anchor when linking a revised index, including pages absent
+from a sampled set of index references.
+
 ## Correction-driven maintenance
 
 When a reader reports an error:
