@@ -160,10 +160,31 @@ joining, because dehyphenation can create new fused tokens.
 
 Do not run OCR spelling or quotation repairs on clean digital PDF or HTML
 text merely for consistency. Preserve the source unless the extraction itself
-introduces a demonstrated defect. Decode saved HTML explicitly as UTF-8 when
+introduces a demonstrated defect or the source contains a very obvious typo
+under the rule below. Decode saved HTML explicitly as UTF-8 when
 that is its recorded encoding; a fragment without a charset declaration must
 not be left to a parser's legacy-encoding default. Check for mojibake in the
 packaged text as well as in a reader preview.
+
+### Correct very obvious typos in the source
+
+Correct an unmistakable typo even when it is printed in the source itself,
+including in clean digital PDFs or structured text. Confirm the occurrence
+against the source and check enough surrounding text to establish the intended
+reading. Use a narrow, contextual correction in the book's reproducible builder,
+record the original and replacement with the source location, and add a
+regression check when practical. Report these editorial corrections to the user;
+no separate confirmation is needed for a correction whose intended reading is
+unambiguous. Preserve ambiguous wording, unusual spelling, dialect, names, and
+valid nested punctuation rather than applying broad spelling or quote cleanup.
+
+For example, a sentence ending `and 350 milliseconds, respectively.”` may
+contain a stray closing double quote. If the surrounding text confirms that
+there is no matching opener and any earlier quotation is already closed,
+remove only the stray quote, retaining the full stop and any following note
+reference. Likewise, an unmistakable misspelling such as `be a virture.` can
+be corrected to `be a virtue.` Do not generalize either example into deleting
+all quotes after full stops or rewriting every unfamiliar word.
 
 Pay special attention to:
 
@@ -367,6 +388,14 @@ sections were retained and which publisher matter was omitted.
 Never leave a printed footnote embedded between ordinary prose paragraphs.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
+
+A source may cite the same note more than once. Preserve those repeated
+references rather than treating them as duplicate extraction or requiring a
+strictly increasing reference sequence. Give every occurrence a unique anchor,
+link all occurrences to the same note entry, and provide return links to each
+occurrence when practical. Validate reference occurrences and unique note
+entries as separate counts; restarting numbering in another chapter also needs
+chapter-qualified note identifiers.
 
 Reader support for semantic popup footnotes is inconsistent. If notes must always be visible, render them as ordinary block content, for example:
 
