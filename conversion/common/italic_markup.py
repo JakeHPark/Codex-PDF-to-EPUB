@@ -194,6 +194,25 @@ def plain_marked_text(text):
     return text.replace(EM_START, "").replace(EM_END, "")
 
 
+def remove_verified_word_hyphens(text, repairs):
+    """Remove only reviewed word hyphens, even across inline style markers.
+
+    The caller supplies source-verified whole-word pairs. Keep emphasis markers
+    in their original positions and reject repairs that change other characters.
+    """
+    for damaged, restored in repairs.items():
+        if '-' not in damaged or damaged.replace('-', '') != restored:
+            raise ValueError(f'Not a hyphen-only repair: {damaged!r}')
+        positions = [i for i, c in enumerate(text) if c not in {EM_START, EM_END}]
+        visible = ''.join(text[i] for i in positions)
+        removals = set()
+        for match in re.finditer(r'(?<!\w)' + re.escape(damaged) + r'(?!\w)', visible):
+            removals.update(positions[i] for i in range(match.start(), match.end())
+                            if visible[i] == '-')
+        text = ''.join(c for i, c in enumerate(text) if i not in removals)
+    return text
+
+
 def visible_first_character(line):
     return plain_marked_text(line)[:1]
 

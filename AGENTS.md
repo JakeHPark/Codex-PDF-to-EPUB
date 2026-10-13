@@ -372,6 +372,34 @@ In quotation-stack audits, classify an internal contraction or possessive
 apostrophe before consuming an open single-quote delimiter. `‘No. I’m busy.’`
 contains an apostrophe inside a single quotation, not its premature closing mark.
 
+### Repairs across inline formatting and profile fields
+
+Review corrections on the visible character stream, not only on the raw markup.
+An emphasis boundary can interrupt a damaged word, causing a plain string repair
+to miss it. `conversion/common/italic_markup.py` provides
+`remove_verified_word_hyphens`: it matches reviewed whole-word hyphen repairs
+while ignoring internal emphasis markers, removes only the verified hyphen, and
+preserves formatting. Check the complete reconstructed word's emphasis against
+the source, including fragments on both sides of a physical line break. Never
+remove all hyphens globally; legitimate compounds must remain. Test both the
+packaged text and the complete expected `<em>` span for reported examples.
+
+Audit mixed dash clusters such as `—-` and `-—` throughout the packaged book and
+reader export, especially epigraph attributions. One printed dash can be
+recognized as two different characters. Verify each flagged cluster against the
+source and record narrowly scoped repairs; do not globally collapse every dash
+sequence, because deliberate repeated dashes may be meaningful.
+
+Repeated profile or questionnaire labels are structural boundaries even when
+they end in punctuation. A regex word boundary after `?` does not match the
+following space: use an explicit delimiter or lookahead appropriate to the
+label instead. Start each profile field in its own paragraph and append wrapped
+answer lines only to that field. When one merged field is reported, audit every
+profile and every known label, count the expected fields, and assert that no
+paragraph contains two separate labels. Check reader output and a rendered
+profile as well as source character coverage; coverage alone cannot detect
+merged fields.
+
 ## Correction-driven maintenance
 
 When a reader reports an error:

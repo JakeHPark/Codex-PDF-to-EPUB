@@ -76,3 +76,8 @@ italics with `<em>`, then inspect reader output and question/answer transitions.
 
 Run measurement checks with `python3 conversion/common/test_scan_styles.py`
 (requires NumPy).
+
+`italic_markup.remove_verified_word_hyphens` applies source-verified whole-word
+hyphen deletions across emphasis markers while retaining those markers. It
+rejects repairs that change characters other than hyphens. Run its positive and
+negative checks with `python3 conversion/common/test_italic_repairs.py`.
