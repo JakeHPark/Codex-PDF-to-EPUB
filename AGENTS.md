@@ -1031,3 +1031,31 @@ synonyms, and subtopics. Retain or rebuild it when the user requests it or when
 its references can be converted to verified links to the relevant passages or
 preserved print-page anchors. Do not treat reflowed reader page numbers as
 equivalent to the original print pagination.
+
+### Academic papers and positioned objects
+
+Preserve a paper's title, author, version/date, publication or working-paper
+identifier, abstract, classification codes, and authored acknowledgments.
+Separate institutional boilerplate and postal/contact details from substantive
+front matter. Preserve numbered section/subsection hierarchy in both content
+and navigation, and keep footnotes distinct from bibliographic references.
+
+Inspect the abstract and preliminary pages visually even when the main text's
+font metadata is reliable. A visibly italic title can be reported within an
+ordinary roman-font span with no italic flag. Matching the extracted italic
+stream cannot prove that all visible emphasis was recovered. Store a contextual,
+source-verified formatting repair for such cases and test the packaged span;
+do not describe missing metadata as evidence that the source uses plain type.
+
+When reconstructing a table, group positioned cells into verified row bands
+before extracting each row. A PDF may report each cell as a separate text line;
+extracting the entire row once for every cell duplicates all its values. Check
+expected row counts, every value's row/column association, and numeric-cell
+coverage with multiplicity. Preserve multilevel headers and blank cells.
+
+An embedded figure bitmap's native aspect ratio can differ from its printed PDF
+placement. Inspect its transformation/placement rectangle before reusing the
+raw asset. Preserve the verified printed appearance with a source-rendered crop
+when necessary; retain labels and legends, and keep captions and figure notes
+as adjacent text. Do not silently fix contradictions already present between a
+figure's title, axes, and source note.
