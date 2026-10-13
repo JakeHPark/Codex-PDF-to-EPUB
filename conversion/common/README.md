@@ -64,3 +64,15 @@ Run their focused checks with:
 ```sh
 python3 conversion/common/test_conversion_quality.py
 ```
+
+### Pixel formatting evidence
+
+`scan_styles.py` measures stroke survival and slant on grayscale word crops when
+scan OCR has no trustworthy font metadata. Calibrate against verified roman,
+bold, and italic examples at one rendering scale; store classification thresholds
+and layout decisions in each book recipe. These measurements are evidence, not
+a universal font classifier. Preserve bold paragraphs with `<strong>` and nested
+italics with `<em>`, then inspect reader output and question/answer transitions.
+
+Run measurement checks with `python3 conversion/common/test_scan_styles.py`
+(requires NumPy).

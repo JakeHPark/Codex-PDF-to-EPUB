@@ -70,11 +70,15 @@ def find_typographic_quote_issues(
         elif char == "”":
             close_quote(position, char, "double")
         elif char == "’":
+            previous = text[position - 1] if position else ""
+            following = text[position + 1] if position + 1 < len(text) else ""
+            # Classify internal contractions before consulting the quote stack.
+            # A nested quote may contain "I'm" without ending at its apostrophe.
+            if previous.isalnum() and following.isalnum():
+                continue
             if stack and stack[-1][0] == "single":
                 stack.pop()
                 continue
-            previous = text[position - 1] if position else ""
-            following = text[position + 1] if position + 1 < len(text) else ""
             # Internal contractions/possessives, leading elisions (`’Twixt`,
             # `’gainst`), and abbreviation possessives (`Ph.D.’s`) are
             # apostrophes even though the glyph is also a closing quote.

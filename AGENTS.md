@@ -341,6 +341,37 @@ At minimum, inspect:
 - bibliography and index samples;
 - any page whose extraction required a special repair.
 
+### Recover bold from scans
+
+An embedded OCR text layer may label every word with the same roman font even
+when the printed questions are bold. Inspect actual pixels before trusting font
+metadata. `conversion/common/scan_styles.py` measures stroke thickness through
+one-pixel erosion and italic slant through shear/projection evidence. Render at
+a fixed scale, calibrate with visually verified bold and roman samples of the
+same type size, and retain positioned word/line scores for the whole book.
+Thresholds belong in the book recipe; they depend on resolution, font, contrast,
+and scan quality. Review roman controls as well as candidate bold lines.
+
+Reconstruct full question or prompt paragraphs across lines and pages, then
+wrap their text in `<strong>`; preserve nested `<em>` when a bold question also
+contains italics. Statements can be bold prompts and ordinary prose can contain
+question marks, so punctuation or wording alone cannot decide formatting.
+Distinguish interview pullquotes and profile labels from question paragraphs.
+Validate transitions between prompts and answers, continuation pages, source
+character coverage, and rendered reader samples.
+
+For inset blocks, consecutive indented lines are evidence only when their
+vertical gaps and left edges establish one sustained block. A normal first-line
+indent following a centered quotation must not be absorbed into the quotation.
+Resolve block boundaries before paragraph indents, and measure indents relative
+to that block's own left edge. Audit paragraph-ending discretionary hyphens even
+when complete character coverage passes: coverage cannot detect a word split
+between two paragraphs.
+
+In quotation-stack audits, classify an internal contraction or possessive
+apostrophe before consuming an open single-quote delimiter. `‘No. I’m busy.’`
+contains an apostrophe inside a single quotation, not its premature closing mark.
+
 ## Correction-driven maintenance
 
 When a reader reports an error:

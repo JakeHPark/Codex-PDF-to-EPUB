@@ -68,6 +68,10 @@ class QuoteAuditTest(unittest.TestCase):
     def test_valid_nested_quotes_pass(self):
         self.assertEqual(find_typographic_quote_issues("“He called it ‘no,’” she said."), [])
 
+    def test_contractions_do_not_close_nested_quotes(self):
+        self.assertEqual(find_typographic_quote_issues("“He said, ‘No. I’m busy.’ Just like that.”"), [])
+        self.assertEqual(find_typographic_quote_issues("“‘We’re going to talk,’ she said.”"), [])
+
     def test_mismatched_single_inside_double_is_flagged(self):
         issues = find_typographic_quote_issues("opposites “co-act,’” and")
         self.assertTrue(any(issue.character == "’" for issue in issues))
