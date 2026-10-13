@@ -400,17 +400,33 @@ paragraph contains two separate labels. Check reader output and a rendered
 profile as well as source character coverage; coverage alone cannot detect
 merged fields.
 
-### Use an older EPUB as an edition reference
+### Use a secondary transcription as a reference
 
-When a revised PDF and an older EPUB are both supplied, the revised PDF is the
-textual authority. Inventory edition-specific chapters, preliminary sections,
-notes, bibliography, index, maps and tables before assembly. Do not assume that
-an unchanged chapter title means unchanged prose, note numbering, or pagination.
-Use the older EPUB to clarify semantic hierarchy, paragraph structure, emphasis
-and verified compound spellings only where the revised source agrees. Record
-exact matches and differences; never substitute the old chapter wholesale or
-silently undo an author's revision. Rebuild metadata and navigation for the
-revised edition, including new material and revised index page targets.
+When a useful but imperfect transcription is available alongside a more
+authoritative source, compare them regardless of format. The reference may be
+an EPUB, cleaned-up OCR PDF, HTML edition, plain text, or another transcription;
+the authority may be a scan, digital document, or revised edition. Establish
+which source governs the requested edition from the user's instructions,
+provenance, and edition information. Easier extraction, cleaner formatting, or
+a newer file date alone does not establish textual authority.
+
+Inventory chapters, preliminary sections, notes, bibliography, index, maps and
+tables in both sources before assembly. Align corresponding passages using
+headings and surrounding text, not page numbers alone. Do not assume that an
+unchanged chapter title means unchanged prose, note numbering, or pagination.
+Use the secondary transcription to recover semantic hierarchy, paragraph
+structure, emphasis, spelling, or obscured characters only where the governing
+source supports that reading. Check ambiguous differences against the source
+image or layout; record unresolved readings rather than silently choosing the
+cleaner transcription. Record verified matches, differences, and the provenance
+of repairs in the reproducible conversion recipe. Never substitute a reference
+chapter wholesale without verifying its complete agreement, import its errors,
+or silently undo an author's revision.
+
+Build metadata, navigation, notes, and any retained index targets for the governing source,
+including material absent from the reference. Validate coverage against that
+source separately from comparison with the secondary transcription, so shared
+omissions or reference-only text cannot pass unnoticed.
 
 For digital PDFs, reconcile the complete retained character stream and italic
 stream with packaged XHTML, after documented ligature, whitespace and verified
@@ -431,7 +447,7 @@ can share the same indentation as normal paragraph openings. Retain each whole
 bullet or numbered item across lines, then use block boundaries and source gaps
 to return to prose. Empty page anchors must not interfere with dehyphenation;
 remove the last visible hyphen, not an intervening zero-width marker. Check every
-expected print-page anchor when linking a revised index, including pages absent
+expected print-page anchor when linking an index, including pages absent
 from a sampled set of index references.
 
 ## Correction-driven maintenance
@@ -888,3 +904,130 @@ Continue accepting reader corrections. Each time:
 - inspect whether the defect exposes a broader process failure;
 - add a narrow automated check or correction where safe;
 - record the generalized lesson here without cluttering the guide with every isolated typo.
+
+### Sentence dashes represented by ordinary hyphens
+
+OCR may reduce sentence dashes to ASCII hyphens, and the source itself may use
+ordinary hyphens for sentence punctuation. Do not replace all hyphens globally. Inventory hyphenated
+tokens with their surrounding clauses, distinguishing lexical compounds,
+numeric ranges, suspended compounds (`lower-middle- and middle-class`),
+discretionary word breaks, and clause punctuation. Recover line-wrapped words
+before deciding what the remaining hyphen means. Preserve compounds within a
+longer construction: `parent-lover-friend-the` may contain two lexical hyphens
+and one sentence dash. Compound recognition must work at each edge, rather than
+classifying the entire token uniformly. Keep source-specific reviewed decisions
+in the builder or a correction file, and audit both the converted dashes and the
+hyphens retained. An unknown compound is a review candidate, not a safe general
+rule for automatic replacement. Test genuine compounds, suspended compounds,
+names, year/page ranges, and sentence dashes in the packaged reader export.
+
+### Outlined text in PDFs
+
+A PDF can contain ordinary selectable prose while rendering
+chapter titles, interview dialogue, verse, or an entire index as vector outlines.
+A blank text extraction is not evidence of a blank leaf. Inventory visible
+vector paths and image placements across every page, and compare them with the
+text boxes before setting section boundaries or deciding which pages to omit.
+Recover outlined text from isolated, high-resolution crops and verify OCR
+against those crops. Exclude decorative rules and underlines from that OCR;
+a crop of an underline can otherwise duplicate the selectable paragraph above
+it. Preserve dialogue speeches and verse lineation when reinserting the text.
+When an outlined index is explicitly retained and cannot be faithfully
+reconstructed as semantic text, preserve complete, sharp source panels and
+document that limitation. Crop away
+empty page margins, verify every panel, and constrain both image width and
+height so a narrow, tall panel does not create blank pages in a reader export.
+
+PDFs containing previously OCR'd text may also reproduce damaged note markers as
+ordinary baseline characters. Re-rendering or running OCR again cannot restore
+a digit that the PDF itself has already replaced with an apostrophe. Separate
+source corruption from new extraction errors. Recover a marker only when the
+surrounding passage, adjacent reference sequence, and corresponding note entry
+support it; preserve and report uncertain source punctuation rather than inventing
+a number. Recognize new note entries before joining physical pages: a page-top
+`16.` is a new note even when its left edge matches a prose continuation. Split
+multiple note entries inside a single PDF block using their line starts, then
+check each chapter's complete note sequence and all generated link targets.
+
+### Fused words and digit errors inherited from an OCR ebook
+
+When a PDF was made from an OCR ebook, defects such as `ForJoe`, `importantto`,
+`ofwhat`, or `6:3o` may already be present in both its selectable text and its
+visible page. Compare the original page and positioned characters before blaming
+paragraph joining or EPUB rendering. Re-OCRing that same defective page cannot
+restore a space or digit that was absent when the PDF was produced.
+
+Audit letter/digit mixtures in times, years, percentages and page references,
+and unexpected internal capitals and fused short words. Detection may be broad;
+corrections must use reviewed whole tokens or tightly constrained contexts. Do
+not split every word beginning with `of`, `in` or `for`, and do not replace every
+`o`, `i` or `l` with a digit. Legitimate words and names such as `office`,
+`information` and `FitzGerald` must survive. Record clear repairs in the book's
+recipe and verify the packaged reader text. Respect a user's instruction to
+limit cleanup of a badly corrupted source; document ambiguous damage rather than
+undertaking an unrequested reconstruction.
+
+A grave accent/backtick may stand in for an opening single quotation mark in
+OCR-derived prose (``My wife said, `Before ... houses.'``). Treat it as a quote
+candidate, verify the complete quoted span, and restore a matching `‘…’` pair.
+Do not repair only the opener while leaving a mismatched ASCII closer. Preserve
+contractions, possessives and note-marker distinctions inside and beside the
+quote; broad replacement of apostrophes is unsafe. Assert both the corrected
+complete quotation and the absence of its damaged opener in the packaged EPUB
+and reader export.
+
+Also check for false spaces inside words, such as `de pendent` for `dependent`.
+Confirm the reading from sentence context and the source, then use a reviewed
+whole-phrase repair. Do not join short-word sequences globally: legitimate
+phrases such as `a part` must remain separate. Check every occurrence of a
+confirmed damaged form and add a regression assertion for its repaired context.
+
+A false paragraph break may already be visibly typeset into an OCR-derived PDF,
+not merely introduced by extraction. Audit incomplete prose paragraphs followed
+by lowercase fragments within the same page as well as across page boundaries.
+When sentence continuity is unambiguous, repair the paragraph in the builder even
+if the source shows extra vertical spacing. Assert that the complete sentence
+belongs to one paragraph; finding its words anywhere in the export is insufficient.
+Keep verse, headings, lists and genuine quotations outside this joining rule.
+
+### Auditing a recovered scan against a secondary transcription
+
+An original scan can resolve errors already typeset into a secondary PDF or
+EPUB. Align retained sections and passages, compare the complete word streams,
+and preserve an inventory of disagreements and source-page evidence. The
+scan's own OCR is independent evidence, not automatically correct: inspect the
+printed pixels before accepting disagreements involving digits, names, wording,
+or punctuation. Keep verified repairs in the reproducible book builder.
+
+Word comparisons ignore punctuation and can miss defects shared by both OCR
+versions. Audit separators between aligned words separately, especially missing
+sentence dashes, hyphens substituted for dashes, genuine compounds turned into
+dashes, suspended compounds, and punctuation touching quotation marks. Review
+nested quotation openers and their matching closers together; replacing a
+backtick alone can leave the closing single and double marks in reverse order.
+Distinguish apostrophes within the quotation from its closing delimiter.
+
+Reconcile every numeric note reference with its section's complete notes
+sequence. Assert the ordered reference list, not merely the existence of note
+targets or equality of distinct counts; omissions, duplicate markers, and false
+references can otherwise cancel one another. Check paragraph continuations
+across separate quotation containers as well as adjacent prose paragraphs.
+When damaged nonsearchable panels are replaced by authoritative scan crops,
+verify their full coverage and edges and document the retained accessibility
+limitation.
+
+### Print indexes in reflowable EPUBs
+
+Omit a print index by default when its page-number references have no usable
+destinations in the EPUB, especially when it would be retained only as scanned
+images. A searchable ebook does not need a nonfunctional reproduction of print
+page references. Remove the index from the reproducible builder, navigation,
+spine, manifest, and packaged assets; do not merely hide its contents with CSS.
+Record the omission and verify that no index document, image, or dangling link
+remains in the finished EPUB.
+
+A curated index can add value beyond literal text search by grouping concepts,
+synonyms, and subtopics. Retain or rebuild it when the user requests it or when
+its references can be converted to verified links to the relevant passages or
+preserved print-page anchors. Do not treat reflowed reader page numbers as
+equivalent to the original print pagination.

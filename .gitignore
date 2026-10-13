@@ -1,6 +1,5 @@
 # Source books and generated ebook artifacts
 *.pdf
-*.epub
 output/
 tmp/
 
