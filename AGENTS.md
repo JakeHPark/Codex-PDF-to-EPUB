@@ -1443,3 +1443,14 @@ that tail after assigning it to the note; otherwise it can appear twice or be
 mistaken for another body reference. Check ordered text and emphasis coverage,
 including spaces between roman and italic runs, in both the package and reader
 export. Do not silently omit content merely because the source markup is invalid.
+
+### Note markers inside headings
+
+A heading can contain a note reference in the middle of its wording. Retain
+that reference and destination in the content heading, but omit the note digit
+from its navigation label. Derive the label from a clone and remove only the
+reference's text: preserve the removed element's tail (the words following the
+marker) by attaching it to its preceding sibling or parent text. Deleting the
+whole element without preserving its tail can silently truncate a chapter
+title. Check the complete title around a middle-of-heading reference, as well
+as the forward and return note links.
