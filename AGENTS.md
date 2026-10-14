@@ -1409,3 +1409,24 @@ pictures. Rejoin only source-confirmed continuations and preserve the pictures
 at their semantic position. Record each exact repair and any obvious source
 typo separately; do not dismiss all findings as ambiguous or balance every
 quotation globally merely to clear the audit.
+
+
+### Publisher EPUB tables in auxiliary documents
+
+An EPUB may show an image of a table in its main article while supplying a
+complete HTML table in a separate, non-linear document. Inventory these
+auxiliary spine items before reconstructing or retaining image-only tables.
+Compare every row, header, value, unit and note with the packaged table image.
+When the semantic table is faithful, bring it into the main reading flow at
+the original position, retain its caption and notes, and redirect every
+cross-reference to the inline target. Remove redundant detail documents and
+unused table images only after accounting for their contents and links. Check
+all cells and emphasis against the original and inspect narrow reader output;
+well-formed HTML alone does not establish a usable table layout.
+
+When auditing punctuation in readable text, account for linked superscript
+citations separately. Flattening a closing quotation mark directly against a
+reference digit can make a valid quotation resemble an apostrophe inside a
+word. Ignore the citation's digit for quotation classification, or insert an
+audit-only separator around it; preserve the actual superscript and link in
+the EPUB. Do not delete or rewrite the quotation to silence this false flag.
