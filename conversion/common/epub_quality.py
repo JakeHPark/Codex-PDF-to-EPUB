@@ -96,6 +96,20 @@ def find_endnote_like_punctuation(text: str) -> list[str]:
     return [match.group(0) for match in ENDNOTE_LIKE_RE.finditer(text)]
 
 
+def find_period_word_spacing_issues(text: str) -> list[dict]:
+    """Flag periods touching a following Unicode letter; never autocorrect.
+
+    Pass the visible text of each paragraph/block, joining inline spans but
+    keeping separate blocks separate. Abbreviations, domains, filenames and
+    technical identifiers are deliberate review candidates, not safe rewrites.
+    Digit-to-digit decimals are excluded; ``1.An`` is still detected.
+    """
+    return [
+        {"position": m.start(), "context": text[max(0, m.start()-45):m.end()+65]}
+        for m in re.finditer(r"\.(?=[^\W\d_])", text)
+    ]
+
+
 def validate_epub_policies(
     epub: str | Path,
     *,

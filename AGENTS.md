@@ -43,6 +43,16 @@ project/
 
 Keep general instructions and reusable, book-independent tools outside `tmp/`. In this project, book-specific builders, validators, OCR drivers, covers, regression assertions, formatting evidence, and extracted material belong under `tmp/pdfs/`; only the generalized method is intended to remain as durable repository guidance.
 
+### EPUB output filenames
+
+By default, name the final EPUB `Title - Author.epub`. Use the source's title
+and credited author names in their original order. For two authors, use
+`Title - Author, Author.epub`; for three or more, use
+`Title - First Author et al.epub`. Preserve author names rather than inventing
+abbreviations, and replace only characters that cannot safely appear in a
+filename. Use the same output path in the builder, validator and delivery link.
+An explicit filename requested by the user takes precedence over this default.
+
 ## Prefer a complete structured web edition when available
 
 Before starting OCR, check whether the user has supplied—or an authoritative
@@ -188,6 +198,16 @@ all quotes after full stops or rewriting every unfamiliar word.
 
 Pay special attention to:
 
+- periods immediately followed by a letter without a space, including a sentence
+  ending in a number (`0 to 1.An impossible event`) or parenthesis
+  (`(1999).Working group`). Audit visible paragraph text across inline markup,
+  while keeping separate blocks separate. Treat matches as suspicious, not as
+  automatic replacements: initials, abbreviations (`U.S.`, `Ph.D.`, `i.e.`),
+  domains, filenames, section labels and code may legitimately contain touching
+  periods and letters. Check context and add only verified sentence-spacing
+  repairs to the builder. `find_period_word_spacing_issues` in
+  `conversion/common/epub_quality.py` provides the shared detector;
+
 - fused words (`selfknowledge`, `Ihave`);
 - fused short phrases (`ina` for `in a`), which should be repaired with
   case-preserving whole-word matches so substrings in names such as `Karenina`
@@ -198,6 +218,16 @@ Pay special attention to:
 - missing punctuation at page boundaries;
 - OCR fragments from illustrations or verso bleed-through;
 - headers inserted into prose.
+
+Foreign-language prose and names can contain detached spacing accents from
+the PDF text map, such as `pre´pare´s` instead of `préparés`, or `Franc¸ois`
+instead of `François`. Inventory these marks throughout body text, notes and
+references when one is found. Recover the accent's base and direction from
+context and source geometry where available, then use proper Unicode letters
+or combining marks normalized to NFC. Accent order can vary, especially around
+dotless i. Do not globally replace acute marks, backticks or cedillas: they may
+be quotation delimiters or technical notation. Keep ambiguous repairs narrow
+and check both packaged text and reader display.
 
 Font changes can damage adjacent text as well as formatting. A PDF may render `*Complete Writings*, Oxford` correctly while its embedded text says `Complete WritingsOxford`: the comma and space disappeared exactly where italic and roman runs meet. Word-only italic alignment cannot restore characters that are absent from the text layer. Compare aligned OCR tokens and geometry with the embedded text; when one embedded token equals two or more consecutive OCR words, split it at the OCR word boundaries and restore only OCR-observed edge punctuation and spacing. Likewise, repair an empty separator between two otherwise aligned words from OCR evidence. `conversion/common/italic_markup.py` performs these constrained repairs before adding emphasis markers and reports the number applied.
 
@@ -389,6 +419,24 @@ Never leave a printed footnote embedded between ordinary prose paragraphs.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
 
+For hanging notes and lists, measure paragraph indentation from the continuation
+text's left edge, not from the note number, bullet, or previous line's bounding
+box. A marker makes the first line's box extend farther left; comparing the next
+line with that box falsely turns normal wrapping into a new paragraph. Determine
+the content edge for each block and page, allowing for alternating margins, and
+start a paragraph only at a genuine additional indent or another verified
+structural boundary. `conversion/common/page_reconstruction.py` provides
+`starts_indented_paragraph` for this content-relative check. Keep note labels
+inline with the opening paragraph; preserve separate paragraphs, inset
+quotations, verse, and displayed equations where the source supports them.
+
+Audit the entire notes section when this failure appears. Check first-line
+continuations even when the first line happens to end in punctuation, and flag
+paragraphs stranded on a line-ending hyphen or followed by a lowercase
+continuation. Character coverage alone cannot detect these breaks: assert that
+representative multi-line opening paragraphs remain whole, that genuine second
+paragraphs remain separate, and that reader export and visual preview agree.
+
 A source may cite the same note more than once. Preserve those repeated
 references rather than treating them as duplicate extraction or requiring a
 strictly increasing reference sequence. Give every occurrence a unique anchor,
@@ -412,6 +460,17 @@ Reader support for semantic popup footnotes is inconsistent. If notes must alway
 CSS should explicitly keep the note section and note blocks visible. Source asterisks used only as print markers should not remain in the prose after the note has been structurally separated.
 
 ### 8. Package correctly
+
+Every EPUB must include at least a minimal cover image, including academic
+papers and other short works. Prefer a usable source cover; if none is supplied,
+generate a simple, legible typographic cover with the correct title and author
+(and subtitle when useful). Do not invent publisher branding or imply that a
+generated cover is the original. An ordinary XHTML title page alone does not
+satisfy this requirement. Embed the image locally, declare it in the manifest
+with EPUB 3 `properties="cover-image"`, and put a responsive cover document
+first in the spine. Include legacy cover metadata when needed for reader
+thumbnails. Verify the packaged image, cover metadata, reading order, thumbnail
+legibility and full-size rendering.
 
 An EPUB is a ZIP container with strict requirements:
 

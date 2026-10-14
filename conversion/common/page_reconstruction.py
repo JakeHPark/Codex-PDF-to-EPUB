@@ -12,6 +12,24 @@ DEFAULT_HEADING = re.compile(
 DETACHED_DEBRIS = re.compile(r"^[A-Z]{1,3}$")
 
 
+def starts_indented_paragraph(
+    line_left: float,
+    *,
+    body_left: float,
+    first_line_indent: float = 12,
+    tolerance: float = 1.5,
+) -> bool:
+    """Recognize paragraph indentation relative to the content's block edge.
+
+    In hanging notes/lists, ``body_left`` is the continuation-text edge, not
+    the number/bullet edge or the preceding line's bounding box. Comparing
+    against that preceding box falsely splits the first wrapped line after a
+    marker. Supply the current page's content edge for alternating margins.
+    Classify headings, new entries, quotations and equations separately first.
+    """
+    return line_left >= body_left + first_line_indent - tolerance
+
+
 def drop_detached_boundary_debris(
     previous_page: str,
     next_page: str,
