@@ -1430,3 +1430,16 @@ reference digit can make a valid quotation resemble an apostrophe inside a
 word. Ignore the citation's digit for quotation classification, or insert an
 audit-only separator around it; preserve the actual superscript and link in
 the EPUB. Do not delete or rewrite the quotation to silence this false flag.
+
+### Loose text and notes in malformed HTML
+
+A web page can display complete notes while its parsed HTML leaves their text
+outside paragraph elements, split between element text, sibling emphasis tags,
+and element tails. Inventory those fragments before selecting only `p` nodes.
+Reconstruct each note from its complete fragment range, preserve spaces at
+inline boundaries, and give every reference a verified target and return link.
+When copying a body paragraph whose tail belongs to the following note, detach
+that tail after assigning it to the note; otherwise it can appear twice or be
+mistaken for another body reference. Check ordered text and emphasis coverage,
+including spaces between roman and italic runs, in both the package and reader
+export. Do not silently omit content merely because the source markup is invalid.
