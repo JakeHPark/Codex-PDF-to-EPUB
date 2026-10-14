@@ -24,7 +24,7 @@ class ProseSpacingTests(unittest.TestCase):
         self.assertEqual(normalize_xhtml_prose_spacing(p), 0)
 
     def test_formula_classes_and_images_are_barriers(self):
-        root = etree.fromstring('<div><p>word<img src="x"/>“sample”</p><p><span class="math">x .</span> .</p></div>')
+        root = etree.fromstring('<div><p>word<img src="x"/>“sample”</p><p>word<br/>“new line”</p><p><span class="math">x .</span> .</p></div>')
         self.assertEqual(normalize_xhtml_prose_spacing(root), 0)
 
     def test_excluded_objects_and_nested_blocks(self):

@@ -1307,6 +1307,12 @@ its references can be converted to verified links to the relevant passages or
 preserved print-page anchors. Do not treat reflowed reader page numbers as
 equivalent to the original print pagination.
 
+For a structured HTML source, inspect existing index links before deciding to
+omit its index. If the references already target print-page anchors, preserve
+those anchors at their original text positions, redirect links after splitting
+chapters, and validate every destination. Hide only the visible folio labels;
+retaining a functional index must not insert printed page numbers into prose.
+
 ### Academic papers and positioned objects
 
 Preserve a paper's title, author, version/date, publication or working-paper
@@ -1454,3 +1460,40 @@ marker) by attaching it to its preceding sibling or parent text. Deleting the
 whole element without preserving its tail can silently truncate a chapter
 title. Check the complete title around a middle-of-heading reference, as well
 as the forward and return note links.
+
+### Symbol-aware comparison and style recovery
+
+A word-only comparison may report a false omission when a correctly transcribed
+symbol has no word token: for example, a reference's `&` can disagree with an
+OCR token `8c` even though nothing is missing. Inspect the complete character
+span before inserting a supposedly absent word. Do the same for fractions,
+ellipses, quotation marks and note markers, and audit separators independently
+of words. An authoritative scan's OCR may contain handwriting or underlining;
+its extra tokens are not evidence of missing authored text.
+
+When recovering italics from scan pixels, OCR spelling and printed style are
+separate questions. A uniquely aligned one-word gap between matching neighbors
+can retain strong measured italic evidence even if the OCR misspells that word;
+keep the verified transcription rather than copying the misspelling. Likewise,
+reconcile two italic OCR fragments split at a printed discretionary hyphen with
+the single joined word in the ebook. Record these positional decisions and
+exclude marginal annotations; neither a global emphasis vocabulary nor an
+unconstrained fuzzy match is an acceptable substitute.
+
+Treat explicit XHTML `br` elements as line boundaries during punctuation audits
+and as barriers during prose-spacing repairs. Concatenating verse lines without
+a separator can invent defects such as `dark.When`; inserting a space into the
+markup to satisfy that false audit does not fix the extraction method.
+`conversion/common/prose_spacing.py` preserves this boundary.
+
+### Soft line breaks in structured tables
+
+HTML table cells may use `br` solely to wrap a name or phrase for print, for
+example `Beauclerk or<br/>Beauclerc` or `Cal'dron not<br/>Cauldron`. When the
+lineation has no semantic role, replace that break with an ordinary space while
+preserving adjacent emphasis and text. Readers, copy/export paths, and text
+extractors can otherwise concatenate the words when they flatten the cell.
+Keep meaningful lineation in verse, addresses and comparable structured text.
+Validate table phrases with whitespace collapsed to one space, not removed
+entirely: a character-only comparison cannot detect `orBeauclerc`. Check both
+packaged cell text and reader-exported text for the full separated phrase.

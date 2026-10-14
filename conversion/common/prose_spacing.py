@@ -26,7 +26,7 @@ def normalize_xhtml_prose_spacing(root):
     formula or code sample is never normalized as ordinary prose.
     """
     blocks = {"p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "figcaption", "td", "th"}
-    excluded = {"math", "svg", "pre", "code", "script", "style", "img"}
+    excluded = {"math", "svg", "pre", "code", "script", "style", "img", "br"}
     count = 0
     def local(e):
         return e.tag.rsplit("}", 1)[-1] if isinstance(e.tag, str) else ""
