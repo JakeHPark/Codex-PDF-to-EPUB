@@ -1334,3 +1334,78 @@ raw asset. Preserve the verified printed appearance with a source-rendered crop
 when necessary; retain labels and legends, and keep captions and figure notes
 as adjacent text. Do not silently fix contradictions already present between a
 figure's title, axes, and source note.
+
+### Cleaning an existing EPUB with numbered remarks or arguments
+
+Treat a found EPUB as a secondary transcription, even when its XHTML is well
+formed. A complete sequence of headings does not establish textual completeness:
+a converter can omit a quotation, the opening of a remark, or a whole paragraph
+while retaining nearby numbers. Compare the text as well as the structure with
+the matching source edition. Preserve the translation actually supplied; a
+newer translation or an automatically translated web transcription is not an
+interchangeable spelling reference.
+
+Inventory the complete expected number sequence. Check for missing, duplicated,
+and transposed digits; literal Markdown headings absorbed into paragraphs;
+numbers misread as letters; and genuine numerical examples misclassified as
+headings. Restore each boundary from the printed text and verify the ordered
+sequence after packaging. Do not manufacture empty sections merely to make the
+number count pass. Keep remark identifiers stable when splitting long content
+files for reader compatibility.
+
+Remove converter-added introductions, endorsements, and credits when requested,
+including their navigation entries and unused associated assets. Preserve the
+author's preface and substantive translator/editor notes. Credit a translator as
+a translator in metadata, not as another author. Check the cover's edition and
+translation claims against the actual text; replace a misleading borrowed cover
+with an accurately labelled minimal cover.
+
+In philosophical, linguistic, and mathematical examples, an intentionally odd
+formula, meaningless symbol sequence, or mirrored word can be the subject of
+the argument. Do not repair it into a conventional expression. Verify the
+printed notation, preserve superscripts, subscripts, and negation signs, and
+retain an unusual visual construction as a closely bounded source image when
+plain text would lose its meaning. Inventory these objects separately from
+ordinary illustrations: a text-only comparison can miss a wholly omitted
+mirrored-word example or a progression represented only by dots.
+
+Independent OCR is evidence rather than an automatic replacement for the old
+transcription. Repeated first-letter confusions can turn valid words into other
+valid words; apply repairs only at aligned, source-supported occurrences. Audit
+punctuation independently: asterisks may be closing quotes, apostrophes, real
+note markers, or deliberate symbols, while carets and underscores may be scan
+noise. Review their page images and record contextual decisions instead of
+replacing each character globally. Handwritten underlining can also distort
+word OCR and italic measurements. Calibrate style detection on both marked and
+unmarked source examples; do not extend one style measurement across a merged
+OCR token containing both italic and roman words.
+
+
+### Spacing at quotation and emphasis boundaries
+
+Audit the visible prose stream across inline markup, not each text node in
+isolation. An opening double quotation mark fused to a preceding word normally
+needs a space: `the word“number”` becomes `the word “number”`. Likewise, remove
+stray horizontal whitespace before a sentence full stop, including after an
+emphasized span: `<em>conceptual confusion</em> .` becomes
+`<em>conceptual confusion</em>.`. Preserve the emphasis and links while editing
+their surrounding text; flattening the paragraph to repair spacing loses style.
+
+Use `conversion/common/prose_spacing.py` for these constrained repairs. The
+shared OCR normalizer invokes its plain-text form; builders recovering clean
+digital text or existing EPUBs should invoke its XHTML form at final assembly
+when these extraction defects are present. Preserve spaced ellipses, decimal
+notation, deliberate dot patterns, code, and mathematics. Treat images and
+formula spans as barriers rather than joining their neighboring text for a
+prose correction. Do not globally remove every space before every punctuation
+mark, or insert spaces around apostrophes and closing quotation marks. Test
+positive examples across emphasis boundaries and negative notation examples,
+then validate the packaged XHTML and reader-exported text.
+
+When a punctuation audit finds definite defects, review the source and repair
+them before release. Missing ellipses and closing quotation marks can coexist
+with false paragraph breaks, including quotations interrupted by inline
+pictures. Rejoin only source-confirmed continuations and preserve the pictures
+at their semantic position. Record each exact repair and any obvious source
+typo separately; do not dismiss all findings as ambiguous or balance every
+quotation globally merely to clear the audit.

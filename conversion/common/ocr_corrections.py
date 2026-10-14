@@ -9,6 +9,11 @@ from __future__ import annotations
 
 import re
 
+try:
+    from .prose_spacing import normalize_prose_spacing
+except ImportError:  # Direct script/test imports from conversion/common.
+    from prose_spacing import normalize_prose_spacing
+
 
 # Exact strings with one defensible reading.  These are intentionally small
 # and reviewable; this is not a general-purpose spell checker.
@@ -82,4 +87,4 @@ def apply_common_ocr_corrections(text: str) -> str:
         lambda match: f"“{match.group(1)}{match.group(2)}”",
         text,
     )
-    return text
+    return normalize_prose_spacing(text)
