@@ -235,6 +235,20 @@ Audit citations as a separate corpus after ordinary prose cleanup. Search packag
 
 ### 6. Generate semantic EPUB XHTML
 
+When cleaning an existing EPUB or imported HTML, audit inherited Word/editor
+styles as well as text. Fixed inch-based indents, oversized heading margins,
+empty spacer paragraphs and fixed white backgrounds can make clean text
+unreadable on narrow screens. Recover the intended roles from source classes,
+neighboring content and the original edition: ordinary paragraphs, inset
+quotations, attributions, verse, dialogue and deliberate section breaks. Replace
+physical-page styling with modest relative spacing and semantic markup; do not
+merely strip every class or join every short paragraph. Wrapped quotation lines
+should flow as prose, while poems and separate speeches retain their boundaries.
+Inventory substantive subheadings hidden inside larger sections and make them
+navigable. Rebuild malformed package metadata and navigation rather than copying
+unbound namespace prefixes, duplicate identifiers or mixed EPUB-version markup.
+Check complete text order and emphasis coverage separately from visual layout.
+
 Each navigable section should normally have:
 
 - one generated `<h1>`;
@@ -487,6 +501,15 @@ An EPUB is a ZIP container with strict requirements:
 #### Container validation
 
 Verify ZIP integrity, member order, compression rules, manifest references, spine references, XML parsing, and navigation targets.
+
+When repairing a corrupt EPUB, preserve a copy before changing the archive.
+A truncated compressed entry may still yield its complete original contents:
+accept such recovery only when the uncompressed length and original CRC both
+match and the recovered document parses correctly. Repackage with valid ZIP
+records, verify every member, and compare all recovered payloads byte for byte.
+Do not ignore overlap/truncation warnings or silently discard an unreadable
+entry. If exact recovery fails, rebuild a damaged navigation document from
+verified surviving navigation/spine data and document that reconstruction.
 
 #### Structural and textual assertions
 
@@ -741,6 +764,11 @@ not a memorized phrase, while preserving a valid nested form such as
 `“He called it ‘no,’”`.
 
 ### Apostrophes versus quotation marks
+
+Also distinguish measurement marks from quotations. In dimensions such as
+`29” wide` or `4’5” tall`, the quote-shaped glyphs denote inches or feet and
+must not be deleted as unmatched quotation marks. When their measurement role
+is unambiguous, use Unicode primes (`29″`, `4′5″`); otherwise review the context.
 
 Do not infer punctuation from glyph shape alone. ASCII `'`, left and right
 curly singles, and tiny raised note digits can collapse to the same OCR token.
