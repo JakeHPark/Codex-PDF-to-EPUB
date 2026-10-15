@@ -38,3 +38,6 @@ result-*
 Thumbs.db
 .idea/
 .vscode/
+
+# Example EPUBs are maintained in a separate branch/worktree
+/examples/
