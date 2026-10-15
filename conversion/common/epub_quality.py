@@ -110,6 +110,47 @@ def find_period_word_spacing_issues(text: str) -> list[dict]:
     ]
 
 
+def find_orphan_symbol_issues(text: str) -> list[dict]:
+    """Flag implausibly isolated symbols for review, without rewriting them.
+
+    Copyright notices and mathematical uses deliberately remain candidates.
+    A numeric degree value is excluded, but a lone degree sign in prose is not.
+    Pass readable block text, excluding actual markup and formula objects.
+    """
+    pattern = re.compile(r"[©®§†‡¤■□¶<>]|(?<!\d)°|[.!?][ \t]+(?:[-—,:;][ \t]*){2,}")
+    return [
+        {"position": match.start(), "symbol": match.group(),
+         "context": text[max(0, match.start()-50):match.end()+60]}
+        for match in pattern.finditer(text)
+    ]
+
+
+def find_ocr_punctuation_issues(text: str) -> list[dict]:
+    """Review candidates only: abbreviations and foreign numerals may be valid.
+
+    Pass complete readable blocks so emphasis boundaries cannot hide defects.
+    Source inspection decides which punctuation or capitalization to restore.
+    """
+    import unicodedata
+
+    patterns = [
+        ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
+        ("conflicting punctuation", r"[,;:]\s*\.|,{2,}"),
+        ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
+        ("trademark symbol", r"[™℠]"),
+    ]
+    issues = []
+    for reason, pattern in patterns:
+        for match in re.finditer(pattern, text):
+            issues.append(dict(position=match.start(), symbol=match.group(), reason=reason,
+                               context=text[max(0, match.start()-50):match.end()+60]))
+    for position, char in enumerate(text):
+        if ord(char) > 127 and unicodedata.category(char) == "Nd":
+            issues.append(dict(position=position, symbol=char, reason="non-ASCII digit",
+                               context=text[max(0, position-50):position+61]))
+    return sorted(issues, key=lambda issue: issue['position'])
+
+
 def validate_epub_policies(
     epub: str | Path,
     *,

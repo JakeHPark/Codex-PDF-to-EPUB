@@ -1497,3 +1497,355 @@ Keep meaningful lineation in verse, addresses and comparable structured text.
 Validate table phrases with whitespace collapsed to one space, not removed
 entirely: a character-only comparison cannot detect `orBeauclerc`. Check both
 packaged cell text and reader-exported text for the full separated phrase.
+
+### Keep physical line evidence independent of joined text
+
+Joining a discretionary hyphen must not change the original line's bounding
+rectangle. Removing the continuation token and then recalculating that line's
+left edge can make an ordinary continuation appear indented, creating false
+paragraphs throughout a book. Retain the original physical line geometry and
+use a separate character map for the joined text. Infer the body margin robustly
+from ordinary full-width lines, allowing for page skew; a single dust speck at
+the extreme left must not define the margin. Audit both unusually short
+paragraphs and runs of lowercase continuations after reconstruction.
+
+### Distinguish edition cuts from missing OCR lines
+
+An older transcription may contain a passage absent from fresh OCR even though
+the authoritative scan still prints it. Before classifying that difference as
+an edition cut, inspect the source image, especially where consecutive text
+lines have an unexpectedly large vertical gap. A second OCR pass using a
+different segmentation mode can detect skipped lines independently; inventory
+its proposed additions and verify them against the scan rather than inserting
+them wholesale. Likewise, an OCR line with word boxes spanning several physical
+lines can displace a phrase. Check its actual position on the page.
+
+A secondary transcription can also have passages in the wrong order or under
+the wrong chapter. Follow the authority's reading order, search nearby sections
+for transcription evidence, and audit the remaining unmatched words inside
+recovered passages. A high overall alignment score does not establish complete
+text, correct order, or correct punctuation.
+
+### Orphaned symbols and punctuation clusters
+
+Audit the entire packaged text for symbols with no plausible role in their
+surrounding prose, including isolated copyright or degree signs, angle brackets,
+and clusters such as a full stop followed by a dash and semicolon. Scan noise
+can produce ordinary-looking punctuation as well as unusual Unicode characters.
+Flag these for source-image review, including occurrences in the middle of a
+paragraph; do not inspect only paragraph endings. Preserve legitimate degrees,
+copyright notices, mathematics, note markers and deliberate ornaments. Remove
+confirmed artifacts in the reproducible builder and test their full contexts.
+An unexpected symbol is an audit trigger, not permission to delete that symbol
+globally or assume it is a missing numeric note.
+
+### Language-aware punctuation spacing
+
+In ordinary English prose, flag spaces immediately inside opening quotation
+marks and before semicolons, colons, question marks and exclamation marks.
+Repair verified extraction spacing across emphasis boundaries without flattening
+the formatting. Apply rules for the passage's language: French normally uses
+spacing before punctuation such as an exclamation mark, often a nonbreaking or
+narrow nonbreaking space. Do not apply an English space-before-exclamation rule
+globally to French passages or multilingual books. Preserve notation, verse
+indentation and deliberate typography where those spaces have a role.
+
+Audit spaces beside lexical hyphens separately from sentence dashes. A wrapped
+compound such as `blue- stocking` may need `blue-stocking`, while a stray hyphen
+between ordinary words may need removal and a clause dash may need an em dash.
+An extra hyphen adjoining an em dash is suspicious; verify and repair the
+complete cluster rather than treating the hyphen as a word-break marker.
+
+### Dialogue, inscriptions and secondary headings
+
+A secondary transcription may already have collapsed several printed dialogue
+turns into one paragraph. Its paragraph boundaries are useful evidence but
+cannot be the only source of structure. Check the first word and quotation
+opener of each physical line, page-top continuations, and indentation against
+the scan. Preserve each printed turn as a separate paragraph, while retaining
+an attribution and a second quotation belonging to the same speech together.
+Treat short displayed inscriptions and mottos as possible verse even when OCR
+does not classify their lines as an inset block; preserve their lineation and
+verify the complete opening/closing quotation pair, including ASCII closers.
+
+When using a secondary transcription to supply missing text, classify extracted
+part/chapter headings before accepting insertions at section boundaries. They
+must not be appended to the preceding sentence when the EPUB already generates
+those headings. Scan all body paragraphs for heading signatures after collation,
+not just after initial PDF extraction.
+
+When stray punctuation is found, also audit punctuation attached to short
+function words (for example `a, book`) and hyphens or plus signs immediately
+before ordinary words at former line starts. Dust, damaged type and line-edge
+specks can create plausible punctuation; do not remove these marks globally,
+since genuine clauses, dashes, compounds and mathematics can match the same
+shapes. Review the source line and retain contextual exact repairs. At physical
+page boundaries, a spurious full stop may conceal a continuation such as
+`and so. / , forth.`. Compare both facing text fragments with the scan before
+joining the paragraph; terminal punctuation alone is not proof of a boundary.
+
+Also audit paragraph beginnings for stray punctuation or a single word that
+completes the preceding sentence. Move a verified stranded final word back to
+its sentence while preserving the following real paragraph; merging both whole
+paragraphs would conceal a different structural error.
+
+### Illustrated exercise lists and numbered subsection titles
+
+For textbooks, inventory every printed list marker and reconstruct each complete
+item before sorting it into reading order. Two adjacent descriptions may share
+all their baselines while belonging to independent columns or cells. Do not
+interleave their lines by vertical position, and do not infer a new list level
+from a page-margin change or from crossing a fixed column threshold mid-word.
+Use the source text block, hanging continuation edge, marker sequence and panel
+boundaries together. A marker may be extracted alone on the same baseline as
+its description, or two levels may share a line (`2. a.`); recover both levels
+explicitly. Preserve verified numbering across pages and validate marker values,
+nesting and the complete continuation text for every item, not only a sample.
+
+A numbered short title can introduce a subsection rather than a list item.
+Check the following paragraphs and the source hierarchy before classifying it.
+Render a verified numbered subsection as a heading, retaining its number. When
+an item has a separately printed label followed by explanatory prose, keep the
+label and explanation in separate blocks even if both share one extracted PDF
+text block; do not append the explanation to the title line.
+
+In the specific case of an introductory list label followed by examples printed
+one per line, preserve the first example on its own line as well. OCR/extraction
+may put that first example in the label's text block while the remaining examples
+form separate blocks. Reconstruct the examples as a nested semantic list when
+the source supports it; do not split ordinary prose merely because it contains
+`e.g.` or a physical line ending.
+
+If an illustrated exercise plate is separated into reflowable items, complete
+the separation: associate each picture or vector cell with its numbered exercise
+and, where the source distinguishes them, its lettered variation. Do not leave
+a combined plate attached to the final item, or split only the prose while
+letting unrelated pictures drift together. Record source rectangles and explicit
+step-to-image mappings; geometric proximity alone is insufficient when captions
+sit below or beside their pictures. Preserve complete vector drawings, labels
+and arrows, not only embedded bitmap resources. If one source illustration
+serves several variations or an entire motion cycle, keep that shared relationship
+explicit rather than inventing a one-to-one mapping. Audit complete artwork
+coverage after splitting, and visually inspect every new crop and its association
+in the packaged EPUB, along with narrow-screen reader examples.
+
+A placed bitmap's rectangle can overlap another picture, causing a page-rendered
+crop to contain a corner of the neighbor even though bitmap coverage is complete.
+Inspect crop edges and use source-verified cell boundaries or narrowly recorded
+cleanup masks to remove only the foreign fragment. Vector poses can also extend
+below or beside their descriptions; the first caption line is not a safe crop
+edge. Audit vector-path coverage as well as bitmap coverage after splitting a
+plate, then visually check the result. Retain movement arrows and panel labels.
+
+Audit every font run inside an exercise-description block, including smaller
+qualifications. A parenthesis or a short alternative such as “or opposite sides”
+may be printed at caption size while remaining part of the instruction. When
+splitting illustrations, recover that text into its item's prose before removing
+it from the image. Search for small text classified as artwork inside blocks
+that otherwise contain list descriptions; ordinary prose coverage checks cannot
+catch text that was wrongly excluded from the prose inventory.
+
+### Wide justification gaps mistaken for paragraph breaks
+
+Digital PDF extractors may return separate “lines” for words on the same
+physical baseline when justified text has unusually wide spaces. In ordinary
+prose, consecutive, horizontally ordered fragments within the same source block
+and baseline belong to one physical line. Join them before interpreting their
+horizontal positions as paragraph indents or column changes, preserving inline
+formatting and the original row's left edge for the following wrapped line.
+Do not extend this rule across independent table cells, exercise descriptions,
+headings, or columns merely because they share a baseline.
+
+Audit the packaged paragraph boundaries against positioned source lines. Flag
+boundaries that split one physical prose line, as well as isolated short words
+and lowercase sentence continuations. Verify candidates against the rendered
+page and test the complete reconstructed sentence; text coverage alone can pass
+while every word is present in the wrong paragraph.
+
+### Stray OCR glyphs and contradictory punctuation
+
+Audit the entire packaged text for unexpected Unicode scripts and non-ASCII
+digits, even when the surrounding text is ordinary English. A Bengali digit
+inside English prose, or trademark/service-mark symbols (`™`, `℠`) in an older
+book, can be OCR interpretations of ink specks. Inventory every occurrence and
+check the scan; preserve genuine foreign-language text, numerals, trademarks,
+note markers and technical symbols. Never delete all non-Latin characters.
+
+Flag isolated apostrophes between words (`in ' sentiment`), adjacent conflicting
+punctuation (`person, .`, `them,.`, `want,,.`), and full stops followed by a
+lowercase word (`lazy. and active`). These are review candidates, not automatic
+global replacements. An apparent full stop may be a speck, a misread comma, or
+a real sentence boundary with a misrecognized lowercase initial; it can also
+split a word (`tur. bulent`). Compare the scan to decide whether to remove the
+mark, restore another punctuation mark, join a word, or capitalize the next
+word. Preserve abbreviations, initials, decimals, ellipses and deliberate
+lowercase quotation openings. Record exact verified repairs and rerun the audit
+across the whole book, including text split by emphasis markup.
+
+### Keep source filenames out of EPUB metadata
+
+Do not embed source-PDF filenames, local paths, download-site labels or temporary
+working filenames in the package metadata, including `dc:source`, descriptions
+and identifiers. Keep file provenance and conversion evidence in the external
+book-specific build records. When bibliographic source metadata is useful, use
+a proper edition citation or authoritative publication URL. Inspect all packaged
+metadata fields before release; removing visible source credits alone is not
+sufficient.
+
+### Image-led books and designed quotation pages
+
+Inspect how images are actually stored before promising direct photo extraction.
+A PDF can consist entirely of one JPEG per page, even when the prose looks
+cleanly typeset. In that case there are no separate original photograph objects
+to extract. Preserve complete photographic plates and designed text pages by
+copying the embedded image streams unchanged. Recover illustrations embedded
+in prose pages by cropping the decoded page at native pixel coordinates and
+saving losslessly; do not resize, repeatedly JPEG-compress, or render the PDF
+at a lower resolution. Record source dimensions, crop rectangles and hashes,
+and prove full-page assets are byte-identical and crop pixels match the source.
+Do not claim to have recovered higher-resolution camera originals.
+
+Treat large typographic quotations, calligraphic pages and graphic chapter
+dividers as designed illustrations when their aesthetic arrangement is part of
+the book or the user requests it. Keep them inline in the source reading order,
+with sensible viewport sizing and semantic navigation. Do not turn OCR of those
+pages into duplicate body paragraphs. Preserve full-page photographic captions
+and any multi-panel arrangement already integral to the image. Identify dense
+back matter retained as facsimiles in the book's conversion record.
+
+In image-led books, marginal text that resembles a sidebar may actually caption
+an adjacent, preceding, or following photograph. Classify it by function before
+applying the default introductory-sidebar placement. Associate numbered figure
+captions with their figure; keep “previous” and “overleaf” descriptions near the
+referenced plate sequence. Extract caption text independently from narrative
+prose so it cannot be joined into an interrupted sentence. When publisher matter
+shares a page with a photograph or substantive illustration captions, omit only
+the publisher material and retain the photograph and captions.
+
+Audit crop boundaries against pale artwork and circular or irregular pictures.
+A dark-pixel or color threshold measures strong ink, not the complete image:
+light edges and small figure labels may extend well beyond its detected bounds.
+Use the neighboring prose and white gutters as additional evidence, review every
+new crop, and retain full-bleed edges at the page boundary. OCR prose columns and
+margins separately after this classification; a whole-page OCR pass may merge a
+small caption and a large drop-cap paragraph onto the same text line. Recover
+verified drop capitals explicitly and audit every chapter's first sentence.
+
+Caption columns can vary in width even within a repetitive book. Some
+right-aligned captions extend much farther left than their neighbors, and some
+outer-margin lines reach the page edge. Use the full available margin up to the
+verified prose gutter, then audit OCR words touching crop edges. A plausible
+OCR sentence is not evidence that its first or last words were fully captured.
+
+### Continuous artwork across facing pages
+
+Inventory double-page illustrations as logical spreads. When an image is meant
+to continue from the left page onto the right, stitch the native pixels in that
+order and embed one lossless image in both the EPUB and any requested image
+archive. Do not leave the two halves separated by reflowed prose or export them
+as duplicates alongside the joined result. Distinguish whole photographic pages
+from image bands on prose pages: stitch only the artwork bands in the latter
+case, retaining both pages' narrative and captions as semantic text.
+
+Use a shared vertical source interval for matching bands, and verify that the
+left and right halves meet at the correct height. Preserve full-bleed page edges
+at the seam; do not invent missing artwork or crop away printed content to hide
+a genuine gutter. Do not resize either half to force an alignment. Save joined
+JPEG-derived pixels as PNG to avoid another lossy encoding, and validate each
+half against the corresponding source pixels. Keep provenance, source-page
+pairs, dimensions and checksums in an archive inventory. Confirm that the image
+ZIP contains the same joined assets as the packaged EPUB, with no orphan halves.
+
+### Figure labels, captions, and obsolete print directions
+
+Inventory numbered illustrations as individual semantic objects, rather than
+assuming that one horizontal picture band is one figure. Neighboring pictures
+with different figure numbers need separate crops and their own adjacent
+captions. Captions may be printed above, below, in a margin, or on a neighboring
+page; reconcile every printed number with the image inventory before placement.
+When one source caption describes a series, retain that description once and
+associate every member explicitly, with linked figure labels if needed. Keep
+multi-panel artwork that has a single source figure number together.
+
+A reflowable caption must not duplicate a figure number already baked into its
+image. Crop the artwork itself and exclude the external printed label, using
+the white gutter between art and label. Preserve letters, scales, diagrams and
+other labels that are actually inside the artwork. Validate crop bottoms against
+the complete printed-label bounding boxes and check every crop visually. Facing
+pages can contain both continuous artwork and separate neighboring figures:
+join only the continuous object, preserving the neighbors as their own figures.
+Retain native pixels and update any image archive from the same final assets.
+
+Normalize figure references to one space between abbreviation and number, such
+as `fig. 1`; audit missing or repeated spaces across inline markup. Check that
+an OCRed `Jig.` or `Sig.` is really a figure label before correcting it. Use the
+book's verified abbreviation and capitalization consistently.
+
+Remove print-only guide headings such as `PREVIOUS`, `OVERLEAF`, and `FOLLOWING`,
+and leading printed-page labels, from converted captions. Preserve the actual
+illustration description and place it with the relevant image. Translate useful
+internal page references into live EPUB links to figures or sections instead of
+leaving nonfunctional page numbers. If descriptions baked into a scan contain
+those labels, recover the descriptions separately before removing the scanned
+caption block. Update left/right-page directions to meaningful plate or panel
+references when the original arrangement no longer exists.
+
+### Line-end hyphens and incomplete emphasis runs
+
+Do not treat a line-final hyphen followed by lowercase text as sufficient proof
+of discretionary hyphenation. Inventory the original token pairs before joining
+lines, including caption columns and paragraph continuations across images or
+pages. Distinguish syllabic wraps from grammatical compounds (`eighteenth-century`,
+`well-educated`, `self-regulation`), proper names, date ranges, and suspended
+compounds (`nineteenth- or early-twentieth-century`). The last case retains the
+hyphen and the following space; an ordinary compound retains the hyphen without
+a space. Confirm ambiguous cases from source context and other occurrences in
+the book. Preserve a reviewed decision and test each resulting form rather than
+trying to repair already-fused compounds with a broad spelling dictionary.
+
+Once an English book's unspaced em-dash convention is verified, remove extraction
+whitespace beside its sentence dashes after physical line joining, including in
+captions. A dash at the end of a printed line must not inherit a space before
+the next word. Keep deliberately spaced display typography and other language
+conventions outside this prose normalization.
+
+Word-by-word italic detection can leave only a title's middle word emphasized,
+particularly when short articles and prepositions provide weak slant evidence.
+Audit short emphasis fragments and partially styled titles/foreign phrases.
+Check the complete source phrase, including articles, connectives and words on
+the next physical line or page, and restore the whole verified run. Add a check
+that every character of that occurrence has the expected emphasis. Do not
+italicize every occurrence of the same words globally: a book title may match an
+ordinary subject term used elsewhere in roman type. Preserve contextual source
+identities or the surrounding phrase to distinguish them.
+
+### Excess margins around extracted illustrations
+
+After splitting neighboring illustrations, audit the outer margins of every
+final crop, including the assembled result of a stitched image. Trim verified
+blank page gutters to the artwork bounds, leaving only a minimal protective
+edge where needed. Ignore isolated JPEG speckles when detecting bounds, but
+visually check faint lines, pale backgrounds, captions internal to the artwork,
+and small scale labels before trimming. Preserve intentional space inside a
+multi-panel figure and alignment at a stitched seam. Use the same reviewed
+native-resolution crop in the EPUB and any image archive, and retain the crop
+coordinates in the reproducible build evidence.
+
+Inspect crop edges at native resolution as well as in reduced contact sheets.
+A one-pixel pale scan border can remain visible when enlarged even though a
+thumbnail looks tightly cropped. Audit the complete outer rows and columns for
+near-uniform pale strips followed by a sharp transition into rectangular art;
+remove verified strips rather than retaining an arbitrary protective white
+border. Do not mistake pale photographic content or deliberate print borders
+for page whitespace. Check the packaged image bytes, since a correct working
+crop does not establish that the final EPUB contains it.
+
+A fixed near-white threshold is insufficient for scan borders: interpolation
+and JPEG compression can turn an edge into a uniform grey or tinted strip.
+Compare the first few outer rows/columns with the neighboring image content,
+using both brightness and variation along the edge. A nearly uniform pale strip
+followed by a sudden darker or more textured row is a review candidate even
+when it is below the white threshold. Remove the verified interpolation fringe
+as well as the blank strip. Review all edges of all figures when this occurs;
+for stitched artwork, adjust the outside edge or both aligned vertical bounds
+without deleting genuine artwork at the interior seam.
