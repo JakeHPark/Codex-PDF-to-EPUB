@@ -26,11 +26,11 @@ It is important to convey the most important book-specific constraints concisely
 
 > Okay, I want to continue stress-testing you to hone your instruction set. *The Anatomical Venus* by Joanna Ebenstein is next. I expect you to extract the images as they are in original quality and embed them losslessly into the EPUB. There are sidebars, which you now hopefully know to deal with; lots of full-page images, which you can extract with something like `pdfimages`; and some full pages of stylised text like on PDF page 40, which you can just extract as images rather than try to OCR and lose the aesthetic grandeur. Once you figure out how to do the first few pages it's actually quite repetitive: very clean text, more sidebars, more inline images, and more full-page images. The images on PDF pages 5+6, 9+10, 11+12, 15+16, 23+24, 31+32, 33+34, 35+36, 57+58, 63+64, 65+66, 69+70, 87+88, 91+92, 95+96, 99+100, 103+104, 107+108, 111+112, 121+122, 167+168, 169+170, 177+178, 199+200, 215+216, need to be joined horizontally, as the images were expected to be viewed continuously from the left to right page. Also, separately create an output ZIP containing all the original-quality images in the book, with the left-right pairs stitched together.
 
-The original pass took 55 minutes using GPT-6.1 Sol, then I had to apply these book-specific corrections:
+The original pass took 55 minutes using GPT-6.1 Sol, then I had to apply these book-specific corrections, which took another 48 minutes:
 
 > > fig.1 The most iconic dissectible wax Anatomical Venus— also known as the ‘Demountable Venus’ and the ‘Medici Venus’— from the workshop of Clemente Susini at La Specola, Florence, Italy (1780-82). Life-sized.
 >
-> In the PDF, the em-dashes are followed by line breaks, so I understand your mistake here; regardless, there shouldn't be spaces after. It should also be "fig. 1" with a single space, not zero or two spaces. Also, "fig. 1" is duplicated in the above image; can you crop out just the photo? Make sure cropped images don't include any unnecessary surrounding blank space. Generalise these corrections to the rest of the book, too.
+> In the PDF, the em-dashes are followed by line breaks, so I understand your mistake here; regardless, there shouldn't be spaces after. It should also be "fig. 1" with a single space, not zero or two spaces. Also, "fig. 1" is duplicated in the above image; can you crop out just the photo? Make sure cropped images don't include any unnecessary surrounding blank space, whether it be white, grey or black. Generalise these corrections to the rest of the book, too.
 >
 > > The *Anatomical* Venus begins at the time and place of the creation of the Medici Venus
 >
