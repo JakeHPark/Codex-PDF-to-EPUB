@@ -51,6 +51,8 @@ COMMON_TOKEN_REPLACEMENTS = {
     'it"s': "it's",
     "Mosi": "Most",
     "mosi": "most",
+    "Yoii": "You",
+    "yoii": "you",
 }
 
 

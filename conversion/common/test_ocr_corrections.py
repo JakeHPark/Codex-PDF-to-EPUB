@@ -5,6 +5,9 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_yoii_is_whole_token_only(self):
+        self.assertEqual(apply_common_ocr_corrections('Yoii can; yoii will. Yoiiko ayoii.'),
+                         'You can; you will. Yoiiko ayoii.')
     def test_double_quote_in_its_contraction(self):
         self.assertEqual(
             apply_common_ocr_corrections('It"s warm; it"s useful. transit"s'),

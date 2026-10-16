@@ -2224,3 +2224,83 @@ spans such as `Water is`. Compare each with neighboring source letters; remove
 only the falsely styled span, retaining genuine emphasis elsewhere. A valid
 italic opening such as `Time` does not justify extending italics into the
 following roman `is`.
+
+### Shaded panels, intrusive rules, and interrupted lists
+
+Border strokes and shaded backgrounds can become convincing OCR tokens such as
+`I`, `J`, `|`, `^`, or stray punctuation inside an otherwise readable paragraph.
+Finding a cluster is a trigger to review the complete panel and its parallel
+entries against the scan. Recover words, punctuation, emphasis, and numbered
+membership together; do not merely delete every matching character. Ordinary
+pronouns, mathematical notation, and genuine punctuation must remain intact.
+
+Audit every isolated italic word in long prose when false emphasis recurs.
+Roman `very`, `every`, `way`, and pronouns can acquire false slant scores, while
+other occurrences really are emphasized. Keep source-positioned decisions for
+each occurrence, including retained genuine emphasis; never remove italics by
+word dictionary alone. Review the whole corrected word and adjacent words so a
+repair does not leave partial-word styling.
+
+A wrapped line just beyond an image mask can be mistakenly assigned to the
+image and disappear from prose. Compare the interrupted sentence with the
+source, extend the prose cutout to include the complete final line, regenerate
+the image, and prove those word IDs now belong to the prose. Do not merely
+insert a second transcription while leaving the same words inside the picture.
+
+A new heading or short list low in one column can precede the continuation of
+an earlier paragraph in the next column. Check for fragments stranded after
+short entries and complete the earlier paragraph before the new section. For
+illustrated numbered instructions, keep one ordered list with each illustration
+inside its corresponding item; a figure should not restart the sequence.
+
+The shared OCR layer repairs whole-token `Yoii`/`yoii` to `You`/`you`, with tests
+protecting substrings inside longer tokens. Broader word-shape similarities are
+review candidates, not automatic spelling changes: `clog` versus `dog`, `toll`
+versus `tell`, and `lime` versus `time` can all be legitimate words.
+
+For list numbering, account for both an OCR numeral and a separately extracted
+full stop. Adding a full stop to the numeral without consuming its separate
+glyph creates forms such as `1.. Fish`. Normalize the verified marker before
+paragraph assembly, then check the complete semantic number sequence.
+
+At the end of a pass, inventory prose paragraphs ending with a comma,
+hyphen, or function word such as `the`, `and`, or `be`. Inspect the following
+blocks even when they start with uppercase text: diagram debris or a displaced
+`Before`/`After` label can prevent ordinary lowercase-continuation repair.
+Check display titles split across a paragraph and heading as well. Capture
+complete diagram labels with their illustration, or associate them explicitly
+as captions, instead of letting them interrupt neighboring prose.
+
+OCR punctuation confusion works in both directions: a comma may become a full
+stop, and a full stop plus a capitalized next word may become a comma followed
+by lowercase text. Review conspicuous run-on clauses against the scan, including
+captions. Restore both the punctuation and capitalization when verified; do not
+globally replace comma-plus-`if`, which is often grammatical.
+
+A short display list's final entry can absorb prose from the next column even
+when the combined paragraph ends normally. Audit short bold/italic prefixes
+followed immediately by capitalized roman prose, and compare their coordinates
+with the preceding parallel entries. Preserve genuine run-in labels, but give
+a verified display item its own block and start the next column's explanation
+as a new paragraph; checking paragraph endings alone cannot detect this merge.
+
+For structured web editions, distinguish authored sidebars from website pull
+quotes that repeat sentences already in the body. Verify each pull quote against
+the complete retained text before omitting a decorative duplicate. Do not remove
+unique quotations or authored marginal notes by this heuristic. Preserve a
+publisher's substantive textual-correction note separately from the essay, while
+omitting unrelated site biography, recommendations, and subscription forms.
+
+A page-wide heading cutoff derived from one column's first baseline can clip
+short words in another column whose baseline or glyph centers sit slightly
+higher. Derive the retained opening band from the actual glyph-box tops across
+all body columns, and audit words excluded immediately above the cutoff. Restore
+misclassified words to prose ownership rather than inserting replacement text
+while leaving the original excluded. Retained-only text comparisons cannot
+prove that excluded words were legitimate exclusions.
+
+`rn` can be read as `m`, yielding valid-looking words such as `comer` for
+`corner`. Inventory the whole book when one is found, but verify the uses before
+repairing them: `comer` is itself a valid English word, and longer words must not
+be altered by substring replacement. Keep reviewed corrections at whole-token
+or positioned-word scope when the document's context supports them.
