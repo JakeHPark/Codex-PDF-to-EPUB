@@ -215,6 +215,10 @@ Pay special attention to:
 - false hyphenation at line or page breaks;
 - spaces around em dashes;
 - zero/O and one/I confusion;
+- prices whose currency sign or digits have become letters (`SlOO` for `$100`)
+  or gained internal spaces (`$1 1,000` for `$11,000`); flag these in monetary
+  context and confirm against the scan before repairing, rather than globally
+  replacing S, I, l, or O in names, codes, or ordinary words;
 - missing punctuation at page boundaries;
 - OCR fragments from illustrations or verso bleed-through;
 - headers inserted into prose.
@@ -256,6 +260,13 @@ Each navigable section should normally have:
 - quotations as `<blockquote>`;
 - deliberate scene breaks as a semantic or styled divider;
 - stable identifiers for notes and links.
+
+A quotation continuing across paragraphs may reopen with a quotation mark at
+each paragraph without closing until the final paragraph. Do not balance quotes
+independently in each paragraph by inserting invented closers. Resolve
+apostrophes within words before pairing single quotation marks; otherwise two
+unrelated contractions can be mistaken for the boundaries of a quotation.
+Verify repeated speech openings and the final closing mark against the source.
 
 Do not flatten dramatic dialogue into prose. When consecutive OCR lines begin
 with speaker labels such as `FRIAR:` and `ROMEO:`, preserve each speech as a
@@ -364,6 +375,14 @@ packaged prose, allowing only documented transformations. Check styling and
 paragraph/list grouping separately, then verify that a reader export retains
 every complete paragraph. Rebuild these checks after any crop or font-role
 change, because changing object boundaries also changes which text is retained.
+
+Apply complete-paragraph and list-entry formatting decisions after structural
+repairs have joined all their fragments. A later transfer from another column
+can append text with stale OCR styles, leaving a previously corrected entry
+inconsistent again. Reapply the reviewed spans to the final joined text and
+validate the packaged complete entry, including deliberately emphasized words
+in its transferred tail.
+
 
 ### Sidebar notes are independent text streams
 
@@ -735,6 +754,13 @@ Semantically marked EPUB footnotes may be hidden or treated as popups by some re
 
 OCR may duplicate a closing quotation mark, but repeated quote characters can also arise near nested quotations. Do not collapse every doubled quote globally. Verify the source and use an exact or tightly contextual repair, then add a regression assertion for the corrected phrase.
 
+Audit duplicated opening quotes and a quotation beginning with digit `1` followed
+by a first-person verb as well as duplicated closers. Check the attribution's
+punctuation in context: a quoted statement followed by a speaker tag may need
+a comma before the closing quote. When the passage crosses a page or column,
+inspect both physical edges for a lost sentence dash before joining the prose.
+These are source-review candidates, not global quote, digit, or period repairs.
+
 OCR may also mismatch quotation styles, such as a single opening mark paired with a double closing mark. Compare the phrase with the rendered source page before normalizing it; apostrophes and genuinely nested quotations make global quote substitution unsafe.
 
 Run a stack-based typographic-quotation audit over every page before packaging.
@@ -822,6 +848,18 @@ for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
 absence of a recognized glyph suffix is not proof of absent formatting.
 
+When classifying small digits by baseline, exclude whitespace-only spans from
+reference-baseline estimates. A PDF may position a separator at the preceding
+superscript's height even though the surrounding words remain on the body
+baseline. Otherwise a note marker or exponent can be misclassified as a
+subscript. Distinguish scripts from note links using geometry, local notation,
+and the complete note inventory, and test both roles in the reader output.
+Separate font runs may also be returned as separate PDF lines at the same
+height; reunite verified same-row fragments left to right before paragraph
+reconstruction, especially in references. Check source-observed word gaps at
+ligature/font boundaries and discard verified italic-correction spacing before
+punctuation or variable primes without introducing spaces inside notation.
+
 Retain line coordinates until paragraphs and quotations have been reconstructed.
 A single indented first line usually begins an ordinary paragraph; a sustained
 inset across consecutive lines denotes a block quotation or list. Determine
@@ -837,6 +875,13 @@ short paragraphs and any paragraph ending with a hyphen. Exact character
 coverage does not prove correct paragraph grouping, so retain both checks.
 
 Plain OCR normally discards italics, boldface, small capitals, and other inline styles. First inspect whether the PDF text layer, hOCR, or ABBYY XML contains reliable style metadata. If it does, convert those spans into semantic EPUB markup such as `<em>` and `<strong>`. If the available OCR assigns generic or meaningless fonts, do not infer formatting globally from capitalization or vocabulary.
+
+OCR style metadata can be partly useful: an engine may label essentially all
+body text bold while still identifying many italic spans correctly. Verify
+weight and slant independently against the scan, and audit unmarked passages
+rather than assuming that every genuine italic run was detected. Preserve
+source-supported missing emphasis with exact passage-level overrides.
+
 
 For style-poor scans, maintain source-verified emphasis terms and contextual corrections. A short common word such as *the* must never be added to a global emphasis list: store the complete surrounding phrase and emphasize only the verified occurrence. Escape the prose first and then insert controlled semantic tags so OCR text cannot become arbitrary HTML. Prefer `<em>` over visual-only `<i>`, add regression assertions against the packaged XHTML, and expand the verified evidence as pages are reviewed. This recovers meaningful formatting incrementally without italicizing ordinary uses of ambiguous words.
 
@@ -2304,3 +2349,10 @@ prove that excluded words were legitimate exclusions.
 repairing them: `comer` is itself a valid English word, and longer words must not
 be altered by substring replacement. Keep reviewed corrections at whole-token
 or positioned-word scope when the document's context supports them.
+
+Do not assume an HTML `<br>` is a deliberate authorial line break. Inventory
+hard breaks inside prose, especially immediately before emphasized words or
+between conditional clauses. Rejoin verified continuous sentences with a
+separating space while retaining inline emphasis. Preserve actual verse,
+dialogue, addresses, and source-supported display lists; grammar and structure,
+not the mere presence of a `<br>` tag, determine the role.
