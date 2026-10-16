@@ -1849,3 +1849,378 @@ when it is below the white threshold. Remove the verified interpolation fringe
 as well as the blank strip. Review all edges of all figures when this occurs;
 for stitched artwork, adjust the outside edge or both aligned vertical bounds
 without deleting genuine artwork at the interior seam.
+
+
+### Unmatched brackets and parentheses in OCR
+
+Audit opening parentheses, square brackets, and braces against their matching
+closers across each semantic paragraph or continuous quotation. An unmatched
+opener may indicate that OCR misread a closing bracket as a letter, digit, or
+punctuation mark; for example, a trailing `j` can be a damaged `)`. Report the
+source page and surrounding text, inspect the scan, and repair only the
+verified occurrence. Allow reviewed mathematical notation, editorial fragments,
+and brackets spanning intentionally separate blocks; do not insert closers or
+replace letters globally merely to balance a count.
+
+### Typography and line recovery across layout changes
+
+Calibrate scan-based bold detection against ordinary prose at the same printed
+size. A larger roman body face can retain more ink than smaller bold captions;
+a fixed stroke threshold across an entire book can make whole pages falsely
+bold. Check both typography and paragraph leading when front matter uses a
+larger, full-width layout than the main columns. Set paragraph boundaries from
+that layout's indentation and line spacing, rather than reusing narrow-column
+thresholds. Centered acknowledgments should preserve individual names while
+joining wrapped introductory and closing prose into complete paragraphs.
+
+Coalesce fragments of one physical line by baseline and horizontal position
+before ordering lines vertically. Tiny baseline differences between words and
+ellipsis dots must not reorder a sentence. Column boundaries should prevent
+cross-column merging only on pages that actually use those columns; full-width
+display text and introductory matter need their own reading-order regions.
+
+
+### Verify a scan's hidden text layer against the images
+
+Selectable text does not prove complete OCR coverage. A scan may contain clear
+prose, captions, and headings while its hidden text layer contains only a stray
+label—or nothing—on the same page. Inventory words per page and compare sparse
+outliers with rendered pages, including pages dominated by diagrams. Also use
+an independent image OCR pass to find missing lines on otherwise populated
+pages. Preserve positioned original words where they overlap reliable image
+OCR; recover missing regions with their own coordinates and provenance, then
+review them in reading order. Exact coverage of the original hidden word stream
+alone cannot establish completeness against the printed book.
+
+For three-column books, assign lines to column regions using the actual column
+starts, allowing scan drift and hanging list indents. Do not use a boundary
+that lies on a column's left edge: small horizontal changes can then send its
+first lines into the preceding column. Reconstruct hanging-indent list items
+before applying ordinary first-line paragraph indentation rules, and retain
+separate text streams for captions, boxed advice, and prose around pictures.
+
+
+A horizontal rule can itself be OCRed as a line of plausible letters, especially
+short repeated fragments such as `a`, `ll`, and `ee`. Rank low-information OCR
+rows before paragraph assembly and inspect their image crops. Remove verified
+rule/ornament interpretations by source region or positioned word identifiers;
+keep real headings immediately below them. A confidence score alone cannot
+separate rule hallucinations from text. Do not clean these fragments with a
+whole-book word replacement dictionary.
+
+Treat proposed illustration rectangles as candidates until compared with the
+scan. A wrong rectangle can both clip artwork and silently remove adjacent prose
+from the text stream. Inventory text ownership separately from image coverage,
+review every crop, and audit short leftover fragments near every picture. Mask
+only verified prose/caption regions; broad rectangular masks can erase sloping
+roofs, foundation blocks, diagram labels, and other real artwork beside text.
+For a picture that wraps around prose, record its irregular cutouts explicitly
+and preserve the entire picture at native resolution. After moving a label or
+caption out of the image, check the complete caption and neighboring sentence,
+not only the image's appearance.
+
+
+A heading spanning several columns may start in the second column while the
+first column continues an earlier paragraph. Finish the unaffected leading
+columns before processing the heading and the columns it actually governs.
+Do not turn its vertical position into a page-wide boundary. Likewise, a float
+can explain a large gap inside continuous prose, but cannot justify merging
+separate fragmentary checklist items across every later line. Check both prose
+continuations and unpunctuated lists when changing float-aware paragraph rules.
+
+
+When reusing cached figure assets, compare the complete current extraction
+specification, including caption membership, cutouts, rotation, and source
+bounds. A deleted field is a change too: comparing only keys still present can
+retain an obsolete caption or mask. Rebuild affected assets and regenerate text
+ownership after layout changes, then validate the packaged image hashes and
+caption placement together.
+
+
+Hidden OCR can also duplicate a line or even a partial line at the same image
+coordinates. Detect overlapping repeated words before baseline coalescing;
+otherwise individually plausible OCR streams can become “Arrange Arrange the
+the furniture”. Remove only source-verified duplicates, preserving unique words
+in partially overlapping lines. In numbered lists, inspect split multi-digit
+markers such as `1 0i` and punctuation misread as a second digit. Recover the
+whole marker before deciding paragraph boundaries, and validate the expected
+item sequence so a missed label cannot join adjacent columns' instructions.
+
+### Recover complete emphasis blocks, lists, and diagram labels
+
+Word-by-word scan measurements can drop short words inside a uniformly bold
+quotation, caption, or emphasis paragraph, and can mistake isolated heavy
+letters for italic type. Audit fragmented style runs across the whole book,
+including short words and punctuation. Review each candidate against the scan
+and recover the complete source span. Retain genuine italic words within bold
+text; a majority vote must not erase real emphasis or extend bold over a roman
+sentence at the end of the same paragraph. Repeated display quotations need
+complete opening/closing marks and ellipses checked as whole units, rather than
+normalizing their punctuation word by word.
+
+A boxed or shaded passage can span two columns while ordinary prose above it
+continues from the first column into the second. Recover the entire box as one
+independent stream, including its heading, introduction, both list columns,
+and closing comment. Finish the surrounding prose before inserting the box.
+Inspect every edge: a boundary through one text row can leave only some words
+of a sentence outside the panel. Reconstruct the row as a unit and audit mixed
+body/panel ownership. Compare semantic list counts and item order with the scan;
+consecutive styled paragraphs alone do not establish a complete list.
+
+When a list's later elements each have their own source line, give its first
+element the same treatment, even if it follows a colon or a column transition.
+Do not let a fragmentary final item absorb the next column's prose. Preserve
+wrapped lines within an item, combine wrapped heading lines, and keep category
+headings outside the list they introduce. Oversized list numerals may have a
+baseline far below the first text line; align them to that first line using
+geometry before sorting, so they do not drift after the sentence or break it
+into two paragraphs. A short heading above a long horizontal rule can govern
+several columns even when the title itself is narrow; use the rule's span when
+establishing reading-order bands.
+
+Masking prose inside an illustration rectangle must not remove diagram labels.
+Audit short masked strings separately: words such as “worry” or “WOOD” inside
+a diagram or bottle label belong to the picture. Every confirmed label error
+triggers a review of other small internal masks. For scans with tinted paper,
+fill removed text areas with sampled local paper colour and opaque pixels.
+Transparent cutouts can render black in ebook readers. Keep all unmasked
+artwork at native resolution and inspect the packaged assets in a reader.
+
+### OCR period-apostrophe clusters and final-letter confusions
+
+Treat `.'` and `.’` after a word as review candidates, especially without a
+matching opening quotation. The pair can be a damaged exclamation mark or
+question mark, a genuine closing quote, or a raised note marker. Inventory the
+pattern across the whole book and verify the printed glyph; never translate
+all occurrences to the same punctuation. The shared punctuation audit flags
+these clusters without rewriting them. In ordinary English OCR, apply the
+whole-token `Mosi` → `Most` (`mosi` → `most`) default repair; do not change
+substrings such as `Mosiac`, and preserve source-verified names or other-language
+uses as explicit exceptions.
+
+An oversized numeral may also be fused into the previous line's last word
+(`forts.4`, for example), or recognized as two letter-shaped pieces. Compare
+independent OCR and the scan, split the text/geometry at the real line boundary,
+and restore the numeral to the following item. Do not merely replace the token
+in place: its tall bounding box can still reorder both lines. Check the complete
+number sequence after recovery. For a shaded panel continued on another page,
+exclude prose below the shaded edge and join the continued panel before returning
+to that prose; assigning the entire physical page to the panel interleaves
+unrelated streams.
+
+When reviewing nested quotations, balance every quotation level. A sentence can
+have a legitimate inner single closing quote and still be missing its outer
+double closing quote. In particular, flag a paragraph that opens with a double
+quote and ends with punctuation plus a single quote while its outer quotation
+remains open. Verify the full printed ending, including faint final marks.
+Do not dismiss the whole cluster merely because its inner quotation is balanced.
+
+Represent printed bullets as semantic `ul`/`li` markers and remove the literal
+bullet and its following source whitespace from the item text. Each item should
+begin with its first word, without an ASCII space or non-breaking space before
+it; let list layout position the marker. Audit all list items and reader exports
+for leading whitespace and duplicated literal bullets, preserving inline styles
+when removing the source marker.
+
+Audit complete style spans, including a bold opening followed by a roman tail
+in the same paragraph. Reviewing only paragraphs that are mostly bold misses
+such openings. Short function words provide weak pixel measurements: recover
+their style from reliable words on the same physical line, or from an explicitly
+continuous span on both sides, and retain reviewed span boundaries. OCR repair
+and dehyphenation can also split formatting inside one word; check the rebuilt
+word as a unit. Preserve real italic words inside bold prose and deliberate
+changes of style. Do not flatten whole mixed paragraphs to a majority style.
+
+The full rectangle of an instructional panel includes its heading, introductory
+text, every list column, diagram, and caption. A rectangle starting at the
+picture or lower half of the box silently leaves its upper text in the main
+stream. This can insert a heading into a continuing sentence or split a list
+around unrelated prose. Check the complete block against the scan and place it
+at a safe boundary after the related prose; a user-requested chapter-end position
+takes precedence over the introductory-quotation default. Keep a preceding list
+of examples before a subsequent checklist, even when the checklist lies below
+the first column and the examples occupy the next column. Validate the final
+sequence and test the repaired surrounding prose as well as the box itself.
+
+Caption selection must compare all neighboring text, not merely choose the
+nearest bold paragraph. A bold body paragraph can resemble a caption while the
+real caption is roman in the hidden OCR. Audit unexpectedly distant captions,
+verify the source, and reconstruct page-end prose across the separately owned
+caption. Image alternative text should use the same cleaned wording as the
+visible caption, without raw OCR or print-line hyphenation.
+
+Flag asterisks or carets inside apparent words, including a short space after
+the mark, for source review. Such marks can represent a line-end hyphen, a
+compound's real hyphen, or a stray stroke from nearby artwork. They can also be
+legitimate notes or mathematical notation, so detection must not imply global
+removal. Verify whether to join the word, retain a hyphen, or remove an artifact.
+Unexpected capitalization within prose likewise needs contextual source review;
+do not globally lowercase names or technical terms.
+
+Text completeness does not prove illustration completeness. Compare residual
+ink regions against the figure inventory after excluding retained prose,
+verified headings, rules, and semantic panels. Small product drawings and signs
+can be missed even when every OCR word is accounted for. Review residuals
+against the scan and retain lettering belonging to a drawing inside its image.
+
+### Second pass for fragmented emphasis
+
+After dehyphenation, OCR correction, and inline markup generation, make a
+second suspicious-formatting pass over the packaged text. Flag every word
+whose letters are only partly bold or italic, and every sentence, heading,
+or paragraph that is predominantly bold or italic except for a few isolated
+words or letter fragments. Check both missing emphasis and stray emphasis;
+short function words, first words, and fragments joined across lines or columns
+are especially vulnerable. Audit bold and italics independently, including
+spurious italics inside bold text. Do not infer correct formatting from a
+paragraph's majority style alone: compare the complete span with the scan,
+preserve genuine mixed emphasis, and record verified boundaries in the builder.
+Examples include a heading with only its last words italicized, a bold sentence
+with an unbold initial article, and `du` italicized inside roman `durable`.
+Add packaged-output regressions for each confirmed repair.
+
+Include short run-in labels before an em dash in emphasis review, even when
+most of the following paragraph is roman; a majority-style paragraph audit
+will miss a label such as bold `Painted` followed by unbold `wood`. Review
+adjacent entries together, including labels that lost all emphasis. A short
+bold label below a drawing may be its caption rather than a subsection title;
+confirm its position, attach it to the figure, and exclude it from the crop.
+
+Replace linked print-page references with reader-independent wording such as
+`here`, preserving the verified destination. Consume the whole page range,
+not just its first number, and handle references in both inline text and tails.
+Recheck reader-exported text after changing link labels. Preserve page numbers
+that are substantive historical or bibliographic information rather than
+navigation instructions.
+
+For skewed scan text, deskew separate text columns before a fresh OCR pass.
+Compare that result with the scan and existing transcription; fresh OCR is
+additional evidence, not a reason to replace already correct words blindly.
+Keep the original illustration pixels, source coordinates, and reviewed styles.
+Verify unfamiliar technical identifiers against the source and an authoritative
+reference when letter/digit confusion remains; do not guess from OCR shape.
+
+Run the fragmented-emphasis audit after every structural markup rewrite as
+well as after initial assembly. Converting literal bullet paragraphs into
+semantic lists must reuse the already reviewed inline styles; regenerating
+text from raw OCR at that stage can silently reintroduce repaired errors.
+Retain source-verified exceptions in the review report, such as a deliberately
+roman word within italic prose or a roman introductory label before an italic
+sentence. An audit finding is a review candidate, not an automatic correction.
+
+For titles and named works, audit the entire phrase at every occurrence,
+including initial articles and short words such as `A`, `The`, `De`, `of`, and
+`and`. A correctly italicized occurrence elsewhere does not validate a broken
+one. Use capitalization and neighboring italic spans to find candidates, then
+verify their full boundaries in the scan; a person's name preceding a title
+may correctly remain roman. Accent or apostrophe variants can prevent a reviewed
+phrase rule from matching, so flag near-matches as well as checking exact hits.
+Restore missing accents only from source evidence, and assert that every
+confirmed title occurrence has a continuous emphasis span.
+
+During a final OCR pass, flag angle brackets embedded inside apparent words,
+unlikely `ii` clusters, and isolated substitutions such as `ol` in `one ol`.
+Also inspect letter-shape confusions that yield valid words, such as `modem`
+for `modern` or `bum` for `burn`. These are detection examples, not global
+replacement rules: a technical text may genuinely mention a modem, and `bum`
+is an ordinary English word. Confirm the context and scan, keep ambiguous
+repairs book-specific, use whole-token boundaries where appropriate, and check
+that legitimate substrings such as `bump` and `bumps` remain intact.
+
+On pages with prose in one column and an illustration grid in others, review
+unclaimed short labels beneath drawings before merging text by reading order.
+A caption missing from the figure inventory can otherwise be appended to the
+last prose paragraph in another column. Assign caption ownership from the
+source geometry and validate that the label occurs only inside its figure.
+
+The fused pronoun phrase `Itis` is repaired to `It is` in the shared OCR layer.
+Keep this an exact, whole-token rule and test punctuation boundaries plus
+negative examples such as `Otitis`, `arthritis`, and longer names. Do not extend
+it into a substring replacement or a general split of every `itis` sequence.
+
+### Emphasis boundaries need negative checks
+
+A mostly styled paragraph audit cannot detect every kind of style leak. Also
+flag a single italic word immediately after an em dash when the following prose
+is roman, and a bold initial word such as `If`, `It`, or `We` at the start of an
+otherwise roman sentence following bold text. Verify these against the scan;
+retain real contrastive emphasis and complete italic run-in labels. Test where
+emphasis stops as well as where it starts. A numbered entry's description is
+not necessarily styled like its number or label.
+
+Short-word fallback must preserve explicit reviewed style decisions and must
+not inherit style blindly from a preceding numeral, punctuation, sentence end,
+or run-in label. After joining a line-end hyphen, treat the resulting word as a
+unit: a short suffix on a new bold line can acquire that line's style even when
+it completes the preceding roman word. Use the longer, more informative glyph
+fragment and surrounding source evidence, then audit the complete word and
+sentence again. Do not fix one partial word by imposing its weakest fragment's
+style on the whole word. Keep legitimate internal emphasis when source-verified.
+
+### Reconstruct complete list sequences around illustrations
+
+Inventory every expected number for each list, including numbers detached by
+oversized typography or mistaken for punctuation. A printed number may be
+missing entirely from OCR even when the entry's label is present. Recover it
+from the scan, mark the structural boundary before paragraph assembly, and
+verify the complete monotonic sequence. A numbered item with a stray literal
+bullet after its number should have one marker; remove the duplicate glyph only
+within a confirmed numbered list, preserving its text and reviewed inline styles.
+
+Finish a list before placing unrelated illustrations. When a print spread puts
+an illustration for a later section above the continuation of the current list,
+move it beside that later section's heading or discussion. Keep diagrams for the
+current list together after its final item when that gives the clearest reading
+order. Validate both the list's item membership and the neighboring figure IDs;
+text coverage and figure counts alone cannot establish correct placement.
+
+### Column fragments and navigation leftovers
+
+Slight scan skew can displace the baselines of adjacent fragments of one line
+by a few points. Before treating a short fragment as another column or paragraph,
+compare its horizontal gap, vertical overlap, and column gutters with the prior
+line. Use a constrained, source-verified joining tolerance that remains below
+ordinary interline spacing. Test the rejoined word and its surrounding paragraph.
+A styled sentence can also begin midway through one physical line; retain a
+verified word-level paragraph boundary instead of requiring a separate OCR row.
+
+Parse whole print-page reference expressions, including comma-separated and
+`and`-joined references as well as ranges. Give each distinct destination a
+reader-independent link label and check that no residual number remains after
+an earlier reference was changed to `here`. Separately flag bare folios or
+quotation-glyph OCR masquerading as numbers near headings, without deleting
+legitimate numbered content.
+
+The shared OCR layer repairs whole-token `It"s` and `it"s` to `It's` and `it's`.
+This is a narrow English contraction repair, not permission to replace double
+quotation marks throughout prose. Tests must protect occurrences embedded in
+longer tokens.
+
+### Short numeric enumerations and repeated prose
+
+Audit inconsistent comma spacing in prose enumerations such as `Numbers 1,2,
+and 3`. The shared spacing repair adds missing spaces only within a sequence
+of at least three one- or two-digit integers with an explicit `and` or `or`.
+Leave thousands separators, decimal commas, formulas, and code untouched;
+broader numeric strings require contextual review.
+
+Search for adjacent repeated phrases as well as duplicated whole paragraphs.
+Compare their source coordinates and the scan: repetition may be an extraction
+duplicate or an obvious typo already printed in the source. Remove a verified
+accidental repetition with a narrow reproducible correction; preserve deliberate
+rhetorical repetition. Distinct source lines do not prove intentional repetition.
+
+Review an isolated italic word at a sentence or paragraph opening, especially
+beside a large italic heading or list numeral. Style can leak from that nearby
+object. Do not flatten the rest of the passage: a later emphasized word may be
+genuine. Likewise, an apparent initial `I` beside otherwise parallel checklist
+entries may be a misread bullet. Restore one semantic list after verifying its
+membership and marker shape against the scan.
+
+A slant detector may classify ordinary initial `W` or `A` glyphs as italic,
+producing repeated false openings such as `We're`, `We've`, or `Are`. When one
+occurs, audit all short italic openings across the book, including multiword
+spans such as `Water is`. Compare each with neighboring source letters; remove
+only the falsely styled span, retaining genuine emphasis elsewhere. A valid
+italic opening such as `Time` does not justify extending italics into the
+following roman `is`.

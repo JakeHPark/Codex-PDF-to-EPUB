@@ -5,6 +5,22 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_double_quote_in_its_contraction(self):
+        self.assertEqual(
+            apply_common_ocr_corrections('It"s warm; it"s useful. transit"s'),
+            "It's warm; it's useful. transit\"s",
+        )
+
+    def test_fused_it_is_is_a_whole_token_repair(self):
+        self.assertEqual(
+            apply_common_ocr_corrections("Itis clear; (Itis true). Otitis arthritis Itison."),
+            "It is clear; (It is true). Otitis arthritis Itison.",
+        )
+
+    def test_mosi_is_a_whole_token_repair(self):
+        self.assertEqual(apply_common_ocr_corrections("Mosi of them, mosi often. Mosiac mosiac osmosis."),
+                         "Most of them, most often. Mosiac mosiac osmosis.")
+
     def test_fused_in_a_preserves_case_and_names(self):
         source = "Ina sense, Anna Karenina was ina difficult position."
         self.assertEqual(

@@ -33,6 +33,20 @@ class ProseSpacingTests(unittest.TestCase):
         self.assertEqual(root.find('.//code').text, 'x“y” .')
         self.assertEqual(root.find('.//pre/p').text, 'word“two” .')
 
+class NumericEnumerationSpacingTests(unittest.TestCase):
+    def test_explicit_short_enumerations(self):
+        self.assertEqual(normalize_prose_spacing('Numbers 1,2, and 3.'), 'Numbers 1, 2, and 3.')
+        self.assertEqual(normalize_prose_spacing('Use 10,11 or 12.'), 'Use 10, 11 or 12.')
+    def test_ambiguous_numbers_remain(self):
+        for s in ['1,234 and 5', '12,345,678', '1,5', '1,234, and 56', '1,2, and 345']:
+            self.assertEqual(normalize_prose_spacing(s), s)
+    def test_markup_and_exclusions(self):
+        root=etree.fromstring('<div><p>Numbers <em>1,2</em>, and 3.</p><p><code>1,2, and 3</code></p></div>')
+        normalize_xhtml_prose_spacing(root)
+        self.assertEqual(''.join(root[0].itertext()), 'Numbers 1, 2, and 3.')
+        self.assertEqual(root[0][0].text, '1, 2')
+        self.assertEqual(root[1][0].text, '1,2, and 3')
+
 
 if __name__ == '__main__':
     unittest.main()

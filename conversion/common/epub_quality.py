@@ -138,8 +138,15 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("conflicting punctuation", r"[,;:]\s*\.|,{2,}"),
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
+        ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
+        ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
     ]
     issues = []
+    # A legitimate inner closing single quote does not close its outer double.
+    # This is a candidate only: source layout may intentionally continue a quote.
+    if text.lstrip().startswith('"') and text.count('"') % 2 and re.search(r"[.!?]['’]\s*$", text):
+        issues.append(dict(position=len(text.rstrip())-1, symbol=text.rstrip()[-1],
+                           reason="unclosed outer double quotation", context=text[-120:]))
     for reason, pattern in patterns:
         for match in re.finditer(pattern, text):
             issues.append(dict(position=match.start(), symbol=match.group(), reason=reason,

@@ -5,12 +5,20 @@ OPEN_QUOTE = re.compile(r"(?<=[^\W_])(?=“)", re.UNICODE)
 # A spaced ellipsis or dot progression is not a sentence full stop. Do not
 # consume line breaks, spaces after digits (numeric notation), or math/code.
 BEFORE_STOP = re.compile(r"(?<=[^\W\d_]|[’”\)\]])[ \t\u00a0]+(?=\.(?!\s*\.|\d))", re.UNICODE)
+# Require at least three short integers and an explicit conjunction. This
+# excludes decimal commas and thousands groups; formula/code nodes are barriers
+# in the XHTML normalizer, and plain-text callers must supply prose only.
+ENUMERATION = re.compile(r"(?<![\w.,])\d{1,2}(?:,[ \t]*\d{1,2})+(?:,[ \t]*|[ \t]+)(?:and|or)[ \t]+\d{1,2}(?![\w]|,\d)")
 
 
 def spacing_edits(text):
     """Return nonoverlapping (start, end, replacement) edits in plain prose."""
-    return sorted([(m.start(), m.end(), " ") for m in OPEN_QUOTE.finditer(text)]
-                  + [(m.start(), m.end(), "") for m in BEFORE_STOP.finditer(text)])
+    edits = [(m.start(), m.end(), " ") for m in OPEN_QUOTE.finditer(text)]
+    edits += [(m.start(), m.end(), "") for m in BEFORE_STOP.finditer(text)]
+    for group in ENUMERATION.finditer(text):
+        edits += [(group.start()+m.end(), group.start()+m.end(), " ")
+                  for m in re.finditer(r",(?=\d)", group.group())]
+    return sorted(edits)
 
 
 def normalize_prose_spacing(text):
