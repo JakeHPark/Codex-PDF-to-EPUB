@@ -25,6 +25,13 @@ first in the spine. Include legacy cover metadata when needed for reader
 thumbnails. Verify the packaged image, cover metadata, reading order, thumbnail
 legibility and full-size rendering.
 
+Identify the cover document semantically as well as declaring its image. Use an
+EPUB navigation landmark and compatible legacy guide information when required
+by the target reader/converter. Check that a reader does not add a second cover
+because it cannot associate the declared image with the first spine document.
+Preserve one real cover document; do not hide a duplicate-cover defect by
+removing the required cover image or its metadata.
+
 An EPUB is a ZIP container with strict requirements:
 
 - `mimetype` must be the first member;
@@ -99,3 +106,9 @@ book-specific build records. When bibliographic source metadata is useful, use
 a proper edition citation or authoritative publication URL. Inspect all packaged
 metadata fields before release; removing visible source credits alone is not
 sufficient.
+
+Verify cover and illustration formats from their decoded content, not merely
+filenames. A downloaded `.jpg` can contain WebP bytes. Convert unsupported
+formats to a genuinely supported encoding, preferably losslessly, and keep the
+manifest media type and extension consistent. Compare decoded pixels when an
+encoding change is necessary; byte equality alone can certify a mislabeled file.

@@ -50,6 +50,14 @@ Use three levels of repair:
 
 Keep exact substitutions visible in a dictionary or correction file. Avoid broad dictionary-based “spell correction”; it can damage names, quotations, dialect, archaic spelling, and technical language.
 
+Track which exact corrections have already been applied when normalizing both
+source lines and reconstructed blocks. A replacement that contains its own
+search text can grow a second letter, quotation mark or year if applied again.
+Apply each reviewed correction once per source occurrence; still check joined
+blocks for repairs spanning a physical line break. Verify the resulting complete
+phrase, including duplicate punctuation and appended digits.
+
+
 OCR may mistake an ampersand for the standalone token `8c`. In the verified
 Blake quotation in *Life Is a Miracle*, `..., 8c is productive ...` should read
 `..., & is productive ...`. Apply this only as a whole-token correction and
@@ -150,6 +158,15 @@ OCR; recover missing regions with their own coordinates and provenance, then
 review them in reading order. Exact coverage of the original hidden word stream
 alone cannot establish completeness against the printed book.
 
+When parsing hOCR, inventory every text-bearing line class, not only
+`ocr_line`. Engines can emit `ocr_header`, `ocr_caption` or `ocr_textfloat`
+for substantive headings, note-group labels and ordinary text. Classify those
+regions by their source role before exclusion; ignoring a class can lose text
+while every retained word still passes coverage checks. Compare segmentation
+modes on hanging notes: one mode may turn the entire number column into a
+vertical nonsense token, while a region-specific uniform-block pass recovers
+the individual labels. Verify the labels and continuations against the scan.
+
 For three-column books, assign lines to column regions using the actual column
 starts, allowing scan drift and hanging list indents. Do not use a boundary
 that lies on a column's left edge: small horizontal changes can then send its
@@ -203,6 +220,24 @@ in partially overlapping lines. In numbered lists, inspect split multi-digit
 markers such as `1 0i` and punctuation misread as a second digit. Recover the
 whole marker before deciding paragraph boundaries, and validate the expected
 item sequence so a missed label cannot join adjacent columns' instructions.
+
+### Audit disagreements that resemble valid words or symbols
+
+When comparing independent OCR streams, retain strict-substring disagreements
+and large edit-distance disagreements for review. `famine`→`amine` can remove
+a substantive letter while leaving a real English word; an entire printed word
+can also become a dash, numeral or punctuation. A filter that requires a shared
+word stem, skips symbols or accepts any substring can conceal these defects.
+Include omitted/mismatched tokens and compare meaningful word coverage as well
+as character coverage. Review the source region before applying each repair.
+
+Use a dictionary only to prioritize suspicious tokens, never to auto-correct
+names, acronyms or technical vocabulary. Supplement it with context, matched
+bracket checks, dates containing letters, and fused pronoun forms. The shared
+OCR layer repairs case-sensitive whole-token `Iam` to `I am`; leave `IAM`,
+`Iams` and substrings in legitimate words unchanged. A plausible dictionary word
+or matching pair of OCR errors does not establish that the scan was recovered.
+
 
 ## Bleed-through and divider pages
 

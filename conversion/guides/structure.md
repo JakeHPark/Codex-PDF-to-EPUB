@@ -81,6 +81,16 @@ After changing one boundary, audit all later boundaries. A single mistaken offse
 
 ## Paragraph continuity
 
+For scans, use physical baselines and the local line leading as additional
+paragraph evidence. Ascenders, descenders, superscripts and page skew make OCR
+rectangle gaps unreliable: a visibly separated, unindented paragraph may have
+almost no gap between its extracted boxes. Audit nonterminal block endings,
+including uppercase continuations and transitions between prose and quotation
+roles. A quoted list can use ordinary-size type and unpunctuated numerals;
+recognize its marker and continuation margins before treating every indented
+line as a fresh paragraph. Check short, wrapped subheadings separately from
+long prose lines rather than requiring one fixed gap or stroke threshold.
+
 PDF line endings are not paragraph endings. Within a paragraph, join wrapped lines with spaces. Across a page boundary, continue the paragraph when the preceding text does not end with terminal punctuation or when the next block clearly begins with a lowercase continuation.
 
 Common failure:
@@ -100,6 +110,11 @@ predictable or mechanical
 Do not apply lowercase-continuation logic blindly to poetry, lists, headings, equations, or intentionally fragmentary prose.
 
 ## Semantic XHTML and inherited styles
+
+Navigation lists should not add an automatic ordinal before a chapter label
+that already contains its printed number. Use semantic nested lists with
+appropriate list styling, while retaining actual list numbering in body content.
+Inspect the visible contents as well as the reader's navigation panel.
 
 When cleaning an existing EPUB or imported HTML, audit inherited Word/editor
 styles as well as text. Fixed inch-based indents, oversized heading margins,
@@ -474,6 +489,13 @@ navigation instructions.
 
 ## Oversized and detached list markers
 
+A genuine numbered list need not print a full stop after each number. Confirm
+its sequence and geometry rather than requiring `1.` as the only marker form.
+Some numbered entries use ordinary first-line paragraph indents with unindented
+continuations instead of hanging indents. Derive the item's continuation edge
+from the source; do not use its indented opening label as that edge. Validate
+the complete item and the return to ordinary prose in both cases.
+
 An oversized numeral may also be fused into the previous line's last word
 (`forts.4`, for example), or recognized as two letter-shaped pieces. Compare
 independent OCR and the scan, split the text/geometry at the real line boundary,
@@ -488,6 +510,13 @@ For list numbering, account for both an OCR numeral and a separately extracted
 full stop. Adding a full stop to the numeral without consuming its separate
 glyph creates forms such as `1.. Fish`. Normalize the verified marker before
 paragraph assembly, then check the complete semantic number sequence.
+
+When a numbered opening uses separate spans for the marker and drop cap, check
+the complete visible text after flattening that display typography. Retain an
+explicit space between the closing marker and first word, such as `(1.) After`.
+Audit every numbered remark for a marker touching a letter; inline span counts
+and word-only text comparisons cannot detect this missing separator.
+
 
 ## Semantic bullets and clean item text
 

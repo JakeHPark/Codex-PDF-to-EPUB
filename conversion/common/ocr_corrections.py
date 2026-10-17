@@ -47,6 +47,7 @@ COMMON_TOKEN_REPLACEMENTS = {
     "theirjargon": "their jargon",
     "upona": "upon a",
     "Itis": "It is",
+    "Iam": "I am",
     'It"s': "It's",
     'it"s': "it's",
     "Mosi": "Most",

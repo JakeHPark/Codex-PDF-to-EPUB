@@ -5,6 +5,10 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_fused_i_am_is_case_sensitive_whole_token_only(self):
+        self.assertEqual(apply_common_ocr_corrections("Iam ready. (Iam here.) IAM Iams William iambic."),
+                         "I am ready. (I am here.) IAM Iams William iambic.")
+
     def test_yoii_is_whole_token_only(self):
         self.assertEqual(apply_common_ocr_corrections('Yoii can; yoii will. Yoiiko ayoii.'),
                          'You can; you will. Yoiiko ayoii.')

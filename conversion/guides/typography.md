@@ -172,6 +172,14 @@ Run formatting recovery across every content page, not merely a representative s
 
 Short words require a stricter classifier, not a global exception. The current detector uses the ordinary slant/gain threshold for words of four or more letters and substantially higher thresholds for two- or three-letter words. A short word inside a consistently italic run can also inherit the run classification. Retain exact contextual overrides only when image evidence cannot classify an isolated occurrence; do not use them as a substitute for the whole-book pass.
 
+Do not bridge a short word solely because both neighbors are italic. The source
+may intentionally use italic labels or contrast words around a roman connective,
+such as italic “fourth category” and “lack” around roman “is”. Require glyph or
+reviewed span evidence, and check isolated short candidates independently:
+roman `A`, `a`, `who` and `is` can score as slanted, while `not`, `are`, `do`
+and `all` may carry genuine contrastive emphasis. Keep occurrence-specific
+positive and negative decisions, including complete title boundaries.
+
 After application, require complete evidence-page coverage, high weighted token alignment, no leaked private-use markers, semantic `<em>` markup in packaged XHTML, and reader-rendered spot checks covering isolated emphasis, multiword titles, long italic passages, notes, and nearby roman controls. Running heads may be detected in the page image, but they should remain unmatched because the builder removes them before formatting alignment.
 
 Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
