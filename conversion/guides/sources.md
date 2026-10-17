@@ -37,6 +37,17 @@ flag generic or missing descriptions for review rather than inventing facts.
 Use responsive image CSS so illustrations fit the reading viewport without
 distortion.
 
+A saved HTML edition may replace every illustration with an identical broken-image
+or security-warning icon while retaining useful image positions and captions.
+If the user supplies a matching PDF with intact illustrations, inventory the
+real images there and map them to the HTML by surrounding prose, caption and
+panel order. Recover original embedded assets when complete, preserving their
+resolution and encoding. Do not package warning icons or mistake a site logo
+for an article figure. Rebuild malformed image/caption groups and note links,
+then verify every recovered image and caption against both source reading orders.
+For a multi-panel sequence, preserve its sequence and grouping while keeping
+individual panels legible and preventing captions from becoming stranded.
+
 Validation for HTML-derived EPUBs must prove that every expected chapter was
 included, every local image reference resolves and appears in the manifest,
 no remote image URL remains, and every content image renders inline with its
