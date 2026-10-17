@@ -98,6 +98,10 @@ Also distinguish measurement marks from quotations. In dimensions such as
 `29” wide` or `4’5” tall`, the quote-shaped glyphs denote inches or feet and
 must not be deleted as unmatched quotation marks. When their measurement role
 is unambiguous, use Unicode primes (`29″`, `4′5″`); otherwise review the context.
+Keep compact feet-and-inches notation internally consistent: `5′11″` rather
+than `5′ 11″`. Audit spaces between the prime and inch count throughout the
+work when one appears. Apply this only to confirmed compound measurements;
+ordinary text following a measurement still needs its separating space.
 
 Do not infer punctuation from glyph shape alone. ASCII `'`, left and right
 curly singles, and tiny raised note digits can collapse to the same OCR token.

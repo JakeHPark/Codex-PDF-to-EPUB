@@ -337,6 +337,14 @@ Never leave a printed footnote embedded between ordinary prose paragraphs.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
 
+Keep punctuation adjacent to a superscript reference separate from the marker
+itself. A source may print a colon after a note call, for example
+`Sen’s⁷: even …`. When replacing an OCR marker and its neighboring characters,
+retain that colon rather than consuming it with the damaged marker. Inventory
+punctuation-bearing marker replacements across the work and verify them against
+the source; both the packaged text and reader export must preserve the sentence's
+punctuation before and after the reference.
+
 For hanging notes and lists, measure paragraph indentation from the continuation
 text's left edge, not from the note number, bullet, or previous line's bounding
 box. A marker makes the first line's box extend farther left; comparing the next

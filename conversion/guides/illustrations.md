@@ -38,6 +38,14 @@ to each responsive inline image; do not hotlink assets. Retain enough resolution
 to enlarge dense panels. Document when tables remain images rather than
 searchable, accessible HTML tables.
 
+Keep short figures and tables together with their captions when they fit a
+reader page, and discourage a break immediately after a caption. Verify this in
+a paginated reader; adjacent XHTML elements alone do not prevent an orphaned
+caption. Preserve block separators in serialized XHTML too: a caption followed
+by a list or table must not fuse with its first item in a reader's text export.
+Check the complete exported object, including nested list introductions and
+cell boundaries, rather than relying solely on its visual appearance.
+
 Exclude each captured object's text from the prose stream, but do not discard
 ordinary text above or below it. A floating table or figure may interrupt a
 sentence at a physical page break. Reconstruct the interrupted paragraph before

@@ -313,7 +313,10 @@ surrounding prose, including isolated copyright or degree signs, angle brackets,
 and clusters such as a full stop followed by a dash and semicolon. Scan noise
 can produce ordinary-looking punctuation as well as unusual Unicode characters.
 Flag these for source-image review, including occurrences in the middle of a
-paragraph; do not inspect only paragraph endings. Preserve legitimate degrees,
+paragraph; do not inspect only paragraph endings. Include symbols fused to a
+word, such as an equals sign or underscore prefixed to an OCR token. A nearby
+illustration stroke can contaminate both punctuation and letters; confirm the
+whole word in the scan rather than merely stripping its non-letter prefix. Preserve legitimate degrees,
 copyright notices, mathematics, note markers and deliberate ornaments. Remove
 confirmed artifacts in the reproducible builder and test their full contexts.
 An unexpected symbol is an audit trigger, not permission to delete that symbol
