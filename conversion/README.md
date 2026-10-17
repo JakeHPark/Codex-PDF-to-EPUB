@@ -1,77 +1,156 @@
-# Reusable conversion tooling
+# Conversion workflow and reusable tooling
 
-Only book-independent conversion code lives here. Book-specific builders,
-validators, corrections, evidence, and intermediate products live under
-`tmp/pdfs/`.
+Start with [AGENTS.md](../AGENTS.md): it defines source selection, mandatory
+release gates and where to find detailed operating rules. This directory holds
+book-independent methods; each book's reproducible recipe and evidence live
+under `tmp/pdfs/<book>/`. There is no universal PDF-to-EPUB builder or single
+command that performs every check.
 
-## Layout
+## Documentation map
 
-- `common/detect_italics.py`: experimental but useful pixel-based italic detector.
-- `common/tessdata/eng.traineddata`: reusable English OCR model.
+| Document | Purpose |
+| --- | --- |
+| [AGENTS.md](../AGENTS.md) | Operating contract, source/feature routing, release gates, output naming and maintenance policy. |
+| This README | Pipeline ordering, source-specific execution and evidence handoffs. |
+| [common/README.md](common/README.md) | Actual shared APIs, defaults, limitations, dependencies and test commands. |
+| [guides/sources.md](guides/sources.md) | Authority, comparative editions, HTML/EPUB recovery, outlined text and academic papers. |
+| [guides/ocr.md](guides/ocr.md) | Scan recovery, damaged text layers, conservative corrections and scholarly diacritics. |
+| [guides/structure.md](guides/structure.md) | Boundaries, paragraphs, headings, dialogue, lists, notes, indexes and references. |
+| [guides/typography.md](guides/typography.md) | Font/pixel evidence, complete emphasis spans, quotations and punctuation. |
+| [guides/illustrations.md](guides/illustrations.md) | Figures, tables, columns, sidebars, panels, masks, captions, spreads and crop QA. |
+| [guides/mathematics.md](guides/mathematics.md) | Native mathematics, source outlines, failure inventory and visual release checks. |
+| [guides/validation.md](guides/validation.md) | Cover, metadata, container, content, reader and visual verification. |
 
-## Recovering italics from a scan
+## Source-specific starting points
 
-Prefer style-bearing source data in this order:
+**Reliable digital PDF.** Inspect positioned spans and actual visible fonts.
+Use embedded character/glyph evidence before OCR; `digital_pdf.py` can expose
+special glyph semantics missed by size/baseline heuristics. Recover reading
+order, notes and objects from geometry. Compare text and emphasis independently,
+then inspect visible controls. Do not apply OCR spelling replacements to clean
+text just because a shared normalizer exists.
 
-1. Tagged PDF or trustworthy PDF font spans.
-2. ABBYY XML or hOCR containing explicit italic/bold attributes.
-3. Word bounding boxes aligned with rendered pixels.
-4. Source-verified contextual overrides.
+**Scanned PDF.** Treat the hidden text layer as an imperfect transcription.
+Inventory all pages and compare sparse or suspicious regions with rendered
+images and independent OCR. Preserve word/line coordinates; recover missing
+regions without replacing reliable text wholesale. Recover weight and slant
+independently using calibrated pixel evidence where font metadata is absent.
+Deskew text regions when necessary, preserving original illustration pixels.
 
-Render a page and produce hOCR from the same image:
+**HTML or existing EPUB.** Verify complete coverage and edition first. Recover
+semantic blocks, authored content and local assets while removing site or
+converter material as appropriate. Inspect malformed loose text, auxiliary
+spine items, inherited physical-page CSS and meaningful versus print-only
+`br` elements. Avoid OCR spelling cleanup on clean structured text.
 
-```bash
-pdftoppm -f PAGE -l PAGE -r 150 -png -singlefile \
-  "Source Book.pdf" tmp/pdfs/page
+**Authority plus secondary transcription.** Inventory both and align passages
+rather than relying on page numbers. Use the transcription to help recover
+structure or obscured text only where the governing source supports it. Record
+source-backed differences and unresolved readings. Check authority coverage
+separately so a shared omission cannot pass.
 
+These paths can coexist within one book. Selectable prose may sit beside an
+outlined heading, a scanned plate, mathematical glyphs and a vector table.
+
+## Pipeline and evidence handoffs
+
+| Stage | Input → output | Required invariant |
+| --- | --- | --- |
+| Inspect | Original files → source/edition inventory and layout map | Physical page mapping verified; substantive content and deliberate omissions identified. |
+| Recover | Source regions → positioned text, font/pixel evidence and original assets | Keep immutable source coordinates and provenance; do not infer completeness solely from selectable text. |
+| Reconstruct | Independent streams → ordered complete blocks, lists, notes and object placements | One accounted role for each retained source fragment; headings and stream boundaries verified. |
+| Correct and style | Complete blocks + reviewed decisions → corrected text and semantic spans | Narrow reproducible changes; OCR-only normalizer used only on OCR-derived prose; real compounds and mixed emphasis preserved. |
+| Assemble | Blocks/assets → XHTML, navigation, note links, metadata and cover | No duplicate headings, remote assets, unresolved markers or stale derived captions/alternative text. |
+| Audit again | Final structure → reviewed text/style/ownership findings | Reapply verified spans after transfers; resolve suspicious outliers and verify negative style boundaries. |
+| Package and validate | EPUB → container/content/link reports and reader export | Checks consume the actual output path, not just working XHTML; all applicable AGENTS release gates pass. |
+| Review and deliver | Reader preview + source → visual QA and final checksum | Every special repair inspected; report graphical accessibility limitations and editorial source corrections. |
+
+Keep a machine-readable or human-readable book QA record under its work directory.
+Include the source edition, retained section/object inventories, correction
+locations, check commands/results, reviewed exceptions, visual evidence, output
+path and checksum. Existing books use different filenames and schemas; reuse a
+suitable one rather than imposing an incompatible new format.
+
+On rebuild, follow dependencies. A crop change can change text ownership; a
+paragraph transfer can invalidate formatting; caption repairs can invalidate
+alternative text; punctuation changes can invalidate note matching and reader
+regressions. Regenerate affected evidence before final package/reader checks.
+Never carry forward a successful report tied to an earlier output checksum.
+
+## Recover scan formatting with the shared tools
+
+Use trustworthy evidence in this order: embedded source fonts/glyphs, verified
+style-bearing OCR XML/hOCR, positioned scan pixels, then contextual overrides.
+OCR metadata may identify slant reliably while getting weight wrong.
+
+For one page, render and OCR the **same** image so boxes and pixels align:
+
+```sh
+mkdir -p tmp/pdfs/source-book/evidence
+pdftoppm -f 12 -l 12 -r 150 -png -singlefile \
+  "Source Book.pdf" tmp/pdfs/source-book/evidence/page-12
 TESSDATA_PREFIX=conversion/common/tessdata tesseract \
-  tmp/pdfs/page.png stdout -l eng --psm 3 \
+  tmp/pdfs/source-book/evidence/page-12.png stdout -l eng --psm 3 \
   -c tessedit_create_hocr=1 -c hocr_font_info=1 \
-  > tmp/pdfs/page.hocr
-```
-
-Then classify likely italic spans:
-
-```bash
+  > tmp/pdfs/source-book/evidence/page-12.hocr
 python3 conversion/common/detect_italics.py \
-  tmp/pdfs/page.png tmp/pdfs/page.hocr \
-  --output tmp/pdfs/page-italics.json
+  tmp/pdfs/source-book/evidence/page-12.png \
+  tmp/pdfs/source-book/evidence/page-12.hocr \
+  --output tmp/pdfs/source-book/evidence/page-12-italics.json
 ```
 
-The detector shears each word crop over a range of angles and measures how
-strongly its dark pixels align into vertical strokes. Roman words generally
-peak near zero; right-slanted italic words peak at a positive correction.
-`slant` and `gain` are retained so borderline cases can be reviewed.
+The page number is an example. Use the correct source-page mapping and an
+available compatible Python/Poppler/Tesseract installation; executable paths
+vary by host. See [the helper catalog](common/README.md) for dependencies.
 
-This is evidence generation, not an unattended rewrite step. Inspect candidate
-spans against the rendered page, resolve OCR/token alignment, then emit semantic
-`<em>` markup and add regression assertions. Short italic words may need context;
-the detector only infers them when both neighboring words on the same line are
-already strong italic candidates.
+For a whole content range, resumable evidence can be produced with:
 
-## Whole-book batch recovery
-
-Analyze every content page with resumable per-page output:
-
-```bash
+```sh
 python3 conversion/common/batch_detect_italics.py \
   "Source Book.pdf" tmp/pdfs/source-book/italics \
-  --first-page FIRST --last-page LAST --dpi 200 --workers 4 \
-  --tesseract /path/to/tesseract \
+  --first-page 10 --last-page 200 --dpi 200 --workers 4 \
+  --pdftoppm /path/to/pdftoppm --tesseract /path/to/tesseract \
   --tessdata conversion/common/tessdata
 ```
 
-The batch runner deletes each temporary rendering and hOCR file after writing
-its JSON evidence. Repeating the command skips completed pages.
+Replace example ranges and executable paths. The runner caches per-page JSON
+and removes temporary images/hOCR. Keep separately rendered review evidence as
+needed. Invalidate caches when the source, page mapping or classifier changes;
+resumability alone does not prove fresh evidence.
 
-Builders can call `mark_page_italics()` from `common/italic_markup.py` after
-page-local text cleanup and before pages are concatenated. The aligner uses OCR
-word order rather than a global vocabulary, so the same word can remain roman
-in one sentence and become `<em>` in another. Replace the private-use markers
-with markup only after HTML escaping, merge adjacent emphasis spans, and write
-the returned statistics to a book-specific report under `tmp/`.
+Call `mark_page_italics()` after page-local cleanup and before page concatenation.
+Review coverage, weighted alignment and unmatched candidates, including rare
+short words and roman controls. Its return contains private-use style markers:
+escape prose, convert controlled markers to semantic markup, and reject any
+markers left in the package. Final block/title boundaries still need review.
+No classifier threshold is a universal justification to italicize a word.
 
-Audit the report for page coverage, weighted alignment, unmatched candidates,
-and unusually low-alignment pages. Finally render the finished EPUB through a
-real reader and compare isolated short emphasis, titles, long italic passages,
-notes, and roman controls with the corresponding PDF pages.
+## Verification commands and scope
+
+Run shared tests when changing a helper or verifying its documented usage:
+
+```sh
+python3 -m unittest discover -s conversion/common -p 'test_*.py'
+```
+
+Run from the repository root with the dependencies in the helper catalog. This
+checks shared code; **it does not validate any book**.
+
+Each recipe must also run its own builder and validator, followed by a reader
+export and complete-block/format checks. The generic reader step is:
+
+```sh
+ebook-convert "output/epub/Title - Author.epub" tmp/pdfs/source-book/reader.txt
+```
+
+Use that book's real paths and recipe order. Inspect reader-generated visual
+output for repaired and representative layouts as required by AGENTS.md.
+A text export cannot validate photographs, outlined equations or crop edges.
+
+## Adding reusable methods
+
+Promote only source-independent algorithms with a clear input/output contract,
+conservative behavior and focused positive/negative tests. Document the actual
+API and its limits in `common/README.md`. Put the general decision method in the
+appropriate guide. Keep source-specific thresholds, names, crops, exact repairs,
+fixtures and build/QA products in `tmp/pdfs/<book>/`.
