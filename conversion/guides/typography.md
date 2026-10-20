@@ -162,6 +162,15 @@ edge. Otherwise every quotation line becomes a separate paragraph and keeps
 its broken hyphenation. Reconstruct multicolumn indexes column by column, not
 by globally sorting all lines by their vertical position.
 
+For scanned quotations, compare line-level style and spacing before joining
+blocks. An italic quotation's short final line can be followed by roman author
+commentary at the same left edge, with a gap smaller than normal body-leading
+thresholds. Sentence completion plus a sustained italic-to-roman transition
+can identify that boundary. Review such transitions throughout the book before
+expanding a mostly italic paragraph; otherwise commentary inherits quotation
+styling. Exclude bibliography title-to-publisher continuations and genuine
+mixed-style sentences from this boundary heuristic.
+
 For digital sources, compare the complete retained character stream and italic
 character stream with the packaged output, allowing only the explicitly
 documented whitespace/dehyphenation transformations. Inspect all unusually

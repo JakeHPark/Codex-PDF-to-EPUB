@@ -50,6 +50,11 @@ Use three levels of repair:
 
 Keep exact substitutions visible in a dictionary or correction file. Avoid broad dictionary-based “spell correction”; it can damage names, quotations, dialect, archaic spelling, and technical language.
 
+Low confidence or disagreement between OCR readings triggers source review. It
+does not authorize converting a prose word into a mathematical image. Recover
+the reading as text; see [the prose/math boundary rules](mathematics.md#keep-prose-out-of-mathematical-assets)
+for formula classification and searchability checks.
+
 Track which exact corrections have already been applied when normalizing both
 source lines and reconstructed blocks. A replacement that contains its own
 search text can grow a second letter, quotation mark or year if applied again.
@@ -415,6 +420,15 @@ Verify unfamiliar technical identifiers against the source and an authoritative
 reference when letter/digit confusion remains; do not guess from OCR shape.
 
 ## Word-shape confusions
+
+Flag apparent words beginning with a slash, such as `/ocal`, `/ess` or `“/t`,
+and words ending abruptly in `]`, such as `If]`. Italic `l` or capital `I`
+can be misrecognized as those strokes; a damaged `If I` can become `If]`.
+Review the complete word and neighboring text against the source. Preserve
+genuine mathematical division, paths, bracketed quotations and citation
+closers. These are whole-book detection rules, not global slash or bracket
+replacements. A trailing bracket can also be extra ink rather than a missing
+pronoun, as in a corrupted `Recall]`.
 
 During a final OCR pass, flag angle brackets embedded inside apparent words,
 unlikely `ii` clusters, and isolated substitutions such as `ol` in `one ol`.

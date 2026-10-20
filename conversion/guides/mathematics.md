@@ -8,6 +8,7 @@ can be satisfied by merely generating a report.
 ## Contents
 
 - [Mathematical expressions and equation images](#mathematical-expressions-and-equation-images)
+  - [Keep prose out of mathematical assets](#keep-prose-out-of-mathematical-assets)
 
 ## Mathematical expressions and equation images
 
@@ -18,6 +19,75 @@ relationships. Use semantic text with emphasis and superscript/subscript markup
 for simple notation when the source glyphs and baselines can be verified.
 Treat mathematical powers, isotope numbers, and note references as distinct
 roles; a raised digit is not sufficient evidence for a note link.
+
+### Keep prose out of mathematical assets
+
+Prefer readable, searchable text for inline notation. The cost of incorrectly
+turning prose into an image is higher than leaving simple notation as text:
+when classification is uncertain, keep the text and flag its reading for review.
+Recognizing mathematics does not itself justify rasterizing it. Expressions
+such as `log p`, `H(p)`, `A_i/A`, simple equalities and inequalities, and short
+variable sequences normally need only text, Unicode symbols and semantic
+subscript/superscript markup. Use images only when source relationships cannot
+be represented faithfully with the available semantic rendering. Preserve
+necessary fractions and stacked coefficients; this preference does not permit
+discarding an uncertain script or flattening a genuinely two-dimensional object.
+
+Do not turn a word into a formula image because its OCR confidence is low,
+its spelling is absent from a dictionary, or two OCR engines disagree. Collate
+those readings against the source and retain reviewed prose as text. An image
+fallback must resolve a verified mathematical construction, not conceal an
+unresolved transcription. When removing an overbroad image fallback, review
+the newly exposed OCR too: an image may have hidden a misread variable, such
+as `7` for italic `T` or `n`, or a missing script numerator. Restore the correct
+semantic glyph or complete expression from the source before release.
+Italics, descenders and a low bounding-box edge alone
+are insufficient: ordinary italic words such as “of”, “by” and “for” can resemble
+subscripted notation. Apply this restraint to roman text and names too.
+
+Identify prose and structural roles before classifying mathematical shapes.
+Parenthesized item labels such as `(1)` and `(2)`, the pronoun “I”, years,
+chapter references and ordinals such as “19th” remain text. Raised ordinal
+suffixes are typography, not equation scripts. Strip a list marker before
+grouping adjacent mathematics, so the first variable cannot absorb the marker
+and duplicate its number. A scanned vertical stroke may be “I”, “1”, a variable
+or a conditional-probability bar; decide from source and context.
+This also applies to appendix letters in references such as “Appendix F” and
+“Appendix W”, and figure-panel or enumerated labels such as `(b)`. Classify
+their structural role before inspecting the letter's mathematical appearance.
+Include these labels in negative image-selection regressions. Review slash-like
+OCR readings in mathematical prose too: `/7` may be an italic `H`; punctuation
+inside `A;/A` or `H(+)` may hide a script or fraction. Check the complete source
+expression and recover it as text where possible, rather than imaging the
+malformed OCR or trusting its literal punctuation.
+
+Classify the complete expression using source symbols, relationships and
+context. Protect ordinary words from geometric heuristics without treating
+every dictionary entry as prose: `Pr`, `dS`, `log` and genuine scripted variables
+can be mathematical. Use semantic italic text for verified standalone variables;
+retain native mathematics where scripts or two-dimensional relationships require
+it. A reviewed inseparable mathematical passage may remain a source image, but
+record its location and reduced searchability explicitly. When prose and
+notation can be source-collated, reconstruct the prose and isolate the true
+expression rather than making the whole sentence an image. An override created by
+a fragment-merging heuristic is not reviewed evidence: tiny OCR rows can be
+duplicate descenders, dots or quotation strokes from ordinary prose. Verify the
+source ink before forcing their neighboring words into a math asset.
+
+Inventory the source tokens assigned to every inline math asset. Audit common
+prose words, unexpected asset counts and formulas containing whole sentences.
+Assert that reviewed prose remains text in both the packaged EPUB and reader
+export; a crop displaying the right word does not pass this check. Regression
+cases must include italic prose with descenders and low OCR confidence, alongside
+real subscripts, function names and unknown technical terms. Inspect both
+positive math selections and ordinary words that must stay outside them.
+Audit complete parenthesized variable tuples and probability distributions: a
+recognized opening fence or initial letter does not prove that the closing
+fence, intervening letters, ellipsis, subscripts or fraction entries survived.
+Review stray degree signs and question marks after numerical bases as possible
+misread exponents; preserve real angles, temperatures and degree notation.
+
+### Recover complete native expressions
 
 For complex digital-PDF formulas that cannot be reconstructed faithfully as
 semantic mathematics, preserve isolated source glyph outlines in transparent
@@ -31,6 +101,12 @@ prose baseline. Otherwise a fraction can be separated from its sentence or a
 stacked coefficient can lose its lower entry. Do not group solely by the PDF's
 text blocks: one expression may occupy many blocks and one block may contain
 both prose and a formula.
+
+Recognize bibliography years and citation suffixes before grouping parenthesized
+mathematics: `(2017a, 2017b)` is a citation, not a variable tuple. Commas and
+alphabetic suffixes alone cannot distinguish these roles. Group complete
+source-supported expressions without allowing a greedy neighboring run to
+swallow an already reviewed semantic expression.
 
 Recognize list markers before mathematical-font classification. A bullet may
 be encoded in the same symbol font as an equation and printed at a smaller
@@ -90,6 +166,38 @@ a discovered failure, not only the reported example. Include stacked
 coefficients, inline fractions beside prose, labeled proof steps, large
 operators, and neighboring punctuation in visual regression checks. Document
 that outlined formulas retain appearance but are not searchable semantic math.
+
+For scanned mathematics, OCR word boxes are an incomplete inventory: an entire
+denominator, operator, equation label or unnumbered schematic may be absent.
+Recover the full source band before narrowing its bounds against visible ink.
+Then audit the actual packaged crop rectangles against independently reflowed
+words. Exclusive OCR-token ownership alone cannot detect prose duplicated
+inside an expanded image. Resolve every overlap by recovering the inline
+expression or, when reliable separation is impossible, preserving one complete
+source passage and documenting its reduced searchability. Never clip unseen
+formula components merely to eliminate an overlap.
+Do not remove an equation number by narrowing a whole multiline crop to the
+number's horizontal position: an earlier line can extend farther right. Keep
+the number in the native image unless its removal preserves every line's ink.
+Review unexpected copyright or trademark symbols in mathematical prose against
+the scan before deleting them. OCR can mistake an infinity sign, omega or a
+raised variable for such a mark; recover the complete expression's source ink.
+Clamp raster crops to the decoded image dimensions before padding or alpha
+extraction. Rounded PDF-to-pixel coordinates can exceed the raster by one pixel;
+some image libraries fill that overflow with black, creating a false vertical
+rule and forcing the real equation to shrink to fit an almost page-wide asset.
+Check unusually narrow inline glyph boxes too: a correctly transcribed zero can
+have a box covering only its right stroke, so its raster crop resembles a closing
+parenthesis. Confirm the complete ink and distinguish lookalikes such as zero
+and omega before choosing a wider source crop or verified semantic glyph.
+
+A tiny detached OCR row can also be ordinary text, a reference's final page
+number, or a closing quotation mark. Associate it with its actual source
+baseline, including short continuation rows; the nearest long prose row can
+belong to the preceding line. Keep bibliography continuations outside generic
+script-merging heuristics. When sorting blocks spanning physical pages, use
+the first page's position, not the smallest vertical coordinate across all
+their pages.
 
 ### Structured mathematics and annotations
 
@@ -180,6 +288,7 @@ as a global substitution dictionary.
 | Drawn mathematical rule omitted | Numerator and denominator survive but their fraction bar, radical rule, or overbar disappears. | Inventory relevant PDF drawing paths separately from text; include and validate each required rule. |
 | Overlaid operator split | A negation stroke and equals sign appear as `/=`, a combining mark, or separate pieces instead of `≠`. | Recover the verified composite symbol semantically or preserve all overlaid outlines; check every occurrence of the construction. |
 | Accent or bar detached | The Planck constant becomes a separate macron plus italic `h`; hats, tildes, checks, or bars separate from their letter. | Inspect overlaid text glyphs as well as drawn paths; use verified `ℏ` or preserve the complete accented construction in one asset. |
+| Prose misclassified as mathematics | Ordinary words become images because they are italic, have descenders, have low OCR confidence or are absent from a dictionary. | Review the source reading as text; require independent mathematical evidence; inventory asset source tokens and verify prose searchability in the final EPUB and reader export. |
 | Sentence punctuation absorbed | A trailing comma, colon, semicolon, or full stop enters the formula image. | Classify punctuation by sentence role, keep external punctuation as text, and preserve genuine internal formula punctuation. |
 | Font-run typography or spacing damaged | Decimal dots become emphasized, words touch formula edges, or spacing is inserted inside words. | Check packaged decimal spans and whole-formula edge gaps; preserve verified source separators and avoid inference from font family alone. |
 | Opaque background or neighboring ink retained | A white rectangle appears behind math, or a whole-page SVG leaks nearby prose. | Use isolated transparent assets; reject opaque background elements and unrelated glyphs; inspect against the reader's background. |
@@ -192,7 +301,11 @@ as a global substitution dictionary.
 Maintain a book-specific inventory of source formula locations, selected glyph
 identities, drawn rules, inline/display roles, and surrounding prose. Require
 every retained visible source character to have exactly one accounted role;
-document intentional semantic replacement of markers and composite symbols.
+reconcile source equation labels independently. Verbose formulas such as
+`H(location and momentum)` can exceed a prose-length heuristic while remaining
+a displayed equation. Verify their full regions and labels, rather than leaving
+function descriptions and isolated operators scattered through prose.
+Document intentional semantic replacement of markers and composite symbols.
 For every confirmed failure, add an assertion about the complete expression
 or structural relationship, rather than only checking that its letters occur
 somewhere in the EPUB. Keep source-specific thresholds, reviewed exceptions,
