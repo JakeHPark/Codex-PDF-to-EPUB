@@ -81,6 +81,17 @@ export; a crop displaying the right word does not pass this check. Regression
 cases must include italic prose with descenders and low OCR confidence, alongside
 real subscripts, function names and unknown technical terms. Inspect both
 positive math selections and ordinary words that must stay outside them.
+
+Render equation images with black ink on solid white backgrounds by default.
+This minimal presentation remains legible when the reader uses a black page
+background, without requiring automatic image recolouring or theme detection.
+Transparency alone does not make fixed black pixels follow the reader's text
+colour. Apply the background to the actual raster or SVG asset, rather than
+relying solely on CSS that a reader may ignore. Preserve original ink geometry,
+resolution and antialiasing; inspect the packaged images on both light and dark
+backgrounds. Semantic notation should continue to inherit ordinary text colour.
+Do not recolour photographs, covers or arbitrary illustrations under this rule.
+
 Audit complete parenthesized variable tuples and probability distributions: a
 recognized opening fence or initial letter does not prove that the closing
 fence, intervening letters, ellipsis, subscripts or fraction entries survived.
@@ -90,8 +101,9 @@ misread exponents; preserve real angles, temperatures and degree notation.
 ### Recover complete native expressions
 
 For complex digital-PDF formulas that cannot be reconstructed faithfully as
-semantic mathematics, preserve isolated source glyph outlines in transparent
-SVG. Select the actual glyph occurrences and necessary fraction/overbar rules;
+semantic mathematics, preserve isolated source glyph outlines in SVG with black
+ink and a white background rectangle. Select the actual glyph occurrences and
+necessary fraction/overbar rules;
 do not crop a whole page's SVG or include neighboring prose. Verify that every
 selected visible glyph is present. Math-extension fonts often report ordinary
 text boxes for tall brackets or operators: measure the transformed glyph
@@ -159,8 +171,8 @@ italic h. Check all occurrences of the same glyph construction.
 
 Keep punctuation belonging to the surrounding sentence outside inline math
 assets, including a following comma, colon, semicolon, or full stop. Preserve
-punctuation internal to mathematical expressions. Formula images must have no
-opaque background and must scale with surrounding text; check their baseline,
+punctuation internal to mathematical expressions. Formula images must use black
+ink on solid white backgrounds and must scale with surrounding text; check their baseline,
 size, complete fences, and scripts in a reader preview. Audit all instances of
 a discovered failure, not only the reported example. Include stacked
 coefficients, inline fractions beside prose, labeled proof steps, large
@@ -218,7 +230,8 @@ globally remove primes, which may be genuine notation.
 For verified simple notation, semantic text with real subscripts/superscripts
 can retain searchability. Normalize mathematical Unicode alphabet variants only
 when their italic/bold/function roles are separately preserved. Complex
-expressions may require transparent vector renders, with sentence punctuation
+expressions may require vector renders with black ink and a white background,
+with sentence punctuation
 outside the asset. Track native and outlined expressions together so every
 source expression appears exactly once, including headings, captions, tables
 and notes. Check accessible labels independently; do not label a correctly
@@ -291,7 +304,7 @@ as a global substitution dictionary.
 | Prose misclassified as mathematics | Ordinary words become images because they are italic, have descenders, have low OCR confidence or are absent from a dictionary. | Review the source reading as text; require independent mathematical evidence; inventory asset source tokens and verify prose searchability in the final EPUB and reader export. |
 | Sentence punctuation absorbed | A trailing comma, colon, semicolon, or full stop enters the formula image. | Classify punctuation by sentence role, keep external punctuation as text, and preserve genuine internal formula punctuation. |
 | Font-run typography or spacing damaged | Decimal dots become emphasized, words touch formula edges, or spacing is inserted inside words. | Check packaged decimal spans and whole-formula edge gaps; preserve verified source separators and avoid inference from font family alone. |
-| Opaque background or neighboring ink retained | A white rectangle appears behind math, or a whole-page SVG leaks nearby prose. | Use isolated transparent assets; reject opaque background elements and unrelated glyphs; inspect against the reader's background. |
+| Background or neighboring ink obscures notation | Transparent black ink disappears on a dark page, or a whole-page SVG leaks nearby prose. | Use isolated black notation on an actual white asset background; exclude unrelated glyphs and inspect against both light and dark reader backgrounds. |
 | Formula scaled or aligned incorrectly | Inline math sits too high/low, is much larger than prose, or a display overflows the viewport. | Size inline assets relative to body text, derive alignment from the source baseline and full ink bounds, and preview both inline and displayed formulas at reader widths. |
 | Coverage checks pass despite corrupt structure | All characters exist somewhere, but an upper entry is in prose, a fraction is split, or citation digits are reordered. | Track exclusive source-character ownership and expected formula groups/roles; add complete-expression and reading-order checks plus source-to-reader visual comparison. |
 | Extracted alt text mistaken for accessible math | An outlined formula looks correct but its raw text map has scrambled order or unknown symbols. | Do not call that map a verified transcription; provide accessible mathematical text only after reconstruction and review, and document the limitations of outlined formulas. |
@@ -319,7 +332,7 @@ newly repaired expressions and representative stacked coefficients, fractions
 with exponents, simultaneous scripts, script letters, accented symbols, large
 operators, equation labels, math-only list items, and sentence punctuation.
 Inspect neighboring prose as well as the equation itself. A successful ZIP/XML
-check, glyph count, transparent background, or text export alone is never
+check, glyph count, correct background, or text export alone is never
 sufficient evidence that mathematical rendering is correct.
 
 Inventory unnumbered diagrams too. Search for substantial vector paths and
