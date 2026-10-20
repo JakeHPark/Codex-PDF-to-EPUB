@@ -63,6 +63,15 @@ table in reading order. Compare the caption, crop top/bottom, and neighboring
 text against the rendered PDF page to catch caption fragments and section text
 leaking across those boundaries.
 
+Font-reported text rectangles may understate visible label ink, especially for
+transformed or bold labels in vector diagrams. A crop that includes every text
+box can still lose a final letter. Check rendered ink and allow independent
+edge padding rather than treating coordinate coverage as proof of completeness.
+For a rotated full-page diagram, recover its caption separately and rotate the
+artwork into a readable orientation; verify all arrowheads and labels again
+in the packaged result. If extra padding would capture the original caption,
+remove only that recovered caption on a working copy before making the asset.
+
 Validate object coverage against the inventory, inspect every crop edge for
 clipped labels or leaked prose, and check representative narrow and wide objects
 in a reader preview. Compare the retained prose separately from captured object
@@ -477,3 +486,15 @@ ink regions against the figure inventory after excluding retained prose,
 verified headings, rules, and semantic panels. Small product drawings and signs
 can be missed even when every OCR word is accounted for. Review residuals
 against the scan and retain lettering belonging to a drawing inside its image.
+
+### Cropped pages backed by shared spread images
+
+A PDF page can display only part of a larger embedded scan, and facing PDF pages
+can reuse the same image with different placement offsets. Inspect the image
+placement transform and the page rectangle before extracting it: saving the
+entire bitmap can introduce the facing page, while treating its pixels as a
+single page can crop the wrong text. Map each verified page/region through the
+placement transform to native image pixels. Cache decoded spreads for adjacent
+crops, preserve the original resolution, and check the resulting page identity.
+For scholarly facsimiles, inspect the outer margins too; line numbers belonging
+to the critical apparatus must not be mistaken for disposable whitespace.

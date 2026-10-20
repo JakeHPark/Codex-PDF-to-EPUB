@@ -26,6 +26,13 @@ chapter coverage and provenance can be verified. Record the source URL and
 inventory every chapter before building so a partial web mirror is never
 mistaken for the whole book.
 
+Check publication metadata against the versioned record and matching PDF.
+A regenerated scholarly HTML edition can evaluate a dynamic source command
+such as TeX's `\today` again, displaying its conversion date as if it were the
+paper's date. Preserve the requested version and verified publication/document
+date; do not silently update the edition from a renderer's timestamp. Keep
+submission dates distinct from a date explicitly printed on the paper.
+
 Treat web editions as source recovery too: remove site navigation, headers,
 footers, advertisements, and other chrome while preserving the book's semantic
 markup, paragraph order, emphasis, quotations, and chapter hierarchy. Download
@@ -47,6 +54,14 @@ for an article figure. Rebuild malformed image/caption groups and note links,
 then verify every recovered image and caption against both source reading orders.
 For a multi-panel sequence, preserve its sequence and grouping while keeping
 individual panels legible and preventing captions from becoming stranded.
+
+Recover meaningful source CSS classes as well as inline tags. A scholarly
+repository may mark whole quotations as italic using a class, and encode a
+numbered list as an unstyled `ul` with literal label spans. Reconstruct those
+roles explicitly so dropping website CSS does not lose emphasis or introduce
+bullets beside the printed numbers. Compare reference typography with the
+published PDF when the repository's citation markup has lost title emphasis
+or reordered bibliographic fields.
 
 Validation for HTML-derived EPUBs must prove that every expected chapter was
 included, every local image reference resolves and appears in the manifest,
@@ -259,6 +274,15 @@ identifier, abstract, classification codes, and authored acknowledgments.
 Separate institutional boilerplate and postal/contact details from substantive
 front matter. Preserve numbered section/subsection hierarchy in both content
 and navigation, and keep footnotes distinct from bibliographic references.
+
+A structured web edition can contain damaged bibliography strings even when
+its prose is clean: duplicated DOI fields, fused years and journal names, or
+reordered author/title fields. Compare flagged references with the matching
+published PDF. Recover complete references and their emphasis from that edition,
+then rebuild local citation targets and return links. Rejoin DOI fragments using
+the complete identifier as independent evidence; do not apply prose hyphen
+removal or generic spacing substitutions to identifiers. Verify each reference's
+text, numbering, italic titles and links separately from the main prose.
 
 Inspect the abstract and preliminary pages visually even when the main text's
 font metadata is reliable. A visibly italic title can be reported within an

@@ -91,6 +91,31 @@ coefficients, inline fractions beside prose, labeled proof steps, large
 operators, and neighboring punctuation in visual regression checks. Document
 that outlined formulas retain appearance but are not searchable semantic math.
 
+### Structured mathematics and annotations
+
+A structured scholarly web edition can supply both presentation MathML and a
+TeX annotation for the same expression. They are not guaranteed to agree:
+annotations may omit words such as “to” inside a range, retain stray dollar
+signs, or differ from an unparsed MathML construction. Inventory every expression
+and compare suspect representations with the matching version's rendered PDF.
+Use the representation that demonstrably retains the complete expression;
+never render all annotations blindly because the prose HTML is clean.
+
+Presentation MathML itself can misclassify sentence punctuation as a script
+inside a denominator. Review unexpected primes and trailing punctuation against
+the published page, including their vertical position. Move verified sentence
+punctuation outside the formula and retain it in the surrounding text; do not
+globally remove primes, which may be genuine notation.
+
+For verified simple notation, semantic text with real subscripts/superscripts
+can retain searchability. Normalize mathematical Unicode alphabet variants only
+when their italic/bold/function roles are separately preserved. Complex
+expressions may require transparent vector renders, with sentence punctuation
+outside the asset. Track native and outlined expressions together so every
+source expression appears exactly once, including headings, captions, tables
+and notes. Check accessible labels independently; do not label a correctly
+rendered range with an annotation that omitted its separator.
+
 ### Source recovery and conservative native mathematics
 
 A digital PDF can display an equation correctly while its text mapping emits

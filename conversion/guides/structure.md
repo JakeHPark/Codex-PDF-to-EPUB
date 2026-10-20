@@ -264,6 +264,13 @@ Do not treat every left-aligned reference line as a new citation. Verify the
 source entry spacing and join wrapped publication names and words within each
 entry before applying hanging-indent styling.
 
+A repeated-author rule may disappear from OCR while its year survives farther
+right. On pages dominated by these entries, continuation lines can become the
+apparent left margin. Identify entry starts from the source rule, author/year
+pattern and spacing together; do not split every hanging continuation. Review
+uppercase title continuations and city/publisher lines as well as lowercase
+fragments. Preserve repeated-author rules explicitly in the rebuilt references.
+
 Numeric-only lines can be ordinary citation continuations, such as a volume
 number and page range. Classify them from their font, baseline, left edge,
 and entry spacing before equation detection. Never attach their digits to a
@@ -406,6 +413,12 @@ Make this release-blocking: all packaged XHTML—not only the main body—must c
 ## Running-head variants absorbed into prose
 
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
+
+A running-head cutoff must leave the highest genuine body line intact in each
+column. Font rectangles may extend above the visible ink, and top baselines can
+vary by a few points across pages. Inventory excluded lines near the cutoff and
+compare an independent extraction before accepting a fixed top margin; otherwise
+whole, fluent continuation lines can disappear while all retained-text checks pass.
 
 ## Print indexes in reflowable EPUBs
 
@@ -568,3 +581,45 @@ between conditional clauses. Rejoin verified continuous sentences with a
 separating space while retaining inline emphasis. Preserve actual verse,
 dialogue, addresses, and source-supported display lists; grammar and structure,
 not the mere presence of a `<br>` tag, determine the role.
+
+### Parallel textual witnesses in scholarly editions
+
+Verify volume numbers on printed title pages before ordering files; filenames
+can be reversed. Inventory each source-language text, translation, supplementary
+witness and apparatus separately. A page can contain two translations of the
+same numbered passage. Repeated section numbers establish parallel witnesses,
+not duplicate extraction.
+
+Recover each witness as a continuous stream across pages. Its next page may
+begin with an unnumbered continuation well before the next numbered paragraph.
+Locate the first line of the witness from source spacing, typography and the
+preceding page's unfinished sentence; do not split only at paragraph numbers,
+at a fixed page height, or at the largest gap. Some pages may contain only one
+witness even within an otherwise parallel run. Small note panels can occur
+between streams, so classify those panels independently before paragraph joining.
+Check both streams' paragraph-number sequences and sentence continuations.
+
+When making a translation-only reading edition, remove the parallel source
+texts by stream or verified region, not by script detection across the book.
+Keep distinct translated witnesses, translated fragments, English commentary
+and notes; quoted source-language terms within that commentary are a separate
+editorial role. Check mixed-language appendices region by region. Repoint note
+links to the retained notes, rebuild navigation and the manifest, and confirm
+that removed facsimiles are absent from the archive. Small English note panels
+can occur near the top of a short page: exclude a generated title by its actual
+identity, never by a blanket upper-page cutoff. Record omitted textual apparatus
+and any retained image-based English material in the edition description.
+
+When original-language text or critical apparatus is preserved as facsimiles,
+keep its marginal line numbers, sigla, variant readings and reference system.
+Link the reading text to the corresponding original pages and state which
+material remains image-based and therefore lacks searchable text. Preserve a
+print index when explicitly requested; retained original-page anchors make its
+pagination usable alongside the reflowed text.
+
+An internal subheading within the first witness can create the same vertical
+gap as the start of the second witness. Check both sides of every proposed
+boundary against the page and its continuations; a plausible spacing threshold
+alone cannot establish ownership. Include numbered paragraphs with OCR-damaged
+final punctuation in structural audits, so a comma misread for a full stop does
+not merge several numbered sections into one paragraph.

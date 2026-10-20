@@ -133,6 +133,15 @@ for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
 absence of a recognized glyph suffix is not proof of absent formatting.
 
+A reliable digital PDF can also insert extraction-only spaces immediately after
+an encoded ligature, producing `ﬁ rst`, `ofﬁ ce` or `conﬂ ict`. Inspect the printed
+word and its character positions before normalizing the ligature. Inventory all
+such glyph-space boundaries in the work, remove only verified internal spaces,
+and expand the actual ligature while retaining its emphasis. Do not promote this
+into joining arbitrary short words or ordinary `fi`/`fl` sequences. Validate the
+complete words and style stream after line joining; a normalizer that expands
+`ﬁ` first can conceal the evidence that the gap came from a single glyph.
+
 When classifying small digits by baseline, exclude whitespace-only spans from
 reference-baseline estimates. A PDF may position a separator at the preceding
 superscript's height even though the surrounding words remain on the body
@@ -476,3 +485,12 @@ italic word inside otherwise roman instructions. Do not make all list prose
 uniform merely because its opening labels share a style. Record retained
 exceptions as well as repairs, and validate the final packaged list membership
 and complete label spans after structural assembly.
+
+Superscript note numerals can merge with a neighboring closing quotation mark
+or question mark during OCR. Use the raised ink and character geometry to
+separate the marker from ordinary punctuation. A numeric OCR result outside the
+expected note range may reflect that merger; review the glyph rather than
+silently dropping its link or leaving symbols such as a degree sign in prose.
+Printed underlining can also obscure letters and defeat both OCR engines.
+Inspect emphasized quotations independently, restore missing source words, and
+preserve the underline when it carries an explicitly stated editorial distinction.
