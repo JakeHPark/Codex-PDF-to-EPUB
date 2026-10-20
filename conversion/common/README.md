@@ -46,7 +46,7 @@ Shared tests establish helper behavior, not the quality of a generated EPUB.
 which may create a new fused token. Do not apply it to clean digital/HTML text
 just to standardize the pipeline. Do not feed code or mathematics through it.
 
-Rules include bounded forms such as `Ihave`, `ina`, `Itis`, `It"s`, `Mosi`,
+Rules include bounded forms such as `Ihave`, `ina`, `asystem`, `Itis`, `It"s`, `Mosi`,
 `Yoii` and `selfknowledge`; valid substrings such as `Karenina`, `Otitis`,
 `arthritis`, `Mosiac` and longer names must survive. These are OCR defaults,
 not dictionary-based spelling correction; retain source-verified exceptions.

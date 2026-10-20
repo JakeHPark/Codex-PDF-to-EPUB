@@ -447,6 +447,10 @@ or positioned-word scope when the document's context supports them.
 
 ## Constrained shared token repairs
 
+The shared OCR layer separates whole-token `asystem`/`Asystem` into
+`a system`/`A system`. Protect longer tokens and technical identifiers; this
+does not authorize splitting every word that contains `system`.
+
 The fused pronoun phrase `Itis` is repaired to `It is` in the shared OCR layer.
 Keep this an exact, whole-token rule and test punctuation boundaries plus
 negative examples such as `Otitis`, `arthritis`, and longer names. Do not extend

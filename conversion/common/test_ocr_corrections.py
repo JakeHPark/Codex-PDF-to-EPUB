@@ -5,6 +5,12 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_fused_a_system_is_whole_token_only(self):
+        self.assertEqual(
+            apply_common_ocr_corrections("asystem... (Asystem). ecosystem parasystem asystems ASYSTEM"),
+            "a system... (A system). ecosystem parasystem asystems ASYSTEM",
+        )
+
     def test_fused_i_am_is_case_sensitive_whole_token_only(self):
         self.assertEqual(apply_common_ocr_corrections("Iam ready. (Iam here.) IAM Iams William iambic."),
                          "I am ready. (I am here.) IAM Iams William iambic.")

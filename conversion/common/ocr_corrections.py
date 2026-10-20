@@ -46,6 +46,8 @@ COMMON_TOKEN_REPLACEMENTS = {
     "teligion": "religion",
     "theirjargon": "their jargon",
     "upona": "upon a",
+    "asystem": "a system",
+    "Asystem": "A system",
     "Itis": "It is",
     "Iam": "I am",
     'It"s': "It's",
