@@ -7,6 +7,7 @@ can be satisfied by merely generating a report.
 
 ## Contents
 
+- [Decorative ornaments and drop caps](#decorative-ornaments-and-drop-caps)
 - [Mixed text, tables, graphs, and diagrams](#mixed-text-tables-graphs-and-diagrams)
 - [Floating instructional panels and nested exercise lists](#floating-instructional-panels-and-nested-exercise-lists)
 - [Sidebar notes are independent text streams](#sidebar-notes-are-independent-text-streams)
@@ -20,6 +21,28 @@ can be satisfied by merely generating a report.
 - [Shaded panels, intrusive rules, and interrupted lists](#shaded-panels-intrusive-rules-and-interrupted-lists)
 - [Caption ownership beside prose](#caption-ownership-beside-prose)
 - [Panel and caption ownership](#panel-and-caption-ownership)
+
+## Decorative ornaments and drop caps
+
+By default, remove purely decorative book ornaments: ornamental borders,
+headpieces, tailpieces, flourishes, repeated divider pictures and similar
+images that carry no textual or illustrative meaning. Omit their empty wrappers,
+forced page breaks, captions describing only the ornament and unused assets.
+Preserve meaningful illustrations, diagrams, authored visual arrangements and
+the required minimal cover; do not classify artwork as decorative merely because
+it is elaborate. Record the ornament inventory and omissions in the recipe.
+
+Convert drop caps and other ornamental chapter initials into ordinary inline
+text. Recover each initial from reliable image alt text, adjacent source text
+or reviewed pixels **before** removing its image; join it to the remaining word
+without inserting a space, while retaining a real word boundary when the
+initial is a standalone word. Remove the decorative float/size styling as well.
+Audit every section opening against the source: some initials are supplied only
+by the image, some are duplicated by accessible text, and some precede an opening
+quotation mark. Preserve the complete word, its surrounding punctuation and any
+genuine emphasis, without duplicating the first letter. Test the first sentence
+of every affected section and verify that no ornamental image or empty frame
+remains in the package or reader output.
 
 ## Mixed text, tables, graphs, and diagrams
 

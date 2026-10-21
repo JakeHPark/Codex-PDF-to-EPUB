@@ -232,6 +232,13 @@ unused table images only after accounting for their contents and links. Check
 all cells and emphasis against the original and inspect narrow reader output;
 well-formed HTML alone does not establish a usable table layout.
 
+Even a searchable auxiliary table can omit a cell-internal line break and fuse
+separate entries. Compare its visible entries with the table image; inspect
+lowercase-to-uppercase joins within individual text nodes while preserving real
+names such as `LinkedIn`. Distinguish missing breaks from existing `br` elements:
+flattened text alone makes both look fused. Restore verified entry boundaries
+in the semantic cell, and check the complete cell in a reader export.
+
 When auditing punctuation in readable text, account for linked superscript
 citations separately. Flattening a closing quotation mark directly against a
 reference digit can make a valid quotation resemble an apostrophe inside a

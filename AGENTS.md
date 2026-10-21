@@ -63,7 +63,7 @@ Do not substitute another edition or translation merely because it is easier.
 | --- | --- |
 | Chapter/part boundaries, paragraphs, dialogue, lists, notes, indexes or print references | [Structure](conversion/guides/structure.md) |
 | Italics, bold, small capitals, fragmented styles, quotations, apostrophes, dashes or punctuation spacing | [Typography](conversion/guides/typography.md) |
-| Columns, floating figures, tables, exercise plates, marginal notes, shaded panels, captions, image crops or spreads | [Illustrations and layout](conversion/guides/illustrations.md) |
+| Columns, floating figures, tables, exercise plates, marginal notes, shaded panels, captions, image crops, spreads, decorative ornaments or drop caps | [Illustrations and layout](conversion/guides/illustrations.md) |
 | Equations, scripts, fractions, stacked coefficients, overlaid operators or equation images | [Mathematics](conversion/guides/mathematics.md), including its failure inventory |
 | Pāli, legacy transliteration fonts, detached accents or other scholarly diacritics | [OCR: transliterations](conversion/guides/ocr.md#pāli-and-other-scholarly-transliterations), plus typography rules |
 | Academic papers, abstracts, positioned tables or figures | [Sources: academic papers](conversion/guides/sources.md#academic-papers-and-positioned-objects), plus applicable object/math rules |
