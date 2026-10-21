@@ -160,6 +160,16 @@ Each navigable section should normally have:
 - deliberate scene breaks as a semantic or styled divider;
 - stable identifiers for notes and links.
 
+HTML `blockquote` elements sometimes serve only as print-size wrappers around
+bibliographies or entire quotation anthologies. Classify their contents before
+copying the tag: retain reading lists as lists/sections, and group independent
+extracts separately with their own attributions. Preserve paragraphs within a
+single continuing quotation. Keep a separate attribution beside the final lines
+of its extract with modest relative spacing and a break-before avoidance rule;
+do not force a long quotation to stay on one reader page. Check verse stored in
+plain paragraphs as well as explicitly marked poetry: recover verified lineation
+without treating ordinary source-wrapped prose as verse.
+
 A quotation continuing across paragraphs may reopen with a quotation mark at
 each paragraph without closing until the final paragraph. Do not balance quotes
 independently in each paragraph by inserting invented closers. Resolve
