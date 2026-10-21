@@ -63,6 +63,13 @@ bullets beside the printed numbers. Compare reference typography with the
 published PDF when the repository's citation markup has lost title emphasis
 or reordered bibliographic fields.
 
+Check CSS overrides before equating tag names with visible emphasis. A `font`
+shorthand declaration can reset an `em` element to roman while changing only
+its face or size; another class can make an ordinary span italic. Recover the
+verified presentation and semantic role together, normalize site-specific font
+choices, and retain the style evidence. Do not introduce italics solely because
+an imported tag is named `em`, or discard real italics when removing site CSS.
+
 Validation for HTML-derived EPUBs must prove that every expected chapter was
 included, every local image reference resolves and appears in the manifest,
 no remote image URL remains, and every content image renders inline with its
@@ -219,6 +226,13 @@ mistaken for another body reference. Check ordered text and emphasis coverage,
 including spaces between roman and italic runs, in both the package and reader
 export. Do not silently omit content merely because the source markup is invalid.
 
+Apply the same inventory to body prose around layout tables. A table nested in
+an invalid paragraph can cause the HTML parser to close the paragraph early,
+leaving its continuation in the table's tail before an empty paragraph. Identify
+whether the table contains real tabular data, verse, or layout gutters; recover
+its semantic content and the following prose separately. Reconcile the complete
+source region, including tails, rather than only its paragraph descendants.
+
 ## Publisher EPUB tables in auxiliary documents
 
 An EPUB may show an image of a table in its main article while supplying a
@@ -290,6 +304,13 @@ then rebuild local citation targets and return links. Rejoin DOI fragments using
 the complete identifier as independent evidence; do not apply prose hyphen
 removal or generic spacing substitutions to identifiers. Verify each reference's
 text, numbering, italic titles and links separately from the main prose.
+
+A saved journal page may retain a table number and caption with only “view
+inline” or “view popup” links, leaving the actual cells out of the file. Zero
+`table` elements does not establish that the article has no tables. Inventory
+numbered object wrappers and in-text calls, recover the cells from the linked
+document or a matching structured edition, and verify headers, values, spans
+and table notes against the published source before placing them inline.
 
 Inspect the abstract and preliminary pages visually even when the main text's
 font metadata is reliable. A visibly italic title can be reported within an

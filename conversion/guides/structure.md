@@ -424,6 +424,14 @@ occurrence when practical. Validate reference occurrences and unique note
 entries as separate counts; restarting numbering in another chapter also needs
 chapter-qualified note identifiers.
 
+For scholarly citation ranges, inventory both the visible marker and its full
+membership: `4–10` cites seven entries even when the source links the whole
+range only to entry 4. Preserve the compact marker and its verified destination,
+but associate every included entry with that occurrence for coverage and return
+links. Keep comma/range separators at the same raised level as citation numerals;
+remove layout-only gaps within the citation cluster without changing neighboring
+prose spacing.
+
 Reader support for semantic popup footnotes is inconsistent. If notes must always be visible, render them as ordinary block content, for example:
 
 ```html
