@@ -621,6 +621,12 @@ as captions, instead of letting them interrupt neighboring prose.
 
 ## Meaningful versus print-only hard breaks
 
+An imported HTML container named `poem` or a preformatted wrapper can contain
+ordinary prose copied from a plain-text edition. Classify its complete contents
+before preserving its line breaks: recover paragraphs from verified blank-line
+boundaries, retain actual verse extracts, and separate explanatory notes from
+the interrupted prose stream. A container's name alone does not establish verse.
+
 Do not assume an HTML `<br>` is a deliberate authorial line break. Inventory
 hard breaks inside prose, especially immediately before emphasized words or
 between conditional clauses. Rejoin verified continuous sentences with a
