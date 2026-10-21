@@ -50,6 +50,10 @@ Rules include bounded forms such as `Ihave`, `ina`, `asystem`, `Itis`, `It"s`, `
 `Yoii` and `selfknowledge`; valid substrings such as `Karenina`, `Otitis`,
 `arthritis`, `Mosiac` and longer names must survive. These are OCR defaults,
 not dictionary-based spelling correction; retain source-verified exceptions.
+Standalone prose `a//` is repaired to `all`; `a//b`, `a//2`, paths and spaced
+division operators are preserved. Recalculate token-length style decisions
+after a spelling/glyph repair, using the original positioned pixel evidence:
+otherwise restored `all` can still fail a short-token emphasis filter.
 The standalone `8c` ampersand repair needs source context because that token
 can be meaningful in technical text.
 
@@ -96,6 +100,42 @@ requires a second audit after joining and structural rewrites: complete titles,
 short styled outliers, partly styled words, missing styles and negative roman
 boundaries cannot be proven correct by classifier counts.
 
+### `inline_audit.py`
+
+`find_emphasis_issues(root, known_phrases=())` inspects semantic `em`/`i` and
+`strong`/`b` across text/tail nodes. It reports partly styled words, isolated
+emphasized words, roman outliers in mostly emphasized blocks, dash boundaries
+and one-to-three short roman words between
+emphasized spans. Supply source-verified complete italic phrases to detect
+incomplete occurrences. `br`, images, code and math are barriers. It does not
+resolve external CSS or infer whether a title/foreign phrase deserves emphasis.
+Genuine emphasis, mixed-style puns and roman conjunctions remain review
+candidates; never apply the findings as blanket corrections.
+
+`find_unlinked_note_candidates(root)` reports bare symbol calls and note-shaped
+body paragraphs such as `*See …`, excluding linked markers and semantic note
+containers. It cannot locate missing source regions or prove note completeness.
+Inventory numeric and symbolic notes independently in the positioned source.
+
+Run these on the packaged XHTML after every rebuild. Gate release on resolving
+findings or individually source-reviewing them. A book may persist a fingerprint
+of each reviewed finding including its block text and style stream; new or
+changed findings must fail until reviewed. A generated report alone is not a
+pass, and a global exemption for a word or reason hides genuine regressions.
+Tests: `test_inline_audit.py`.
+
+`package_audit.audit_epub(epub, known_phrases=(), reviewed_keys=())` also checks
+periods touching letters across inline styles (abbreviations and domains require
+individual review). It runs these
+style/note checks together with punctuation, slash and degree-glyph inventories
+on the actual ZIP's XHTML. It returns per-block fingerprints, all findings and
+an `unreviewed_count`. Fingerprints include the block's complete text and style
+stream, so a changed occurrence invalidates its earlier review. The standalone
+`package_audit.py` CLI requires `--report`, accepts `--phrases` and `--reviewed`
+JSON files, and exits nonzero for unresolved findings. `--inventory` only
+collects candidates; it is not a release pass. This does not replace container,
+source-coverage or reader validation. Tests: `test_package_audit.py`.
+
 ## Reviewed note recovery
 
 [endnote_recovery.py](endnote_recovery.py) provides `load_reviewed_records`,
@@ -119,6 +159,8 @@ separately. Tests: `test_conversion_quality.py`.
 | `find_period_word_spacing_issues(text)` | Touching sentence-stop/word candidates. | Abbreviations, initials, domains and code can be valid; findings are not automatic replacements. |
 | `find_orphan_symbol_issues(text)` | Suspicious isolated symbols. | Cannot distinguish a real degree sign or note marker from scan noise without source evidence. |
 | `find_ocr_punctuation_issues(text)` | Demonstrated punctuation-cluster candidates. | Cannot choose between a quote, note, exclamation mark, comma or ink speck by shape alone. |
+| `find_ocr_slash_issues(text)` | Slash-shaped initial/final letters and asymmetric lexical slash spacing. | Paths, code, ratios and verse require semantic classification; only URLs are excluded automatically. |
+| `find_degree_glyphs(text)` | Every `°`/`º`, including numeric occurrences. | Does not distinguish real angles/temperatures from an ordinal or note OCR error; source-review each use. |
 | `find_endnote_like_punctuation(text)` | Punctuation-shaped possible note markers. | Does not recover digits, association or sequence. |
 | `visible_text(markup)` | Lightweight tag stripping and entity decoding. | Not a semantic reader export. It does not reconstruct block/`br` spacing or separate note references; use a DOM-aware visible stream for those audits. |
 | `validate_epub_policies(epub, ...)` | Selected marker/placeholder rules, optional note-reference count, optional quote report and local fragment targets in the actual package. | Not full ZIP/XML/manifest/spine/cover, completeness, typography or reader validation. Use the book validator for the remaining release gates. |

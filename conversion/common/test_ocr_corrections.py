@@ -5,6 +5,11 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_slashes_for_italic_ll_require_complete_prose_token(self):
+        self.assertEqual(apply_common_ocr_corrections('a// of them; (a//), a//—yes. a//'),
+                         'all of them; (all), all—yes. all')
+        source = 'a//b a//2 a // b /a// https://a//b call// a///b'
+        self.assertEqual(apply_common_ocr_corrections(source), source)
     def test_fused_a_system_is_whole_token_only(self):
         self.assertEqual(
             apply_common_ocr_corrections("asystem... (Asystem). ecosystem parasystem asystems ASYSTEM"),

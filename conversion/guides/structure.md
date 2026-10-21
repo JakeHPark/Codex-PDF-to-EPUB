@@ -91,6 +91,22 @@ recognize its marker and continuation margins before treating every indented
 line as a fresh paragraph. Check short, wrapped subheadings separately from
 long prose lines rather than requiring one fixed gap or stroke threshold.
 
+Inset quotations can dominate a page. Do not estimate the body margin from the
+median of all long lines: enough inset lines can shift it inward and turn quoted
+paragraphs into body prose. Establish the outer text measure from verified
+full-width lines and neighboring pages, then identify each quotation as a region
+before splitting its paragraphs. Dialogue indentation belongs inside that region;
+a short final line and a page boundary do not end the quotation. Review every
+prose/quotation role change inside an unfinished sentence and compare all pages
+whose margin estimate changes materially under a full-width-line cross-check.
+
+A drop capital can indent several continuation lines. Review every such opening
+against the page before accepting an indent as a paragraph boundary; restoring
+the missing capital alone does not fix the structure. Keep one reviewed mapping
+for drop-cap continuations, including explicit exceptions where a genuine new
+paragraph begins alongside the capital. Check complete opening paragraphs and
+line-end hyphen joins in the packaged EPUB and reader export.
+
 PDF line endings are not paragraph endings. Within a paragraph, join wrapped lines with spaces. Across a page boundary, continue the paragraph when the preceding text does not end with terminal punctuation or when the next block clearly begins with a lowercase continuation.
 
 Common failure:
@@ -341,6 +357,18 @@ paragraphs would conceal a different structural error.
 ## Footnotes and endnotes
 
 Never leave a printed footnote embedded between ordinary prose paragraphs.
+
+Chapter-opening pages can carry a symbolic note attached to the title, byline,
+contributor biography or ordinary prose. Inventory asterisks and other symbols
+separately from each chapter’s numeric sequence. Do not disable note-region
+detection on pages with large headings: a numeral-only pattern or a chapter-open
+exemption can leave a small `*See …` citation in the body. Inspect low-position
+small-type regions and match every symbolic call to its actual note. Retain it as a
+linked note or visible editorial aside; do not absorb it into the contributor’s
+biography or omit it while stripping the displayed heading. Validate symbolic
+references and numbered references independently, including their return links.
+Run `inline_audit.find_unlinked_note_candidates` on the final package and resolve
+all findings, while retaining separate source-region completeness checks.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
 

@@ -117,8 +117,10 @@ same as resolving its findings. Do not claim a pass for an unperformed check.
 | Reproducibility and delivery | Repairs and exceptions live in the recipe; regressions pass against final output; QA evidence matches its checksum; deliver the actual rebuilt EPUB and report material limitations or source editorial corrections. |
 
 Use shared detectors from [the helper catalog](conversion/common/README.md),
-plus book-specific checks. Know their limits: the curly-quote audit does not
-flag ordinary ASCII quotes; a word-only comparison ignores punctuation; image
+plus book-specific checks. Run the shared packaged-text/style audit as a release
+gate: every finding must be repaired or individually source-reviewed; an
+inventory-only report is not a pass. Know their limits: the curly-quote audit
+does not flag ordinary ASCII quotes; a word-only comparison ignores punctuation; image
 counts do not prove crop completeness; font metadata does not prove visible
 formatting. Add explicit checks for those gaps.
 

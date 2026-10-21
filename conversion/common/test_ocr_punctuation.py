@@ -21,6 +21,10 @@ class OCRPunctuationTests(unittest.TestCase):
   self.assertNotIn('internal word symbol',{i['reason'] for i in find_ocr_punctuation_issues('A word*. With a footnote.')})
  def test_ordinary_prose(self):
   self.assertEqual(find_ocr_punctuation_issues("It's 3.14. Next, ‘a quotation’ and a name’s possessive…"),[])
+ def test_comma_after_terminal_punctuation_across_spaces(self):
+  for text in ['The occasion arose. ,', 'He said “No!” , then left.', 'Done? ,']:
+   self.assertIn('conflicting punctuation',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+  self.assertEqual(find_ocr_punctuation_issues('For example, e.g., a comma. Then 3.14.'),[])
  def test_valid_forms_are_only_candidates(self):
   self.assertTrue(find_ocr_punctuation_issues('Mr. smith; বাংলা ২'))
  def test_apostrophe_at_block_edge(self):

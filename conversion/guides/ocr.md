@@ -326,6 +326,13 @@ copyright notices, mathematics, note markers and deliberate ornaments. Remove
 confirmed artifacts in the reproducible builder and test their full contexts.
 An unexpected symbol is an audit trigger, not permission to delete that symbol
 globally or assume it is a missing numeric note.
+Include both comma-before-stop and stop-before-comma clusters (`person, .`,
+`arise. ,`) across inline markup. Resolve them before release; do not treat the
+absence of a crash or the generation of an audit file as a successful check.
+Inventory degree-like glyphs even after numbers: a French ordinal `3e` can
+lose its superscript `e` as `3°`. Preserve genuine angles and temperatures;
+recover a verified ordinal with ordinary-letter superscript markup (`3<sup>e</sup>`)
+when font support makes a small Unicode glyph ambiguous in the reader.
 
 ## Stray OCR glyphs and contradictory punctuation
 
@@ -429,6 +436,14 @@ genuine mathematical division, paths, bracketed quotations and citation
 closers. These are whole-book detection rules, not global slash or bracket
 replacements. A trailing bracket can also be extra ink rather than a missing
 pronoun, as in a corrupted `Recall]`.
+Also inspect repeated slash strokes within words (`a//` for italic `all`) and
+terminal slash strokes (`rea/` for `real`). The shared OCR helper repairs only
+the standalone prose `a//` form; broader readings need source review. Audit
+asymmetric spaces beside lexical slashes, especially after physical line
+joining (`stolen/ hidden` → source-verified `stolen/hidden`). A slash may instead
+be a damaged letter, and symmetric verse separators, mathematical division,
+paths and URLs must retain their intended spacing. Do not globally delete slash
+spaces or turn all slash strokes into letters.
 
 During a final OCR pass, flag angle brackets embedded inside apparent words,
 unlikely `ii` clusters, and isolated substitutions such as `ol` in `one ol`.

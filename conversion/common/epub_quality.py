@@ -135,7 +135,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
 
     patterns = [
         ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
-        ("conflicting punctuation", r"[,;:]\s*\.|,{2,}"),
+        ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+,|,{2,}"),
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
@@ -156,6 +156,40 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
             issues.append(dict(position=position, symbol=char, reason="non-ASCII digit",
                                context=text[max(0, position-50):position+61]))
     return sorted(issues, key=lambda issue: issue['position'])
+
+
+def find_ocr_slash_issues(text: str) -> list[dict]:
+    """Review slash-shaped letters and asymmetric lexical slash spacing.
+
+    Prose only: paths, code, ratios and verse separators need classification,
+    not automatic removal. URLs are excluded; real slash compounds remain.
+    """
+    issues = []
+    patterns = [
+        ("slash-shaped word letters", r"(?<![\w/])[A-Za-z]+//(?=$|[\s.,;:!?—–”’\"')\]])"),
+        ("slash-shaped initial letter", r"(?<![\w/:])/[A-Za-z]+\b"),
+        ("slash-shaped final letter", r"\b[A-Za-z]+/(?=$|[-.,;:!?—–”’\"')\]])"),
+        ("asymmetric lexical slash spacing", r"\b[A-Za-z][A-Za-z’-]*/[ \t]+(?=[A-Za-z])"),
+    ]
+    urls = [m.span() for m in re.finditer(r"\b\w+://\S+", text)]
+    for reason, pattern in patterns:
+        for match in re.finditer(pattern, text):
+            if any(a <= match.start() < b for a, b in urls):
+                continue
+            issues.append(dict(position=match.start(), symbol=match.group(), reason=reason,
+                               context=text[max(0, match.start()-50):match.end()+60]))
+    return sorted(issues, key=lambda issue: issue['position'])
+
+
+def find_degree_glyphs(text: str) -> list[dict]:
+    """Inventory every degree-like glyph, including numeric ones, for review.
+
+    A real 30° angle and OCR of a French superscript e are both candidates;
+    this deliberately does not infer the intended letter or physical unit.
+    """
+    return [dict(position=m.start(), symbol=m.group(),
+                 context=text[max(0, m.start()-40):m.end()+45])
+            for m in re.finditer('[°º]', text)]
 
 
 def validate_epub_policies(

@@ -71,6 +71,23 @@ locations, check commands/results, reviewed exceptions, visual evidence, output
 path and checksum. Existing books use different filenames and schemas; reuse a
 suitable one rather than imposing an incompatible new format.
 
+Run the shared packaged-text/style audit after assembly. For example:
+
+```sh
+python3 conversion/common/package_audit.py "output/epub/Title - Author.epub" \
+  --report tmp/pdfs/book/package-audit.json \
+  --phrases tmp/pdfs/book/reviewed-italic-phrases.json \
+  --reviewed tmp/pdfs/book/reviewed-release-audits.json
+```
+
+For an initial inventory, omit the optional phrase/review files or add
+`--inventory`; resolve defects and record source-supported exceptions before
+running the release gate without that flag. Review records are JSON objects
+with a `key` from the finding and a source location/reason. Phrase files contain
+source-verified strings or objects with a `text` field. New or changed findings
+must stop release. This audit supplements the independent source, container,
+link, reader and visual checks; it does not replace them.
+
 On rebuild, follow dependencies. A crop change can change text ownership; a
 paragraph transfer can invalidate formatting; caption repairs can invalidate
 alternative text; punctuation changes can invalidate note matching and reader

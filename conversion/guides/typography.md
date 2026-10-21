@@ -48,6 +48,11 @@ for exact detector defaults and limitations.
 
 ## Repeated quotation marks
 
+After normalizing spaced ellipses, check the boundary before a closing quote.
+Do not retain an OCR or normalization-inserted space that lets the closing mark
+wrap alone onto the next line. Preserve the source dots and quotation nesting;
+verify the complete sentence in the reader export and visual rendering.
+
 OCR may duplicate a closing quotation mark, but repeated quote characters can also arise near nested quotations. Do not collapse every doubled quote globally. Verify the source and use an exact or tightly contextual repair, then add a regression assertion for the corrected phrase.
 
 Audit duplicated opening quotes and a quotation beginning with digit `1` followed
@@ -457,6 +462,25 @@ and dehyphenation can also split formatting inside one word; check the rebuilt
 word as a unit. Preserve real italic words inside bold prose and deliberate
 changes of style. Do not flatten whole mixed paragraphs to a majority style.
 
+When false emphasis recurs, inventory every packaged italic span in body and
+notes for source review; a shortlist of frequently misclassified words is not
+whole-book coverage. Also inspect missing emphasis independently. Length-based
+filters can discard genuine two-letter foreign words, initials, numerals and
+variables, and a neighbor-fill rule can miss two consecutive short italic words.
+Review complete foreign phrases and titles across physical lines, plus fused
+tokens that contain both roman and italic text even when the detector classified
+the entire token as roman. Preserve explicitly reviewed roman decisions through
+later gap filling, and retain source-supported internal puns as exceptions.
+Use the shared `inline_audit.find_emphasis_issues` on final packaged XHTML;
+include known complete titles/foreign phrases and review its positive and
+negative boundaries. Make new, unresolved findings release-blocking, with
+source-positioned exceptions for valid isolated emphasis and roman connectives.
+Do not merely generate a candidate report or approve an entire failure class.
+When a spelling repair restores letters mistaken for slash strokes, classify
+the corrected token length using its original glyph evidence, then audit its
+emphasis again. A recovered word must not inherit its damaged spelling's
+short-token rejection.
+
 Audit every isolated italic word in long prose when false emphasis recurs.
 Roman `very`, `every`, `way`, and pronouns can acquire false slant scores, while
 other occurrences really are emphasized. Keep source-positioned decisions for
@@ -465,6 +489,14 @@ word dictionary alone. Review the whole corrected word and adjacent words so a
 repair does not leave partial-word styling.
 
 ## Emphasis boundaries need negative checks
+
+OCR can fuse text across an em dash into one token despite a change of typeface
+(e.g. italic `Perplex` followed by roman `—mostly`). Audit dash-containing
+styled tokens throughout body and notes. Review each side against the source,
+split its style spans at character boundaries, and test the roman side as well
+as the emphasized side. Either side may legitimately carry emphasis; do not
+strip or propagate it automatically. Short-word style inference must not cross
+a dash without source evidence.
 
 A mostly styled paragraph audit cannot detect every kind of style leak. Also
 flag a single italic word immediately after an em dash when the following prose

@@ -72,6 +72,10 @@ def apply_common_ocr_corrections(text: str) -> str:
     for damaged, restored in COMMON_TOKEN_REPLACEMENTS.items():
         text = re.sub(rf"\b{re.escape(damaged)}\b", restored, text)
 
+    # Italic ll can be read as two slashes. Require a complete prose token:
+    # preserve a//b, a//2, paths, and a spaced floor-division operator.
+    text = re.sub(r"(?<![\w/])a//(?=$|[\s.,;:!?—–”’\"')\]])", "all", text)
+
     # Whole-token matching is essential: `ina` is a common fusion of `in a`,
     # but the same letters are legitimate inside names such as `Karenina`.
     text = re.sub(
