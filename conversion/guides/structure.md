@@ -107,6 +107,12 @@ for drop-cap continuations, including explicit exceptions where a genuine new
 paragraph begins alongside the capital. Check complete opening paragraphs and
 line-end hyphen joins in the packaged EPUB and reader export.
 
+A paragraph can end with a parenthetical citation whose final character is `)`,
+with no following full stop. Treat that as a possible complete boundary, not
+automatic evidence of a column/page continuation. Check source paragraph spacing
+and the next opening before joining; retain a negative regression beside genuine
+continuations that cross the same column or page boundary.
+
 PDF line endings are not paragraph endings. Within a paragraph, join wrapped lines with spaces. Across a page boundary, continue the paragraph when the preceding text does not end with terminal punctuation or when the next block clearly begins with a lowercase continuation.
 
 Common failure:
