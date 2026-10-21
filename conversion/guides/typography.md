@@ -48,6 +48,15 @@ for exact detector defaults and limitations.
 
 ## Repeated quotation marks
 
+Review complete ellipsis runs across inline markup, not merely adjacent
+punctuation pairs. Flag mixed spacing such as `. . ..`, two-dot or excessive
+dot runs, and a redundant full stop beside `!` or `?` plus an ellipsis.
+Distinguish a three-dot omission from a sentence stop plus three omission dots:
+four dots can be intentional. Verify the source and normalize only the damaged
+spacing or redundant stop; do not collapse every four-dot sequence to three.
+Check every occurrence in the book and assert the repaired full context in
+both packaged text and reader export. A clean word comparison cannot catch it.
+
 After normalizing spaced ellipses, check the boundary before a closing quote.
 Do not retain an OCR or normalization-inserted space that lets the closing mark
 wrap alone onto the next line. Preserve the source dots and quotation nesting;

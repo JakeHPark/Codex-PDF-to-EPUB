@@ -142,6 +142,23 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
     ]
     issues = []
+    # Inspect each complete dot run, not just adjacent pairs: a legitimate
+    # sentence stop plus ellipsis has four dots, but mixed spacing can hide
+    # malformed forms such as ". . ..". These remain review-only candidates.
+    for match in re.finditer(r"\.(?:[ \t\r\n]*\.)+", text):
+        run = match.group()
+        count = run.count('.')
+        gaps = re.findall(r"(?<=\.)[ \t\r\n]*(?=\.)", run)
+        reasons = []
+        if count == 2 or count > 4:
+            reasons.append("suspicious ellipsis dot count")
+        if any(gaps) and not all(gaps):
+            reasons.append("mixed ellipsis spacing")
+        if count >= 4 and re.search(r"[!?][”’\"')\]]*[ \t]*$", text[:match.start()]):
+            reasons.append("redundant stop beside ellipsis")
+        for reason in reasons:
+            issues.append(dict(position=match.start(), symbol=run, reason=reason,
+                               context=text[max(0, match.start()-50):match.end()+60]))
     # A legitimate inner closing single quote does not close its outer double.
     # This is a candidate only: source layout may intentionally continue a quote.
     if text.lstrip().startswith('"') and text.count('"') % 2 and re.search(r"[.!?]['’]\s*$", text):

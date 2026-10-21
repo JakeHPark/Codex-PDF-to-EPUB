@@ -242,7 +242,11 @@ rendered range with an annotation that omitted its separator.
 A digital PDF can display an equation correctly while its text mapping emits
 control characters, private-use characters, replacement characters, or the
 wrong ordinary letter. Inspect embedded glyph names and positioned text traces
-before trusting extracted Unicode. Recover a Unicode symbol only when the
+before trusting extracted Unicode. A symbol-font override must match the actual
+glyph identity as well as its font; the same font can supply spaces and ordinary
+punctuation. Replacing every character in that font can duplicate a recovered
+symbol and delete its separating space. Check the complete surrounding phrase
+and the recovered symbol’s occurrence count in both XHTML and the reader. Recover a Unicode symbol only when the
 glyph mapping and source appearance support it. Otherwise retain the actual
 glyph outlines. Internal unknown-glyph placeholders must never leak into
 visible EPUB prose or be presented as a trustworthy formula transcription.

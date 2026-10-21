@@ -164,7 +164,9 @@ HTML `blockquote` elements sometimes serve only as print-size wrappers around
 bibliographies or entire quotation anthologies. Classify their contents before
 copying the tag: retain reading lists as lists/sections, and group independent
 extracts separately with their own attributions. Preserve paragraphs within a
-single continuing quotation. Keep a separate attribution beside the final lines
+single continuing quotation. Preserve the source’s choice of inline versus
+separately displayed attributions rather than imposing one style throughout.
+Keep a separate attribution beside the final lines
 of its extract with modest relative spacing and a break-before avoidance rule;
 do not force a long quotation to stay on one reader page. Check verse stored in
 plain paragraphs as well as explicitly marked poetry: recover verified lineation

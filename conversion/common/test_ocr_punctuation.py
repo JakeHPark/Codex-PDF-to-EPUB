@@ -21,6 +21,14 @@ class OCRPunctuationTests(unittest.TestCase):
   self.assertNotIn('internal word symbol',{i['reason'] for i in find_ocr_punctuation_issues('A word*. With a footnote.')})
  def test_ordinary_prose(self):
   self.assertEqual(find_ocr_punctuation_issues("It's 3.14. Next, ‘a quotation’ and a name’s possessive…"),[])
+ def test_malformed_ellipsis_runs(self):
+  for text in ['hollow . . .. Owing', 'Done.. Next', 'Wait.....', 'eyes!. . . . The cry']:
+   self.assertTrue(any('ellipsis' in i['reason'] for i in find_ocr_punctuation_issues(text)),text)
+  self.assertIn('mixed ellipsis spacing',{i['reason'] for i in find_ocr_punctuation_issues('hollow . . .. Owing')})
+  self.assertIn('redundant stop beside ellipsis',{i['reason'] for i in find_ocr_punctuation_issues('eyes!. . . . The cry')})
+ def test_valid_ellipses_and_sentence_stops(self):
+  for text in ['hollow. . . . Owing', 'hollow . . . Owing', 'Wait... Then', 'Done.... Next', 'Stop! . . . Next', 'Done… Next', 'Done…. Next', '3.14 and 1.2.3']:
+   self.assertFalse(any('ellipsis' in i['reason'] for i in find_ocr_punctuation_issues(text)),text)
  def test_comma_after_terminal_punctuation_across_spaces(self):
   for text in ['The occasion arose. ,', 'He said “No!” , then left.', 'Done? ,']:
    self.assertIn('conflicting punctuation',{i['reason'] for i in find_ocr_punctuation_issues(text)})

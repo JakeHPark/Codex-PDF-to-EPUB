@@ -38,5 +38,13 @@ class PackageAuditTests(unittest.TestCase):
             self.package(d,'<p>It is really <em>so</em>.</p>')
             self.assertGreater(audit_epub(path,reviewed_keys=keys)['unreviewed_count'],0)
 
+    def test_ellipsis_check_crosses_inline_boundaries(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=self.package(d,'<p>mostly hollow . <span>.</span> .. Owing to it.</p>')
+            self.assertTrue(any(r['finding']['reason']=='mixed ellipsis spacing'
+                                for r in audit_epub(path)['records']))
+            self.package(d,'<p>mostly hollow. . . . Owing to it.</p>')
+            self.assertEqual(audit_epub(path)['unreviewed_count'],0)
+
 
 if __name__=='__main__':unittest.main()
