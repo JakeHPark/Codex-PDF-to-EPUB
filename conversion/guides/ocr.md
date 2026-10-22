@@ -36,9 +36,26 @@ For each page:
 - preserve block quotations and deliberate section breaks;
 - exclude blank divider pages and reverse-side bleed-through.
 
+Do not preserve a line-end hyphen merely because the fragment resembles a
+prefix. `pro-` + `ject`, `pre-` + `cisely`, and `ex-` + `planation` are ordinary
+words split for print. Review the reconstructed whole word and the original
+pair; retain genuine compounds such as `non-Euclidean` or `post-Freudian`.
+Audit the ledger of retained hyphens as well as the removed ones.
+At a print wrap, an existing multiword compound can lose its first meaningful
+hyphen (`might-` + `have-beens` → `mighthave-beens`). Review the complete compound,
+including its remaining hyphens, rather than treating every line-end hyphen as
+discretionary. Search all occurrences of the same compound after a repair.
+
 Printed typography can confuse extractors. Drop caps and letter-spaced small capitals may become forms such as `A p pa R e n t ly`. Verify these against the rendered page and repair them explicitly.
 
 Some PDF text layers also leak invisible font-run delimiters as standalone characters. Confirm them against the page image before removing them. For example, an isolated `*` may be an internal italic-run marker rather than a printed ornament; genuine scene breaks usually have a distinct repeated or centered form that should be retained.
+
+A reconstructed scan may combine a faint residual bitmap with synthetic vector
+glyphs or other foreground layers. Its largest embedded image can therefore be
+an incomplete cover or illustration. Compare the extracted asset with the fully
+rendered page before accepting it. When the composition itself is the intended
+asset, preserve all layers in a suitably resolved render and record that choice;
+native bitmap dimensions alone do not prove completeness.
 
 ## Correction scope and common normalization
 
@@ -254,6 +271,14 @@ Do not wait for a reader to find these pages. Before packaging, rank every inclu
 
 Large, spaced, or mixed-case opening letters may be extracted as multiple fragments. These irregular forms require source-verified substitutions rather than a broad whitespace rule.
 
+Ordinary capitals, especially italic capitals in titles, can also become detached
+from the rest of a word (`A bolitionists`). Audit single capital letters followed
+by lowercase fragments throughout the packaged text; corroborate candidates with
+source pixels and intact occurrences elsewhere. Do not automatically join them:
+articles (`A better argument`), the pronoun `I`, initials and logical symbols
+(`X and Y`) are valid separate tokens. Keep repairs occurrence-bound and retain
+these valid lookalikes as regression controls.
+
 ## Fused words and digit errors inherited from an OCR ebook
 
 When a PDF was made from an OCR ebook, defects such as `ForJoe`, `importantto`,
@@ -462,6 +487,13 @@ or positioned-word scope when the document's context supports them.
 
 ## Constrained shared token repairs
 
+For English OCR-derived prose, the shared layer repairs whole-token
+`iato`/`Iato` to `into`/`Into` and rejoins `a bolitionist`, `a bolitionists`,
+and `a bolitionism` (also with initial `A`). These are narrow defaults with
+source-verified exceptions, not general spelling correction or permission to
+join arbitrary articles to following words. Protect longer tokens and valid
+initials; test both punctuation boundaries and legitimate lookalikes.
+
 The shared OCR layer separates whole-token `asystem`/`Asystem` into
 `a system`/`A system`. Protect longer tokens and technical identifiers; this
 does not authorize splitting every word that contains `system`.
@@ -490,6 +522,12 @@ accidental repetition with a narrow reproducible correction; preserve deliberate
 rhetorical repetition. Distinct source lines do not prove intentional repetition.
 
 ## Punctuation clusters and intrusive strokes
+
+Flag exclamation marks embedded between letters (`Beansta!k`, `mere!y`),
+including across inline markup. They can be misread stems of `l` or `i`, but
+the source determines the replacement. Keep normal exclamations, factorials,
+code and deliberately punctuated names as reviewed exceptions; never globally
+replace `!` with a letter. The packaged punctuation audit reports this class.
 
 Treat `.'` and `.’` after a word as review candidates, especially without a
 matching opening quotation. The pair can be a damaged exclamation mark or

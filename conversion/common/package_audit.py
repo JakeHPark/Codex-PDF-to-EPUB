@@ -6,6 +6,7 @@ decide which candidate is an error; only exact, reviewed findings are exempted.
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import hashlib
 import json
 from pathlib import Path
@@ -14,10 +15,10 @@ import zipfile
 
 try:
     from .inline_audit import BLOCKS, local, inline_stream, find_emphasis_issues, find_unlinked_note_candidates
-    from .epub_quality import find_ocr_punctuation_issues, find_ocr_slash_issues, find_degree_glyphs, find_period_word_spacing_issues
+    from .epub_quality import find_ocr_punctuation_issues, find_ocr_slash_issues, find_degree_glyphs, find_period_word_spacing_issues, find_typographic_quote_issues
 except ImportError:
     from inline_audit import BLOCKS, local, inline_stream, find_emphasis_issues, find_unlinked_note_candidates
-    from epub_quality import find_ocr_punctuation_issues, find_ocr_slash_issues, find_degree_glyphs, find_period_word_spacing_issues
+    from epub_quality import find_ocr_punctuation_issues, find_ocr_slash_issues, find_degree_glyphs, find_period_word_spacing_issues, find_typographic_quote_issues
 
 
 def audit_epub(epub, *, known_phrases=(), reviewed_keys=()):
@@ -34,6 +35,9 @@ def audit_epub(epub, *, known_phrases=(), reviewed_keys=()):
             for index, block in enumerate(blocks):
                 cs = inline_stream(block); text = ''.join(c for c, *_ in cs)
                 hits = []
+                # Audit complete semantic blocks, including across inline styles.
+                # Continued quotations require individually reviewed fingerprints.
+                hits.extend(('quotes', asdict(i)) for i in find_typographic_quote_issues(text))
                 for kind, findings in [('emphasis', style), ('note', notes)]:
                     hits.extend((kind, i) for i in findings if i.get('block') == block.get('id')
                                 and (block.get('id') is not None or i['context'] in text))
@@ -47,7 +51,7 @@ def audit_epub(epub, *, known_phrases=(), reviewed_keys=()):
     reviewed = set(reviewed_keys); unresolved = [r for r in records if r['key'] not in reviewed]
     return dict(output=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                 candidate_count=len(records), unreviewed_count=len(unresolved),
-                counts={kind:sum(r['kind']==kind for r in records) for kind in ['emphasis','note','punctuation','slash','degree','period_spacing']},
+                counts={kind:sum(r['kind']==kind for r in records) for kind in ['emphasis','note','punctuation','slash','degree','period_spacing','quotes']},
                 records=records, unreviewed=unresolved)
 
 

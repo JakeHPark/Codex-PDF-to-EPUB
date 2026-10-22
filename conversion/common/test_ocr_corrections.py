@@ -5,6 +5,19 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_iato_is_whole_token_and_case_sensitive(self):
+        self.assertEqual(apply_common_ocr_corrections('elevated iato it; Iato (iato).'),
+                         'elevated into it; Into (into).')
+        source = 'IATO iatonic ciato iatos'
+        self.assertEqual(apply_common_ocr_corrections(source), source)
+
+    def test_detached_abolition_initial_preserves_case_and_boundaries(self):
+        self.assertEqual(
+            apply_common_ocr_corrections('A bolitionists; a bolitionist; a bolitionism.'),
+            'Abolitionists; abolitionist; abolitionism.')
+        source = 'A better argument. A book. a bolitionistic xa bolitionist a bolitionistsExtra X and Y'
+        self.assertEqual(apply_common_ocr_corrections(source), source)
+
     def test_slashes_for_italic_ll_require_complete_prose_token(self):
         self.assertEqual(apply_common_ocr_corrections('a// of them; (a//), a//—yes. a//'),
                          'all of them; (all), all—yes. all')

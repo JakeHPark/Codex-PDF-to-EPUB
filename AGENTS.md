@@ -89,9 +89,16 @@ Do not substitute another edition or translation merely because it is easier.
    mixed styles. Apply prose typography across inline markup without losing links.
 6. **Assemble and package.** Generate headings once, semantic XHTML, navigation,
    visible linked notes, local responsive assets and at least a minimal cover image.
-7. **Audit the final text and styles again.** Structural rewrites can reintroduce
-   defects. Recheck partial words, missing short words in styled spans, false
-   italic openings, parallel list labels, complete titles and punctuation roles.
+7. **Perform a fresh whole-book second pass before delivery.** This is mandatory;
+   do not wait for the user to request another proofread. After the first complete
+   conversion and its repairs, review the entire packaged reading stream again,
+   including preliminaries, notes and every chapter. Recheck OCR/spelling
+   candidates, paragraph joins, lists, quotations, punctuation, repetitions,
+   notation and emphasis in context. Check roman surroundings as well as styled
+   words, and complete structures rather than repaired examples alone. Resolve
+   findings against the source, repair the recipe and inspect the rebuilt reader
+   result. Record the second pass separately in QA; reusing the first inventory,
+   checking only reported defects or merely opening the EPUB does not count.
 8. **Run every applicable release gate below on the final artifact.** After any
    change, rerun affected source/style/object checks, rebuild, then rerun package
    validation and reader export. A stale successful report is not evidence.
@@ -108,6 +115,7 @@ same as resolving its findings. Do not claim a pass for an unperformed check.
 | Edition and coverage | Every retained chapter/part/preliminary section and its actual opening accounted for; correct order; documented omissions; no unexplained excluded source text. |
 | Text and structure | Retained source stream reconciled after documented changes; no duplicated headings, running heads, leaked folios or bleed-through; complete paragraphs, lists and notes in verified order. Character counts alone cannot pass this gate. |
 | Textual sanity | Review period-word spacing, fused/split words, false hyphens, digit/letter confusion, unexpected capitals/scripts/symbols, punctuation clusters, unmatched brackets, repetitions and stranded fragments across the whole packaged text. Apply language-aware rules. |
+| Whole-book second pass | Separate post-conversion proofreading record covering the complete packaged reading stream, with checks run, source-reviewed decisions, resulting repairs and final reader verification. No unresolved findings or unperformed checks represented as a pass. |
 | Typography | Typographic prose quotes/apostrophes actually applied; measurements and notation classified separately; nested and continued quotations preserved. No unexplained partial-word styling, fragmented titles, short style outliers or style leaks. Test both emphasized and roman boundaries. |
 | Objects and layout | Source inventory reconciled with packaged figures/tables/formulas; every crop edge and association reviewed; captions and derived alternative text agree; no duplicate prose inside assets; native quality and spread relationships verified where applicable. |
 | Notes and links | Expected entries and reference occurrences checked separately, including repeated references; all forward/back/fragment targets resolve; notes remain readable. A count alone cannot prove correct note order or association. |

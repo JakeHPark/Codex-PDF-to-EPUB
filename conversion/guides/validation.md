@@ -1,5 +1,30 @@
 # Packaging and release validation
 
+## Mandatory whole-book second pass
+
+After the initial complete conversion and correction cycle, perform a fresh
+proofreading pass over the entire packaged reading stream before delivery.
+Include front matter, every chapter, lists, captions, quotations and notes.
+This is separate from the first extraction audit and must not depend on a user
+finding an error. Record its scope, actual checks, reviewed findings, repairs,
+exceptions and final artifact checksum in a distinct QA entry.
+
+For OCR, review suspicious words and glyphs in context as well as punctuation;
+a valid-looking word or high OCR confidence does not prove the reading. Use
+lexical comparisons as candidate generators, preserving names, dialect, archaic
+spellings and foreign-language passages unless source evidence supports repair.
+Recheck cross-page sentences and prose/inset/list boundaries. Examine complete
+emphasis expressions and their roman neighbors: correct italic variables can
+still coexist with falsely italicized prose. Refresh the packaged shared audit,
+resolve every finding, and source-check new candidates beyond the original
+repairs. An unchanged list of first-pass findings is not a second pass.
+
+After second-pass corrections, rebuild and run the final package/reader gates;
+inspect all special repairs in that output. Recheck affected classes throughout
+the book when later changes invalidate them. Do not claim a literal word-by-word
+manual proofread if the performed pass combined automated detection with focused
+source review; state the actual scope and remaining source limitations.
+
 Detailed operating rules supporting [AGENTS.md](../../AGENTS.md). Read the
 sections selected by its source and feature routing tables before implementing
 that part of a conversion. These are instructions, not a list of checks that

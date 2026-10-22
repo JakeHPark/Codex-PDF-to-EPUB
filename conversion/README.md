@@ -63,7 +63,7 @@ outlined heading, a scanned plate, mathematical glyphs and a vector table.
 | Assemble | Blocks/assets → XHTML, navigation, note links, metadata and cover | No duplicate headings, remote assets, unresolved markers or stale derived captions/alternative text. |
 | Audit again | Final structure → reviewed text/style/ownership findings | Reapply verified spans after transfers; resolve suspicious outliers and verify negative style boundaries. |
 | Package and validate | EPUB → container/content/link reports and reader export | Checks consume the actual output path, not just working XHTML; all applicable AGENTS release gates pass. |
-| Review and deliver | Reader preview + source → visual QA and final checksum | Every special repair inspected; report graphical accessibility limitations and editorial source corrections. |
+| Second pass and delivery | Complete packaged reading stream + reader preview + source → separate second-pass QA and final checksum | Mandatory fresh whole-book review after initial conversion/repairs; resolve findings, inspect special repairs, rerun final gates and report material limitations/editorial corrections. |
 
 Keep a machine-readable or human-readable book QA record under its work directory.
 Include the source edition, retained section/object inventories, correction

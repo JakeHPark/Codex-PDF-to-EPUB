@@ -19,6 +19,17 @@ relationships. Use semantic text with emphasis and superscript/subscript markup
 for simple notation when the source glyphs and baselines can be verified.
 Treat mathematical powers, isotope numbers, and note references as distinct
 roles; a raised digit is not sufficient evidence for a note link.
+Repeated logical variables may be mapped to ordinary text fonts or OCRed as
+`Xi`, `Yi`, or `Z:` when the source has `X₁`, `Y₁`, `Z₁`. Verify the entire
+parallel series and script baselines, including roman digit shapes. Preserve
+italic variable letters without leaking emphasis into intervening prose such
+as `and`. A short-word style bridge between two variables is not evidence that
+the connector is emphasized; inspect these boundaries independently.
+Check both positive and negative style boundaries throughout a reviewed
+expression. Verifying that `X` and `Y` are italic does not detect a leaked
+italic `was` in `either X or Y was the case`. Source-review the surrounding
+prose, reset false emphasis there, and test the complete expression's roman
+words as well as its variables. Preserve independently authored nearby emphasis.
 
 ### Keep prose out of mathematical assets
 

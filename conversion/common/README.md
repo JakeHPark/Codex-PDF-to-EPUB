@@ -50,6 +50,10 @@ Rules include bounded forms such as `Ihave`, `ina`, `asystem`, `Itis`, `It"s`, `
 `Yoii` and `selfknowledge`; valid substrings such as `Karenina`, `Otitis`,
 `arthritis`, `Mosiac` and longer names must survive. These are OCR defaults,
 not dictionary-based spelling correction; retain source-verified exceptions.
+Whole-token `iato`/`Iato` becomes `into`/`Into`. A detached `a`/`A` is rejoined
+only with the complete fragments `bolitionist`, `bolitionists` or `bolitionism`;
+capitalization is preserved. Other detached initials remain review candidates,
+and articles, logical symbols, longer tokens and all-capital identifiers survive.
 Standalone prose `a//` is repaired to `all`; `a//b`, `a//2`, paths and spaced
 division operators are preserved. Recalculate token-length style decisions
 after a spelling/glyph repair, using the original positioned pixel evidence:
@@ -128,7 +132,18 @@ Tests: `test_inline_audit.py`.
 periods touching letters across inline styles (abbreviations and domains require
 individual review). It runs these
 style/note checks together with punctuation, slash and degree-glyph inventories
-on the actual ZIP's XHTML. It returns per-block fingerprints, all findings and
+on the actual ZIP's XHTML. It also reports exclamation marks embedded between
+letters, across inline markup;
+those are source-review candidates, not automatic letter replacements.
+It always runs the typographic quote checker
+on semantic blocks, including unclosed openers and across inline styles.
+Continued quotations need individual source-reviewed fingerprints; a closing
+single mark after a word can otherwise conceal a missing double closer.
+Capitalized plural possessives followed by a capitalized title word inside a
+single quotation are treated as apostrophes, so `‘Haddocks’ Eyes` cannot falsely
+balance a missing final single mark. Ambiguous capitalized speech attributions
+remain source-review candidates, rather than automatic punctuation repairs.
+It returns per-block fingerprints, all findings and
 an `unreviewed_count`. Fingerprints include the block's complete text and style
 stream, so a changed occurrence invalidates its earlier review. The standalone
 `package_audit.py` CLI requires `--report`, accepts `--phrases` and `--reviewed`

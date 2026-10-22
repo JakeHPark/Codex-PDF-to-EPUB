@@ -76,6 +76,13 @@ def find_typographic_quote_issues(
             # A nested quote may contain "I'm" without ending at its apostrophe.
             if previous.isalnum() and following.isalnum():
                 continue
+            # A possessive inside a quoted title is not its closing delimiter:
+            # ‘Haddocks’ Eyes’. Without this, a missing final single closer
+            # appears balanced. Ambiguous capitalized dialogue is reviewable.
+            if stack and stack[-1][0] == "single":
+                before = re.search(r"\b[A-Z][A-Za-z]*s$", text[:position])
+                if before and re.match(r"\s+[A-Z][a-z]", text[position + 1:]):
+                    continue
             if stack and stack[-1][0] == "single":
                 stack.pop()
                 continue
@@ -139,6 +146,8 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
+        ("embedded exclamation mark", r"(?<=[A-Za-z])!(?=[A-Za-z])"),
+        ("space before closing quote", r"[ \t\u00a0]+(?:”|’(?=$|[\s\d,.;:!?—–”)\]]))"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
     ]
     issues = []

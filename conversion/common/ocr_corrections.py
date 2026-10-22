@@ -56,6 +56,8 @@ COMMON_TOKEN_REPLACEMENTS = {
     "mosi": "most",
     "Yoii": "You",
     "yoii": "you",
+    "iato": "into",
+    "Iato": "Into",
 }
 
 
@@ -71,6 +73,11 @@ def apply_common_ocr_corrections(text: str) -> str:
         text = text.replace(damaged, restored)
     for damaged, restored in COMMON_TOKEN_REPLACEMENTS.items():
         text = re.sub(rf"\b{re.escape(damaged)}\b", restored, text)
+
+    # A detached ordinary italic capital can look like an article. Restrict
+    # this repair to the demonstrated abolition family, never arbitrary A + word.
+    text = re.sub(r"\b([Aa])[ \t]+(bolition(?:ists?|ism))\b",
+                  lambda match: match[1] + match[2], text)
 
     # Italic ll can be read as two slashes. Require a complete prose token:
     # preserve a//b, a//2, paths, and a spaced floor-division operator.

@@ -33,6 +33,10 @@ apostrophe. Preserve literal marks in code, URLs, and other notation, and use
 proper prime symbols for measurements or mathematics when the source requires
 them. Review ambiguous marks against the source, and check the packaged visible
 text across inline emphasis boundaries for mixed or mismatched quote styles.
+For positional style assertions, derive the text and style flags together from
+the packaged DOM. Internal one-character note placeholders can expand to several
+digits, and line-break markers can disappear from visible text; offsets from an
+earlier extraction stream may therefore test the wrong character.
 
 Apply prose typography after structural joining, across complete visible blocks,
 while preserving inline elements, text/tails, emphasis and links. Check remaining
@@ -43,6 +47,17 @@ contractions contiguous in the audit stream, preserve block/`br` boundaries and
 handle linked note digits separately. Model source-verified quotation reopeners
 across paragraphs as one continuing quotation; do not invent intermediate closers
 or delete repeated openers in the delivered text just to clear an audit.
+The packaged audit must include unclosed openers: a wrong single closer after
+an ordinary word (`“secondary effects’`) can be classified as an apostrophe,
+leaving the double opener as the only detectable defect. Do not suppress all
+unclosed findings to accommodate continued quotations. Review those exceptions
+individually, with source evidence and exact block fingerprints.
+Plural possessives inside a quoted title also need special care: in
+`“‘Haddocks’ Eyes.’”`, the mark after `Haddocks` is an apostrophe and the mark
+after `Eyes.` closes the inner quotation. A checker that counts the possessive
+as that closer can falsely pass a missing final mark. Review capitalized
+possessive/title continuations and test both the intact and damaged nesting;
+do not globally replace apostrophes or infer closers merely from mark counts.
 See the [helper catalog](../common/README.md#quality-detectors-and-package-policy-checks)
 for exact detector defaults and limitations.
 
@@ -319,7 +334,8 @@ quotation globally merely to clear the audit.
 ## Language-aware punctuation spacing
 
 In ordinary English prose, flag spaces immediately inside opening quotation
-marks and before semicolons, colons, question marks and exclamation marks.
+marks, immediately before closing quotation marks (`Confusion. ”`), and
+before semicolons, colons, question marks and exclamation marks.
 Repair verified extraction spacing across emphasis boundaries without flattening
 the formatting. Apply rules for the passage's language: French normally uses
 spacing before punctuation such as an exclamation mark, often a nonbreaking or

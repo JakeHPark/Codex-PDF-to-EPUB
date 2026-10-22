@@ -65,6 +65,11 @@ class GeneratedHeadingTest(unittest.TestCase):
 
 
 class QuoteAuditTest(unittest.TestCase):
+    def test_possessive_in_nested_title_does_not_hide_missing_closer(self):
+        self.assertEqual(find_typographic_quote_issues('“The name is called ‘Haddocks’ Eyes.’”'), [])
+        self.assertTrue(find_typographic_quote_issues('“The name is called ‘Haddocks’ Eyes.”'))
+        self.assertEqual(find_typographic_quote_issues('“She called it ‘James’ Book’ yesterday.”'), [])
+
     def test_valid_nested_quotes_pass(self):
         self.assertEqual(find_typographic_quote_issues("“He called it ‘no,’” she said."), [])
 

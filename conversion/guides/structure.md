@@ -91,6 +91,12 @@ recognize its marker and continuation margins before treating every indented
 line as a fresh paragraph. Check short, wrapped subheadings separately from
 long prose lines rather than requiring one fixed gap or stroke threshold.
 
+Inset arguments and syllogisms may contain several complete propositions, each
+wrapping onto a hanging continuation line. Join each complete proposition,
+retain a separate block for the next one, and keep the following prose lead-in
+and displayed symbolic proportion distinct. Neither an indented first line nor
+a hanging continuation alone determines the extent of the inset argument.
+
 Inset quotations can dominate a page. Do not estimate the body margin from the
 median of all long lines: enough inset lines can shift it inward and turn quoted
 paragraphs into body prose. Establish the outer text measure from verified
@@ -452,6 +458,13 @@ Superscript note symbols may be OCRed as punctuation such as `!`, or as a combin
 
 Numeric endnotes can also be OCRed as an ASCII or curly apostrophe, with or without an asterisk: `denaturing.'*`, `attached.’`, and genuine closing quotation marks can all look deceptively similar in plain text. Textual shape alone must never decide whether such a mark is punctuation or a note. Before stripping symbols, inventory every sentence-final apostrophe-like candidate across the whole body. For each candidate, use its stored word box and baseline position, render a high-resolution crop, run digit-only OCR at several crop widths, and reconcile the result with the chapter's verified note-entry sequence (allowing repeated reference occurrences) and the corresponding notes entry. Record every reviewed decision under the book-specific `tmp/` material, including whether a genuine closing quotation mark must remain. Support multiple recovered markers on one page without relying on the page number as a unique key.
 
+A matching numeric suffix is insufficient: `1640` is not necessarily a call to
+note 40, and list item `12.` is not a call to note 2. Require raised glyph or
+baseline evidence, preserve the complete ordinary number, and include years and
+list labels as negative controls. If a line-end word is joined across a hyphen,
+transfer any reference attached to its continuation into the reconstructed word.
+Reconcile reference locations and surrounding punctuation as well as counts.
+
 Convert confirmed markers to the same semantic linked-superscript form as other numeric notes. Treat unconfirmed marks as punctuation candidates and resolve them from the rendered source and sentence context; do not globally delete ASCII or curly apostrophes after full stops. Add packaged-XHTML checks for all reviewed cases, for leaked raw marker clusters, for every note target, and for the expected whole-book reference count.
 
 ## Superscript numeric endnotes misread as symbols
@@ -468,6 +481,13 @@ Make this release-blocking: all packaged XHTML—not only the main body—must c
 
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
 
+Do not remove every line above a fixed vertical cutoff. Scan drift can put a
+real first body line inside that band or a running head below it. Identify the
+head by its content and layout, then check the first retained body line on every
+page. Audit removed ornament tokens separately: a short indented word such as
+“Many,” “This,” or “Was” is not decorative merely because it occupies the same
+horizontal position as an ornament elsewhere.
+
 A running-head cutoff must leave the highest genuine body line intact in each
 column. Font rectangles may extend above the visible ink, and top baselines can
 vary by a few points across pages. Inventory excluded lines near the cutoff and
@@ -483,6 +503,15 @@ page references. Remove the index from the reproducible builder, navigation,
 spine, manifest, and packaged assets; do not merely hide its contents with CSS.
 Record the omission and verify that no index document, image, or dangling link
 remains in the finished EPUB.
+
+When retaining an index, reject numeric-only entry labels for review. Wrapped
+page references can appear as independent rows, including rows sharing a baseline
+with a neighboring entry. Reconstruct each column by position, attach numeric
+continuations to their verified entry, and check the resulting labels as well as
+their link destinations. Derive column membership from headings as well as
+indented entries: a threshold fitted only to entry text can place right-column
+headings in the left column. Assert the category owning each group of entries.
+A resolving hyperlink does not prove a valid label or category.
 
 A curated index can add value beyond literal text search by grouping concepts,
 synonyms, and subtopics. Retain or rebuild it when the user requests it or when
@@ -561,6 +590,11 @@ not just its first number, and handle references in both inline text and tails.
 Recheck reader-exported text after changing link labels. Preserve page numbers
 that are substantive historical or bibliographic information rather than
 navigation instructions.
+
+Establish which work a page citation belongs to before linking it. A quoted
+author's `p. 207` does not become a reference to this book merely because this
+book also has a page 207. Require evidence of an internal navigation instruction
+or a verified index destination; preserve external citation numbers as text.
 
 ## Oversized and detached list markers
 

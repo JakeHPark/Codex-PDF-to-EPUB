@@ -2,6 +2,16 @@ import unittest
 from conversion.common.epub_quality import find_ocr_punctuation_issues
 
 class OCRPunctuationTests(unittest.TestCase):
+ def test_space_before_closing_quote_is_reviewed(self):
+  for text in ['“Confusion. ”', '“word ”23', '‘word ’', 'word\u00a0”']:
+   self.assertIn('space before closing quote',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+  for text in ['“Confusion.”', '‘word’', 'He used ’tis.', '« texte »']:
+   self.assertNotIn('space before closing quote',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+ def test_embedded_exclamation_is_reviewed_not_rewritten(self):
+  for text in ['Beansta!k', 'mere!y']:
+   self.assertIn('embedded exclamation mark',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+  for text in ['Stop! Next.', 'n! + 1', 'Wow!—yes', 'Really?!']:
+   self.assertNotIn('embedded exclamation mark',{i['reason'] for i in find_ocr_punctuation_issues(text)})
  def test_failure_classes(self):
   text="in ' sentiment; person, . lazy. and active ২ how™ strange"
   reasons={i['reason'] for i in find_ocr_punctuation_issues(text)}
