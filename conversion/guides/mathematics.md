@@ -39,7 +39,15 @@ when classification is uncertain, keep the text and flag its reading for review.
 Recognizing mathematics does not itself justify rasterizing it. Expressions
 such as `log p`, `H(p)`, `A_i/A`, simple equalities and inequalities, and short
 variable sequences normally need only text, Unicode symbols and semantic
-subscript/superscript markup. Use images only when source relationships cannot
+subscript/superscript markup. A report about an artifact is not a request to change mathematical notation.
+Preserve a requested stacked expression and repair its rendering, using isolated
+source glyphs/rules when reader CSS is unreliable.
+A short inline fraction can use an unambiguous linear form such as `1/(1−t)`
+when stacked CSS renders unreliably in EPUB readers. Parenthesize the complete
+denominator and preserve variable emphasis; `1/1−t` changes the meaning. Do not
+use this fallback to flatten matrices, binomial coefficients or complex
+multilevel notation. Check both the visible reader result and exported text.
+Use images only when source relationships cannot
 be represented faithfully with the available semantic rendering. Preserve
 necessary fractions and stacked coefficients; this preference does not permit
 discarding an uncertain script or flattening a genuinely two-dimensional object.

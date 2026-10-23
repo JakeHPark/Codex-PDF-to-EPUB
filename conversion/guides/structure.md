@@ -102,7 +102,10 @@ median of all long lines: enough inset lines can shift it inward and turn quoted
 paragraphs into body prose. Establish the outer text measure from verified
 full-width lines and neighboring pages, then identify each quotation as a region
 before splitting its paragraphs. Dialogue indentation belongs inside that region;
-a short final line and a page boundary do not end the quotation. Review every
+a short final line and a page boundary do not end the quotation. A short final
+italic word followed by a longer roman citation can also have a low italic
+percentage. Preserve that whole ending with the quotation; line-level majority
+style must not move it into the following prose. Review every
 prose/quotation role change inside an unfinished sentence and compare all pages
 whose margin estimate changes materially under a full-width-line cross-check.
 

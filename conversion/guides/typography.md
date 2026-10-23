@@ -235,6 +235,14 @@ After application, require complete evidence-page coverage, high weighted token 
 
 Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
 
+For source small-cap lettering, check actual reader support rather than only
+retaining `font-variant: small-caps`. Some readers display the underlying
+lowercase letters unchanged. When uppercase presentation is required, encode
+uppercase letters in the verified spans themselves and remove conflicting
+lowercase transforms. Respect inherited spans and parent-owned text tails;
+verify all occurrences in packaged text and reader output without capitalizing
+neighboring prose or changing unrelated lowercase quotations.
+
 ## Recover bold from scans
 
 An embedded OCR text layer may label every word with the same roman font even
