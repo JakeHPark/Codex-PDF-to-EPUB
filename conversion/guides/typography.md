@@ -174,7 +174,10 @@ complete words and style stream after line joining; a normalizer that expands
 When classifying small digits by baseline, exclude whitespace-only spans from
 reference-baseline estimates. A PDF may position a separator at the preceding
 superscript's height even though the surrounding words remain on the body
-baseline. Otherwise a note marker or exponent can be misclassified as a
+baseline. Compare a small digit with its local heading or prose size: a
+heading's note marker may be larger than a body marker and exceed a fixed
+point-size cutoff. Reconcile both against the note inventory. Otherwise a note
+marker or exponent can be misclassified as a
 subscript. Distinguish scripts from note links using geometry, local notation,
 and the complete note inventory, and test both roles in the reader output.
 Separate font runs may also be returned as separate PDF lines at the same
@@ -419,7 +422,10 @@ identities or the surrounding phrase to distinguish them.
 
 Line-end hyphen handling must include numeric compounds, not only alphabetic
 words. A wrapped `42-` followed by `inch` should retain the hyphen without a
-space when the source confirms a measurement adjective. Do not apply the same
+space when the source confirms a measurement adjective. Check the reverse
+direction too: `mid-` followed by `2000s`, or a citation range `160–` followed by
+`67`, must not acquire an internal space. Preserve the original hyphen or range
+dash; do not treat either as an alphabetic word split. Do not apply the same
 rule to a range or a suspended construction such as `42- and 48-inch`.
 Measurements with mixed fractions also need source review: OCR may turn `3½`
 into `3 '/2`. Recover a legible Unicode fraction or accurate mathematical form,
@@ -513,6 +519,30 @@ When a spelling repair restores letters mistaken for slash strokes, classify
 the corrected token length using its original glyph evidence, then audit its
 emphasis again. A recovered word must not inherit its damaged spelling's
 short-token rejection.
+
+When OCR produces underscores in prose, inspect the source for underlining
+before deleting them. If the author uses underlining to identify advice or
+another meaningful category, recover the complete source-supported underline
+spans and their roman boundaries; removing OCR debris alone loses that meaning.
+Distinguish printed underlines from handwritten annotations and scan artifacts.
+
+Keep spaces within one continuous source-underlined phrase inside the same
+`u` span. Separate per-word tags with roman spaces can leave visible gaps in
+mobile readers. Bridge only intervening whitespace between verified underline
+runs; never extend underlining across a genuine roman word or punctuation
+boundary without source evidence. Check final markup as well as desktop export;
+reader-specific rendering needs an actual device check before claiming support.
+Printed underlines can also resemble box rules: review apparent panels that
+start or end inside prose, and restore complete paragraphs before styling them.
+
+
+Audit the roman word immediately before each multiword italic run, including
+capitalized question openings such as “What’s”, “With” and “When”. A zero slant
+score can be a glyph-shape failure, not proof of roman type. Compare the complete
+question or expression against the source, and assert both its italic opening
+and its roman surroundings. Conversely, italic words on either side of a roman
+word do not prove a continuous italic phrase: retain source-verified roman gaps
+through span joining and test them explicitly in the final package.
 
 Audit every isolated italic word in long prose when false emphasis recurs.
 Roman `very`, `every`, `way`, and pronouns can acquire false slant scores, while

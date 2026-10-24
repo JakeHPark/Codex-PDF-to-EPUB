@@ -202,7 +202,9 @@ short repeated fragments such as `a`, `ll`, and `ee`. Rank low-information OCR
 rows before paragraph assembly and inspect their image crops. Remove verified
 rule/ornament interpretations by source region or positioned word identifiers;
 keep real headings immediately below them. A confidence score alone cannot
-separate rule hallucinations from text. Do not clean these fragments with a
+separate rule hallucinations from text. Ruled answer lines can also expand a real
+word or line box far beyond its glyphs. Review these geometric outliers before
+using them to assign a panel, infer an indent, or crop an object. Do not clean these fragments with a
 whole-book word replacement dictionary.
 
 Treat proposed illustration rectangles as candidates until compared with the

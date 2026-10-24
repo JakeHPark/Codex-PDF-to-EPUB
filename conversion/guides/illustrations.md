@@ -150,6 +150,11 @@ notice. Retain the notice and original caption, record the missing source
 artwork, and report that limitation. Do not treat it as a failed extraction or
 invent a substitute. Complex tables and blank assessment forms may remain
 verified, enlargable images; document their lack of searchable cell text.
+Do not derive their crop solely from recognized word bounds: OCR can miss a
+heading, blank answer lines, a table border, or an entire flowchart column.
+Compare the full source page and every crop edge, retaining those non-text
+features and labels at the native scan grid. Invalidate cached crops whenever
+their source or rectangle changes.
 
 Compare the retained source character stream in verified reading order with
 packaged prose, allowing only documented transformations. Check styling and

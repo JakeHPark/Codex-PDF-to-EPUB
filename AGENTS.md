@@ -61,7 +61,7 @@ Do not substitute another edition or translation merely because it is easier.
 
 | Feature or observed failure | Read before handling it |
 | --- | --- |
-| Chapter/part boundaries, paragraphs, dialogue, lists, notes, indexes or print references | [Structure](conversion/guides/structure.md) |
+| Chapter/part boundaries, paragraphs, dialogue, lists, notes, indexes, print references or keeping a source-page dedication together | [Structure](conversion/guides/structure.md) |
 | Italics, bold, small capitals, fragmented styles, quotations, apostrophes, dashes or punctuation spacing | [Typography](conversion/guides/typography.md) |
 | Columns, floating figures, tables, exercise plates, marginal notes, shaded panels, captions, image crops, spreads, decorative ornaments or drop caps | [Illustrations and layout](conversion/guides/illustrations.md) |
 | Equations, scripts, fractions, stacked coefficients, overlaid operators or equation images | [Mathematics](conversion/guides/mathematics.md), including its failure inventory |

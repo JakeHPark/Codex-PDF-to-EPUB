@@ -142,6 +142,27 @@ Do not apply lowercase-continuation logic blindly to poetry, lists, headings, eq
 
 ## Semantic XHTML and inherited styles
 
+Do not infer a quotation from the hanging indent of a list item. Before
+classifying indented prose as a blockquote, identify source bullet/number
+markers and their complete wrapped items. Group consecutive peers in one
+semantic list and retain only source-supported nesting. Audit every packaged
+list's ancestor chain: a mixture of direct items and individually blockquoted
+items creates inconsistent reader indents even when their text is correct.
+Likewise, indentation alone must not attach ordinary following prose to the
+last item; verify item continuations and the list's closing boundary.
+
+A hanging list can place every continuation line beyond the ordinary paragraph
+indent threshold. Measure continuation from the item's text margin, separately
+from its numeral, or retain verified item-region ownership; otherwise every
+physical line may become a paragraph and leave word fragments such as a line-end
+hyphen followed by a detached suffix. Check the final item-to-prose transition
+across page turns as well as the numbered starts. A four-digit year followed by
+a full stop is normally sentence text, not a list marker: constrain ordinal
+detection and source-check digit-initial paragraph splits.
+Empty physical-page anchors between consecutive items do not end their semantic
+list. Skip such anchors when grouping peers, and preserve their correct source
+ownership when moving an item into the shared list.
+
 Navigation lists should not add an automatic ordinal before a chapter label
 that already contains its printed number. Use semantic nested lists with
 appropriate list styling, while retaining actual list numbering in body content.
@@ -216,6 +237,15 @@ a numbered Introduction that is already a main chapter; include both when the
 source contains both. Check the contents page and the PDF pages themselves
 before setting the extraction start page. Record explicitly which preliminary
 sections were retained and which publisher matter was omitted.
+
+When a compact dedication shares one source page, keep its introductory words,
+dedicatee names, connecting words and explanatory paragraphs in one semantic
+dedication group. Names are normally styled paragraphs, not separate chapter
+headings or navigation entries. Use `break-inside: avoid` with the compatible
+`page-break-inside: avoid` on the group; avoid oversized margins that force a
+split. Verify that the complete dedication stays together in a paginated reader
+export. Preserve reflow and allow an unavoidable split on very small screens
+or at large font sizes rather than shrinking or clipping the text.
 
 ## Generated versus extracted headings
 
@@ -399,6 +429,14 @@ all findings, while retaining separate source-region completeness checks.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
 
+In scanned books, a note can begin with a short or separately extracted line,
+or continue from the previous page before the next numbered entry. Expand the
+verified small-type region to its actual first baseline; do not start it at the
+first sufficiently long line or the first recognizable numeral. Reconcile the
+call and entry streams independently across page boundaries. A comma followed
+by digits in a quantity is not evidence of a raised note number: verify its
+baseline and the corresponding entry before turning it into a link.
+
 Keep punctuation adjacent to a superscript reference separate from the marker
 itself. A source may print a colon after a note call, for example
 `Sen’s⁷: even …`. When replacing an OCR marker and its neighboring characters,
@@ -539,6 +577,13 @@ whole element without preserving its tail can silently truncate a chapter
 title. Check the complete title around a middle-of-heading reference, as well
 as the forward and return note links.
 
+Generate labels from the final semantic heading, after multiline joining and
+note linking. `conversion/common/navigation.py:heading_label` omits only
+explicit note-reference elements and preserves their following text. Audit
+every packaged contents entry against its target heading, excluding those
+references; do not strip trailing digits with a regular expression, since
+years, numbered figures and other genuine title numbers must survive.
+
 ## Soft line breaks in structured tables
 
 HTML table cells may use `br` solely to wrap a name or phrase for print, for
@@ -617,6 +662,15 @@ number sequence after recovery. For a shaded panel continued on another page,
 exclude prose below the shaded edge and join the continued panel before returning
 to that prose; assigning the entire physical page to the panel interleaves
 unrelated streams.
+
+A detached ordinal can be recognized as a short prose word (such as `Be` for
+`3.`), or sorted to the top of the page independently of its item. Review tiny
+standalone OCR regions and numeric tails on complete sentences against marker
+positions and baselines. Restore the marker to its source item before paragraph
+assembly; do not guess its owner from extraction order. Reconcile every printed
+ordinal with its item opening, including absent middle entries, and compare the
+actual source values rather than testing only a consecutive generated sequence.
+Keep later paragraphs inside their verified item and stop at the return to prose.
 
 For list numbering, account for both an OCR numeral and a separately extracted
 full stop. Adding a full stop to the numeral without consuming its separate

@@ -89,6 +89,13 @@ Tests: `test_prose_spacing.py`.
 
 ## Formatting evidence and semantic spans
 
+`navigation.py:heading_label(heading)` accepts an ElementTree or lxml heading
+and returns a whitespace-normalized plain label without explicit EPUB
+`noteref` or ARIA `doc-noteref` elements. It preserves their tails, surrounding
+emphasis text, ordinary digits and unclassified superscripts, and leaves the
+heading unchanged. Identify note calls before using it; it cannot recognize
+an unmarked citation digit. Tests: `test_navigation.py`.
+
 | Module / API | Contract | Required review | Tests |
 | --- | --- | --- | --- |
 | [detect_italics.py](detect_italics.py) CLI | Rendered image + hOCR from that same image → positioned slant/gain and likely-italic evidence. | Pixel evidence is not an unattended rewrite. Calibrate for the source; check short words, roman controls and complete spans. See CLI `--help`. | Source-specific visual calibration. |
