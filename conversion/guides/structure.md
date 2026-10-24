@@ -299,6 +299,12 @@ do not force a long quotation to stay on one reader page. Check verse stored in
 plain paragraphs as well as explicitly marked poetry: recover verified lineation
 without treating ordinary source-wrapped prose as verse.
 
+A hidden OCR row can combine a quotation's final word with an attribution
+printed on a different baseline. Split the two from source coordinates; retain
+both streams and their styles. Removing an apparent duplicate attribution must
+not remove its only surviving occurrence. Reconcile source attributions with
+the packaged reading stream separately from quotation text coverage.
+
 A quotation continuing across paragraphs may reopen with a quotation mark at
 each paragraph without closing until the final paragraph. Do not balance quotes
 independently in each paragraph by inserting invented closers. Resolve

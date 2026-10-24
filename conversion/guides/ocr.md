@@ -453,6 +453,13 @@ verified occurrence. Allow reviewed mathematical notation, editorial fragments,
 and brackets spanning intentionally separate blocks; do not insert closers or
 replace letters globally merely to balance a count.
 
+A damaged text layer can collect closing parentheses from several list entries
+into one symbol-only row at an unrelated position. Before discarding a cluster
+as scan noise, compare nearby unmatched openers with the pixels. Restore each
+verified closer to its own entry and record the displaced row's ownership.
+Recheck the entries separately after joining; a balanced chapter total can hide
+both misplaced punctuation and accidentally merged list items.
+
 ## Pāli and other scholarly transliterations
 
 Treat diacritics as substantive letters, not decorative accents. For Romanized
