@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "epub": "../../../output/epub/Title - Author.epub",
+  "inputs": ["../../../input/Source.pdf", "build.py", "validate_release.py", "corrections.json"],
+  "work_dir": "release",
+  "reader_text": "reader.txt",
+  "calibre": ["ebook-convert"],
+  "timeout_seconds": 600,
+  "reviewed_audit": "reviewed-audit.json",
+  "phrases": "reviewed-italic-phrases.json",
+  "checks": [
+    {
+      "id": "book-validation",
+      "argv": ["python3", "validate_release.py", "--epub", "{epub}", "--reader", "{reader_text}", "--report", "release/book-check.json"],
+      "gates": ["edition_coverage", "text_structure", "textual_sanity", "typography", "objects_layout", "notes_links", "reader_export", "reproducibility"],
+      "report": "release/book-check.json"
+    }
+  ],
+  "reviews": {
+    "second_pass": "second-pass-review.json",
+    "visual_review": "visual-review.json"
+  }
+}

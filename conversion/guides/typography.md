@@ -7,19 +7,352 @@ can be satisfied by merely generating a report.
 
 ## Contents
 
-- [Prefer typographic quotation marks and apostrophes](#prefer-typographic-quotation-marks-and-apostrophes)
-- [Repeated quotation marks](#repeated-quotation-marks)
-- [Apostrophes versus quotation marks](#apostrophes-versus-quotation-marks)
 - [Recover source emphasis and digital font semantics](#recover-source-emphasis-and-digital-font-semantics)
 - [Recover bold from scans](#recover-bold-from-scans)
-- [Repairs across inline formatting and profile fields](#repairs-across-inline-formatting-and-profile-fields)
-- [Spacing at quotation and emphasis boundaries](#spacing-at-quotation-and-emphasis-boundaries)
-- [Language-aware punctuation spacing](#language-aware-punctuation-spacing)
 - [Symbol-aware comparison and style recovery](#symbol-aware-comparison-and-style-recovery)
-- [Line-end hyphens and incomplete emphasis runs](#line-end-hyphens-and-incomplete-emphasis-runs)
 - [Second pass for fragmented emphasis](#second-pass-for-fragmented-emphasis)
 - [Emphasis boundaries need negative checks](#emphasis-boundaries-need-negative-checks)
 - [Parallel list label formatting](#parallel-list-label-formatting)
+- [Recover meaningful underlining](#recover-meaningful-underlining)
+- [Prefer typographic quotation marks and apostrophes](#prefer-typographic-quotation-marks-and-apostrophes)
+- [Repeated quotation marks](#repeated-quotation-marks)
+- [Apostrophes versus quotation marks](#apostrophes-versus-quotation-marks)
+- [Repairs across inline formatting and profile fields](#repairs-across-inline-formatting-and-profile-fields)
+- [Spacing at quotation and emphasis boundaries](#spacing-at-quotation-and-emphasis-boundaries)
+- [Language-aware punctuation spacing](#language-aware-punctuation-spacing)
+- [Line-end hyphens and sentence dashes](#line-end-hyphens-and-sentence-dashes)
+
+## Recover source emphasis and digital font semantics
+
+For digitally typeset PDFs, first inspect embedded font glyphs as well as font
+names, sizes, and baselines. Some fonts encode small capitals and superscript
+digits as glyph variants (`N.sc`, `one.super`) while the text map returns an
+ordinary lowercase letter or digit at the ordinary body size and baseline.
+Size-based superscript detection misses these. `conversion/common/digital_pdf.py`
+maps CFF glyph names from PyMuPDF's text trace back to positioned characters.
+Use verified `.sc` variants for semantic small-cap spans and `.super` variants
+for superscripts; reconcile numeric references with the complete notes sequence
+and validate every forward and return link. Not every font exposes these names:
+absence of a recognized glyph suffix is not proof of absent formatting.
+
+A reliable digital PDF can also insert extraction-only spaces immediately after
+an encoded ligature, producing `ﬁ rst`, `ofﬁ ce` or `conﬂ ict`. Inspect the printed
+word and its character positions before normalizing the ligature. Inventory all
+such glyph-space boundaries in the work, remove only verified internal spaces,
+and expand the actual ligature while retaining its emphasis. Do not promote this
+into joining arbitrary short words or ordinary `fi`/`fl` sequences. Validate the
+complete words and style stream after line joining; a normalizer that expands
+`ﬁ` first can conceal the evidence that the gap came from a single glyph.
+
+When classifying small digits by baseline, exclude whitespace-only spans from
+reference-baseline estimates. A PDF may position a separator at the preceding
+superscript's height even though the surrounding words remain on the body
+baseline. Compare a small digit with its local heading or prose size: a
+heading's note marker may be larger than a body marker and exceed a fixed
+point-size cutoff. Reconcile both against the note inventory. Otherwise a note
+marker or exponent can be misclassified as a
+subscript. Distinguish scripts from note links using geometry, local notation,
+and the complete note inventory, and test both roles in the reader output.
+Separate font runs may also be returned as separate PDF lines at the same
+height; reunite verified same-row fragments left to right before paragraph
+reconstruction, especially in references. Check source-observed word gaps at
+ligature/font boundaries and discard verified italic-correction spacing before
+punctuation or variable primes without introducing spaces inside notation.
+
+Retain line coordinates until paragraphs and quotations have been reconstructed.
+A single indented first line usually begins an ordinary paragraph; a sustained
+inset across consecutive lines denotes a block quotation or list. Determine
+the block first, then detect paragraph indents relative to that block's left
+edge. Otherwise every quotation line becomes a separate paragraph and keeps
+its broken hyphenation. Reconstruct multicolumn indexes column by column, not
+by globally sorting all lines by their vertical position.
+
+For scanned quotations, compare line-level style and spacing before joining
+blocks. An italic quotation's short final line can be followed by roman author
+commentary at the same left edge, with a gap smaller than normal body-leading
+thresholds. Sentence completion plus a sustained italic-to-roman transition
+can identify that boundary. Review such transitions throughout the book before
+expanding a mostly italic paragraph; otherwise commentary inherits quotation
+styling. Exclude bibliography title-to-publisher continuations and genuine
+mixed-style sentences from this boundary heuristic.
+
+For digital sources, compare the complete retained character stream and italic
+character stream with the packaged output, allowing only the explicitly
+documented whitespace/dehyphenation transformations. Inspect all unusually
+short paragraphs and any paragraph ending with a hyphen. Exact character
+coverage does not prove correct paragraph grouping, so retain both checks.
+
+Plain OCR normally discards italics, boldface, small capitals, and other inline styles. First inspect whether the PDF text layer, hOCR, or ABBYY XML contains reliable style metadata. If it does, convert those spans into semantic EPUB markup such as `<em>` and `<strong>`. If the available OCR assigns generic or meaningless fonts, do not infer formatting globally from capitalization or vocabulary.
+
+OCR style metadata can be partly useful: an engine may label essentially all
+body text bold while still identifying many italic spans correctly. Verify
+weight and slant independently against the scan, and audit unmarked passages
+rather than assuming that every genuine italic run was detected. Preserve
+source-supported missing emphasis with exact passage-level overrides.
+
+
+For style-poor scans, maintain source-verified emphasis terms and contextual corrections. A short common word such as *the* must never be added to a global emphasis list: store the complete surrounding phrase and emphasize only the verified occurrence. Escape the prose first and then insert controlled semantic tags so OCR text cannot become arbitrary HTML. Prefer `<em>` over visual-only `<i>`, add regression assertions against the packaged XHTML, and expand the verified evidence as pages are reviewed. This recovers meaningful formatting incrementally without italicizing ordinary uses of ambiguous words.
+
+This project also includes `conversion/common/detect_italics.py`, which uses hOCR word boxes aligned to rendered pixels. For each word it tests a range of horizontal shear corrections and measures how strongly dark pixels align into vertical strokes. Right-slanted italic words typically show a positive best slant and a meaningful improvement over the zero-slant score. Use its JSON output to prioritize and document review; do not apply its candidates blindly. Exclude running heads and marginal furniture, correct OCR tokens, join adjacent candidates into spans, and store approved results with the book-specific material under `tmp/`.
+
+Run formatting recovery across every content page, not merely a representative sample. `conversion/common/batch_detect_italics.py` renders and analyzes pages independently, caches one compact JSON record per page, and deletes temporary images and hOCR. `conversion/common/italic_markup.py` aligns those page-level word records with the builder’s extracted page text, inserts occurrence-level emphasis markers, and reports alignment and application counts. This preserves the distinction between an italic occurrence and a roman occurrence of the same word.
+
+Short words require a stricter classifier, not a global exception. The current detector uses the ordinary slant/gain threshold for words of four or more letters and substantially higher thresholds for two- or three-letter words. A short word inside a consistently italic run can also inherit the run classification. Retain exact contextual overrides only when image evidence cannot classify an isolated occurrence; do not use them as a substitute for the whole-book pass.
+
+Do not bridge a short word solely because both neighbors are italic. The source
+may intentionally use italic labels or contrast words around a roman connective,
+such as italic “fourth category” and “lack” around roman “is”. Require glyph or
+reviewed span evidence, and check isolated short candidates independently:
+roman `A`, `a`, `who` and `is` can score as slanted, while `not`, `are`, `do`
+and `all` may carry genuine contrastive emphasis. Keep occurrence-specific
+positive and negative decisions, including complete title boundaries.
+
+After application, require complete evidence-page coverage, high weighted token alignment, no leaked private-use markers, semantic `<em>` markup in packaged XHTML, and reader-rendered spot checks covering isolated emphasis, multiword titles, long italic passages, notes, and nearby roman controls. Running heads may be detected in the page image, but they should remain unmatched because the builder removes them before formatting alignment.
+
+Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
+
+For source small-cap lettering, check actual reader support rather than only
+retaining `font-variant: small-caps`. Some readers display the underlying
+lowercase letters unchanged. When uppercase presentation is required, encode
+uppercase letters in the verified spans themselves and remove conflicting
+lowercase transforms. Respect inherited spans and parent-owned text tails;
+verify all occurrences in packaged text and reader output without capitalizing
+neighboring prose or changing unrelated lowercase quotations.
+
+A superscript reference fused into an italic word's OCR box can corrupt its
+slant score. Contractions can likewise defeat a short-word fallback when their
+combined letter count exceeds the threshold. Review complete titles and the
+last word of emphasized passages, including attached references; separate the
+reference geometry where possible or record a source-verified span repair.
+Do not extend emphasis into the note number or adjacent roman prose.
+
+Superscript note numerals can merge with a neighboring closing quotation mark
+or question mark during OCR. Use the raised ink and character geometry to
+separate the marker from ordinary punctuation. A numeric OCR result outside the
+expected note range may reflect that merger; review the glyph rather than
+silently dropping its link or leaving symbols such as a degree sign in prose.
+
+## Recover bold from scans
+
+An embedded OCR text layer may label every word with the same roman font even
+when the printed questions are bold. Inspect actual pixels before trusting font
+metadata. `conversion/common/scan_styles.py` measures stroke thickness through
+one-pixel erosion and italic slant through shear/projection evidence. Render at
+a fixed scale, calibrate with visually verified bold and roman samples of the
+same type size, and retain positioned word/line scores for the whole book.
+Thresholds belong in the book recipe; they depend on resolution, font, contrast,
+and scan quality. Review roman controls as well as candidate bold lines.
+
+Reconstruct full question or prompt paragraphs across lines and pages, then
+wrap their text in `<strong>`; preserve nested `<em>` when a bold question also
+contains italics. Statements can be bold prompts and ordinary prose can contain
+question marks, so punctuation or wording alone cannot decide formatting.
+Distinguish interview pullquotes and profile labels from question paragraphs.
+Validate transitions between prompts and answers, continuation pages, source
+character coverage, and rendered reader samples.
+
+For inset blocks, consecutive indented lines are evidence only when their
+vertical gaps and left edges establish one sustained block. A normal first-line
+indent following a centered quotation must not be absorbed into the quotation.
+Resolve block boundaries before paragraph indents, and measure indents relative
+to that block's own left edge. Audit paragraph-ending discretionary hyphens even
+when complete character coverage passes: coverage cannot detect a word split
+between two paragraphs.
+
+In quotation-stack audits, classify an internal contraction or possessive
+apostrophe before consuming an open single-quote delimiter. `‘No. I’m busy.’`
+contains an apostrophe inside a single quotation, not its premature closing mark.
+
+## Symbol-aware comparison and style recovery
+
+A word-only comparison may report a false omission when a correctly transcribed
+symbol has no word token: for example, a reference's `&` can disagree with an
+OCR token `8c` even though nothing is missing. Inspect the complete character
+span before inserting a supposedly absent word. Do the same for fractions,
+ellipses, quotation marks and note markers, and audit separators independently
+of words. An authoritative scan's OCR may contain handwriting or underlining;
+its extra tokens are not evidence of missing authored text.
+
+When recovering italics from scan pixels, OCR spelling and printed style are
+separate questions. A uniquely aligned one-word gap between matching neighbors
+can retain strong measured italic evidence even if the OCR misspells that word;
+keep the verified transcription rather than copying the misspelling. Likewise,
+reconcile two italic OCR fragments split at a printed discretionary hyphen with
+the single joined word in the ebook. Record these positional decisions and
+exclude marginal annotations; neither a global emphasis vocabulary nor an
+unconstrained fuzzy match is an acceptable substitute.
+
+Treat explicit XHTML `br` elements as line boundaries during punctuation audits
+and as barriers during prose-spacing repairs. Concatenating verse lines without
+a separator can invent defects such as `dark.When`; inserting a space into the
+markup to satisfy that false audit does not fix the extraction method.
+`conversion/common/prose_spacing.py` preserves this boundary.
+
+## Second pass for fragmented emphasis
+
+After dehyphenation, OCR correction, and inline markup generation, make a
+second suspicious-formatting pass over the packaged text. Flag every word
+whose letters are only partly bold or italic, and every sentence, heading,
+or paragraph that is predominantly bold or italic except for a few isolated
+words or letter fragments. Check both missing emphasis and stray emphasis;
+short function words, first words, and fragments joined across lines or columns
+are especially vulnerable. Audit bold and italics independently, including
+spurious italics inside bold text. Do not infer correct formatting from a
+paragraph's majority style alone: compare the complete span with the scan,
+preserve genuine mixed emphasis, and record verified boundaries in the builder.
+Examples include a heading with only its last words italicized, a bold sentence
+with an unbold initial article, and `du` italicized inside roman `durable`.
+Add packaged-output regressions for each confirmed repair.
+
+Include short run-in labels before an em dash in emphasis review, even when
+most of the following paragraph is roman; a majority-style paragraph audit
+will miss a label such as bold `Painted` followed by unbold `wood`. Review
+adjacent entries together, including labels that lost all emphasis. A short
+bold label below a drawing may be its caption rather than a subsection title;
+confirm its position, attach it to the figure, and exclude it from the crop.
+
+Run the fragmented-emphasis audit after every structural markup rewrite as
+well as after initial assembly. Converting literal bullet paragraphs into
+semantic lists must reuse the already reviewed inline styles; regenerating
+text from raw OCR at that stage can silently reintroduce repaired errors.
+Retain source-verified exceptions in the review report, such as a deliberately
+roman word within italic prose or a roman introductory label before an italic
+sentence. An audit finding is a review candidate, not an automatic correction.
+
+For titles and named works, audit the entire phrase at every occurrence,
+including initial articles and short words such as `A`, `The`, `De`, `of`, and
+`and`. A correctly italicized occurrence elsewhere does not validate a broken
+one. Use capitalization and neighboring italic spans to find candidates, then
+verify their full boundaries in the scan; a person's name preceding a title
+may correctly remain roman. Accent or apostrophe variants can prevent a reviewed
+phrase rule from matching, so flag near-matches as well as checking exact hits.
+Restore missing accents only from source evidence, and assert that every
+confirmed title occurrence has a continuous emphasis span. Check final words,
+subtitles and parenthetical title extensions as well as short opening words.
+Adjacent italic works separated by quotation marks or citation punctuation
+need separate spans; do not bridge punctuation merely because both neighboring
+words are italic. Keep surrounding author names, publication data and separators
+outside the title, and validate the complete title in packaged markup.
+
+Review an isolated italic word at a sentence or paragraph opening, especially
+beside a large italic heading or list numeral. Style can leak from that nearby
+object. Do not flatten the rest of the passage: a later emphasized word may be
+genuine. Likewise, an apparent initial `I` beside otherwise parallel checklist
+entries may be a misread bullet. Restore one semantic list after verifying its
+membership and marker shape against the scan.
+
+A slant detector may classify ordinary initial `W` or `A` glyphs as italic,
+producing repeated false openings such as `We're`, `We've`, or `Are`. When one
+occurs, audit all short italic openings across the book, including multiword
+spans such as `Water is`. Compare each with neighboring source letters; remove
+only the falsely styled span, retaining genuine emphasis elsewhere. A valid
+italic opening such as `Time` does not justify extending italics into the
+following roman `is`.
+
+Audit complete style spans, including a bold opening followed by a roman tail
+in the same paragraph. Reviewing only paragraphs that are mostly bold misses
+such openings. Short function words provide weak pixel measurements: recover
+their style from reliable words on the same physical line, or from an explicitly
+continuous span on both sides, and retain reviewed span boundaries. OCR repair
+and dehyphenation can also split formatting inside one word; check the rebuilt
+word as a unit. Preserve real italic words inside bold prose and deliberate
+changes of style. Do not flatten whole mixed paragraphs to a majority style.
+
+When false emphasis recurs, inventory every packaged italic span in body and
+notes for source review; a shortlist of frequently misclassified words is not
+whole-book coverage. Also inspect missing emphasis independently. Length-based
+filters can discard genuine two-letter foreign words, initials, numerals and
+variables, and a neighbor-fill rule can miss two consecutive short italic words.
+Review complete foreign phrases and titles across physical lines, plus fused
+tokens that contain both roman and italic text even when the detector classified
+the entire token as roman. Preserve explicitly reviewed roman decisions through
+later gap filling, and retain source-supported internal puns as exceptions.
+Use the shared `inline_audit.find_emphasis_issues` on final packaged XHTML;
+include known complete titles/foreign phrases and review its positive and
+negative boundaries. Make new, unresolved findings release-blocking, with
+source-positioned exceptions for valid isolated emphasis and roman connectives.
+Do not merely generate a candidate report or approve an entire failure class.
+When a spelling repair restores letters mistaken for slash strokes, classify
+the corrected token length using its original glyph evidence, then audit its
+emphasis again. A recovered word must not inherit its damaged spelling's
+short-token rejection.
+
+Audit the roman word immediately before each multiword italic run, including
+capitalized question openings such as “What’s”, “With” and “When”. A zero slant
+score can be a glyph-shape failure, not proof of roman type. Compare the complete
+question or expression against the source, and assert both its italic opening
+and its roman surroundings. Conversely, italic words on either side of a roman
+word do not prove a continuous italic phrase: retain source-verified roman gaps
+through span joining and test them explicitly in the final package.
+
+Audit every isolated italic word in long prose when false emphasis recurs.
+Roman `very`, `every`, `way`, and pronouns can acquire false slant scores, while
+other occurrences really are emphasized. Keep source-positioned decisions for
+each occurrence, including retained genuine emphasis; never remove italics by
+word dictionary alone. Review the whole corrected word and adjacent words so a
+repair does not leave partial-word styling.
+
+A book title can match an ordinary subject term used elsewhere in roman type. Keep source-positioned occurrence identities; do not italicize every matching word sequence globally.
+
+## Emphasis boundaries need negative checks
+
+OCR can fuse text across an em dash into one token despite a change of typeface
+(e.g. italic `Perplex` followed by roman `—mostly`). Audit dash-containing
+styled tokens throughout body and notes. Review each side against the source,
+split its style spans at character boundaries, and test the roman side as well
+as the emphasized side. Either side may legitimately carry emphasis; do not
+strip or propagate it automatically. Short-word style inference must not cross
+a dash without source evidence.
+
+A mostly styled paragraph audit cannot detect every kind of style leak. Also
+flag a single italic word immediately after an em dash when the following prose
+is roman, and a bold initial word such as `If`, `It`, or `We` at the start of an
+otherwise roman sentence following bold text. Verify these against the scan;
+retain real contrastive emphasis and complete italic run-in labels. Test where
+emphasis stops as well as where it starts. A numbered entry's description is
+not necessarily styled like its number or label.
+
+Short-word fallback must preserve explicit reviewed style decisions and must
+not inherit style blindly from a preceding numeral, punctuation, sentence end,
+or run-in label. After joining a line-end hyphen, treat the resulting word as a
+unit: a short suffix on a new bold line can acquire that line's style even when
+it completes the preceding roman word. Use the longer, more informative glyph
+fragment and surrounding source evidence, then audit the complete word and
+sentence again. Do not fix one partial word by imposing its weakest fragment's
+style on the whole word. Keep legitimate internal emphasis when source-verified.
+
+## Parallel list label formatting
+
+Audit every list for inconsistent emphasis among parallel entries. Compare the
+number, run-in label, and explanatory prose separately; one or two labels in a
+different bold/italic style are suspicious even when their words are complete.
+Also flag a label whose final word lost its emphasis. Review these outliers
+against neighboring source entries, preserving genuine contrasts such as one
+italic word inside otherwise roman instructions. Do not make all list prose
+uniform merely because its opening labels share a style. Record retained
+exceptions as well as repairs, and validate the final packaged list membership
+and complete label spans after structural assembly.
+
+## Recover meaningful underlining
+
+When OCR produces underscores in prose, inspect the source for underlining
+before deleting them. If the author uses underlining to identify advice or
+another meaningful category, recover the complete source-supported underline
+spans and their roman boundaries; removing OCR debris alone loses that meaning.
+Distinguish printed underlines from handwritten annotations and scan artifacts.
+
+Keep spaces within one continuous source-underlined phrase inside the same
+`u` span. Separate per-word tags with roman spaces can leave visible gaps in
+mobile readers. Bridge only intervening whitespace between verified underline
+runs; never extend underlining across a genuine roman word or punctuation
+boundary without source evidence. Check final markup as well as desktop export;
+reader-specific rendering needs an actual device check before claiming support.
+Printed underlines can also resemble box rules: review apparent panels that
+start or end inside prose, and restore complete paragraphs before styling them.
+
+Printed underlining can also obscure letters and defeat both OCR engines.
+Inspect emphasized quotations independently, restore missing source words, and
+preserve the underline when it carries an explicitly stated editorial distinction.
 
 ## Prefer typographic quotation marks and apostrophes
 
@@ -149,134 +482,6 @@ checking whether it is a quote delimiter or a note marker. Preserve reviewed
 decisions in book-specific evidence, but keep this classification procedure and
 its regression checks in the shared workflow.
 
-## Recover source emphasis and digital font semantics
-
-For digitally typeset PDFs, first inspect embedded font glyphs as well as font
-names, sizes, and baselines. Some fonts encode small capitals and superscript
-digits as glyph variants (`N.sc`, `one.super`) while the text map returns an
-ordinary lowercase letter or digit at the ordinary body size and baseline.
-Size-based superscript detection misses these. `conversion/common/digital_pdf.py`
-maps CFF glyph names from PyMuPDF's text trace back to positioned characters.
-Use verified `.sc` variants for semantic small-cap spans and `.super` variants
-for superscripts; reconcile numeric references with the complete notes sequence
-and validate every forward and return link. Not every font exposes these names:
-absence of a recognized glyph suffix is not proof of absent formatting.
-
-A reliable digital PDF can also insert extraction-only spaces immediately after
-an encoded ligature, producing `ﬁ rst`, `ofﬁ ce` or `conﬂ ict`. Inspect the printed
-word and its character positions before normalizing the ligature. Inventory all
-such glyph-space boundaries in the work, remove only verified internal spaces,
-and expand the actual ligature while retaining its emphasis. Do not promote this
-into joining arbitrary short words or ordinary `fi`/`fl` sequences. Validate the
-complete words and style stream after line joining; a normalizer that expands
-`ﬁ` first can conceal the evidence that the gap came from a single glyph.
-
-When classifying small digits by baseline, exclude whitespace-only spans from
-reference-baseline estimates. A PDF may position a separator at the preceding
-superscript's height even though the surrounding words remain on the body
-baseline. Compare a small digit with its local heading or prose size: a
-heading's note marker may be larger than a body marker and exceed a fixed
-point-size cutoff. Reconcile both against the note inventory. Otherwise a note
-marker or exponent can be misclassified as a
-subscript. Distinguish scripts from note links using geometry, local notation,
-and the complete note inventory, and test both roles in the reader output.
-Separate font runs may also be returned as separate PDF lines at the same
-height; reunite verified same-row fragments left to right before paragraph
-reconstruction, especially in references. Check source-observed word gaps at
-ligature/font boundaries and discard verified italic-correction spacing before
-punctuation or variable primes without introducing spaces inside notation.
-
-Retain line coordinates until paragraphs and quotations have been reconstructed.
-A single indented first line usually begins an ordinary paragraph; a sustained
-inset across consecutive lines denotes a block quotation or list. Determine
-the block first, then detect paragraph indents relative to that block's left
-edge. Otherwise every quotation line becomes a separate paragraph and keeps
-its broken hyphenation. Reconstruct multicolumn indexes column by column, not
-by globally sorting all lines by their vertical position.
-
-For scanned quotations, compare line-level style and spacing before joining
-blocks. An italic quotation's short final line can be followed by roman author
-commentary at the same left edge, with a gap smaller than normal body-leading
-thresholds. Sentence completion plus a sustained italic-to-roman transition
-can identify that boundary. Review such transitions throughout the book before
-expanding a mostly italic paragraph; otherwise commentary inherits quotation
-styling. Exclude bibliography title-to-publisher continuations and genuine
-mixed-style sentences from this boundary heuristic.
-
-For digital sources, compare the complete retained character stream and italic
-character stream with the packaged output, allowing only the explicitly
-documented whitespace/dehyphenation transformations. Inspect all unusually
-short paragraphs and any paragraph ending with a hyphen. Exact character
-coverage does not prove correct paragraph grouping, so retain both checks.
-
-Plain OCR normally discards italics, boldface, small capitals, and other inline styles. First inspect whether the PDF text layer, hOCR, or ABBYY XML contains reliable style metadata. If it does, convert those spans into semantic EPUB markup such as `<em>` and `<strong>`. If the available OCR assigns generic or meaningless fonts, do not infer formatting globally from capitalization or vocabulary.
-
-OCR style metadata can be partly useful: an engine may label essentially all
-body text bold while still identifying many italic spans correctly. Verify
-weight and slant independently against the scan, and audit unmarked passages
-rather than assuming that every genuine italic run was detected. Preserve
-source-supported missing emphasis with exact passage-level overrides.
-
-
-For style-poor scans, maintain source-verified emphasis terms and contextual corrections. A short common word such as *the* must never be added to a global emphasis list: store the complete surrounding phrase and emphasize only the verified occurrence. Escape the prose first and then insert controlled semantic tags so OCR text cannot become arbitrary HTML. Prefer `<em>` over visual-only `<i>`, add regression assertions against the packaged XHTML, and expand the verified evidence as pages are reviewed. This recovers meaningful formatting incrementally without italicizing ordinary uses of ambiguous words.
-
-This project also includes `conversion/common/detect_italics.py`, which uses hOCR word boxes aligned to rendered pixels. For each word it tests a range of horizontal shear corrections and measures how strongly dark pixels align into vertical strokes. Right-slanted italic words typically show a positive best slant and a meaningful improvement over the zero-slant score. Use its JSON output to prioritize and document review; do not apply its candidates blindly. Exclude running heads and marginal furniture, correct OCR tokens, join adjacent candidates into spans, and store approved results with the book-specific material under `tmp/`.
-
-Run formatting recovery across every content page, not merely a representative sample. `conversion/common/batch_detect_italics.py` renders and analyzes pages independently, caches one compact JSON record per page, and deletes temporary images and hOCR. `conversion/common/italic_markup.py` aligns those page-level word records with the builder’s extracted page text, inserts occurrence-level emphasis markers, and reports alignment and application counts. This preserves the distinction between an italic occurrence and a roman occurrence of the same word.
-
-Short words require a stricter classifier, not a global exception. The current detector uses the ordinary slant/gain threshold for words of four or more letters and substantially higher thresholds for two- or three-letter words. A short word inside a consistently italic run can also inherit the run classification. Retain exact contextual overrides only when image evidence cannot classify an isolated occurrence; do not use them as a substitute for the whole-book pass.
-
-Do not bridge a short word solely because both neighbors are italic. The source
-may intentionally use italic labels or contrast words around a roman connective,
-such as italic “fourth category” and “lack” around roman “is”. Require glyph or
-reviewed span evidence, and check isolated short candidates independently:
-roman `A`, `a`, `who` and `is` can score as slanted, while `not`, `are`, `do`
-and `all` may carry genuine contrastive emphasis. Keep occurrence-specific
-positive and negative decisions, including complete title boundaries.
-
-After application, require complete evidence-page coverage, high weighted token alignment, no leaked private-use markers, semantic `<em>` markup in packaged XHTML, and reader-rendered spot checks covering isolated emphasis, multiword titles, long italic passages, notes, and nearby roman controls. Running heads may be detected in the page image, but they should remain unmatched because the builder removes them before formatting alignment.
-
-Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.
-
-For source small-cap lettering, check actual reader support rather than only
-retaining `font-variant: small-caps`. Some readers display the underlying
-lowercase letters unchanged. When uppercase presentation is required, encode
-uppercase letters in the verified spans themselves and remove conflicting
-lowercase transforms. Respect inherited spans and parent-owned text tails;
-verify all occurrences in packaged text and reader output without capitalizing
-neighboring prose or changing unrelated lowercase quotations.
-
-## Recover bold from scans
-
-An embedded OCR text layer may label every word with the same roman font even
-when the printed questions are bold. Inspect actual pixels before trusting font
-metadata. `conversion/common/scan_styles.py` measures stroke thickness through
-one-pixel erosion and italic slant through shear/projection evidence. Render at
-a fixed scale, calibrate with visually verified bold and roman samples of the
-same type size, and retain positioned word/line scores for the whole book.
-Thresholds belong in the book recipe; they depend on resolution, font, contrast,
-and scan quality. Review roman controls as well as candidate bold lines.
-
-Reconstruct full question or prompt paragraphs across lines and pages, then
-wrap their text in `<strong>`; preserve nested `<em>` when a bold question also
-contains italics. Statements can be bold prompts and ordinary prose can contain
-question marks, so punctuation or wording alone cannot decide formatting.
-Distinguish interview pullquotes and profile labels from question paragraphs.
-Validate transitions between prompts and answers, continuation pages, source
-character coverage, and rendered reader samples.
-
-For inset blocks, consecutive indented lines are evidence only when their
-vertical gaps and left edges establish one sustained block. A normal first-line
-indent following a centered quotation must not be absorbed into the quotation.
-Resolve block boundaries before paragraph indents, and measure indents relative
-to that block's own left edge. Audit paragraph-ending discretionary hyphens even
-when complete character coverage passes: coverage cannot detect a word split
-between two paragraphs.
-
-In quotation-stack audits, classify an internal contraction or possessive
-apostrophe before consuming an open single-quote delimiter. `‘No. I’m busy.’`
-contains an apostrophe inside a single quotation, not its premature closing mark.
-
 ## Repairs across inline formatting and profile fields
 
 Review corrections on the visible character stream, not only on the raw markup.
@@ -366,32 +571,7 @@ of at least three one- or two-digit integers with an explicit `and` or `or`.
 Leave thousands separators, decimal commas, formulas, and code untouched;
 broader numeric strings require contextual review.
 
-## Symbol-aware comparison and style recovery
-
-A word-only comparison may report a false omission when a correctly transcribed
-symbol has no word token: for example, a reference's `&` can disagree with an
-OCR token `8c` even though nothing is missing. Inspect the complete character
-span before inserting a supposedly absent word. Do the same for fractions,
-ellipses, quotation marks and note markers, and audit separators independently
-of words. An authoritative scan's OCR may contain handwriting or underlining;
-its extra tokens are not evidence of missing authored text.
-
-When recovering italics from scan pixels, OCR spelling and printed style are
-separate questions. A uniquely aligned one-word gap between matching neighbors
-can retain strong measured italic evidence even if the OCR misspells that word;
-keep the verified transcription rather than copying the misspelling. Likewise,
-reconcile two italic OCR fragments split at a printed discretionary hyphen with
-the single joined word in the ebook. Record these positional decisions and
-exclude marginal annotations; neither a global emphasis vocabulary nor an
-unconstrained fuzzy match is an acceptable substitute.
-
-Treat explicit XHTML `br` elements as line boundaries during punctuation audits
-and as barriers during prose-spacing repairs. Concatenating verse lines without
-a separator can invent defects such as `dark.When`; inserting a space into the
-markup to satisfy that false audit does not fix the extraction method.
-`conversion/common/prose_spacing.py` preserves this boundary.
-
-## Line-end hyphens and incomplete emphasis runs
+## Line-end hyphens and sentence dashes
 
 Do not treat a line-final hyphen followed by lowercase text as sufficient proof
 of discretionary hyphenation. Inventory the original token pairs before joining
@@ -410,16 +590,6 @@ captions. A dash at the end of a printed line must not inherit a space before
 the next word. Keep deliberately spaced display typography and other language
 conventions outside this prose normalization.
 
-Word-by-word italic detection can leave only a title's middle word emphasized,
-particularly when short articles and prepositions provide weak slant evidence.
-Audit short emphasis fragments and partially styled titles/foreign phrases.
-Check the complete source phrase, including articles, connectives and words on
-the next physical line or page, and restore the whole verified run. Add a check
-that every character of that occurrence has the expected emphasis. Do not
-italicize every occurrence of the same words globally: a book title may match an
-ordinary subject term used elsewhere in roman type. Preserve contextual source
-identities or the surrounding phrase to distinguish them.
-
 Line-end hyphen handling must include numeric compounds, not only alphabetic
 words. A wrapped `42-` followed by `inch` should retain the hyphen without a
 space when the source confirms a measurement adjective. Check the reverse
@@ -430,171 +600,3 @@ rule to a range or a suspended construction such as `42- and 48-inch`.
 Measurements with mixed fractions also need source review: OCR may turn `3½`
 into `3 '/2`. Recover a legible Unicode fraction or accurate mathematical form,
 retaining the dimension's units and its relationship to neighboring numbers.
-
-## Second pass for fragmented emphasis
-
-After dehyphenation, OCR correction, and inline markup generation, make a
-second suspicious-formatting pass over the packaged text. Flag every word
-whose letters are only partly bold or italic, and every sentence, heading,
-or paragraph that is predominantly bold or italic except for a few isolated
-words or letter fragments. Check both missing emphasis and stray emphasis;
-short function words, first words, and fragments joined across lines or columns
-are especially vulnerable. Audit bold and italics independently, including
-spurious italics inside bold text. Do not infer correct formatting from a
-paragraph's majority style alone: compare the complete span with the scan,
-preserve genuine mixed emphasis, and record verified boundaries in the builder.
-Examples include a heading with only its last words italicized, a bold sentence
-with an unbold initial article, and `du` italicized inside roman `durable`.
-Add packaged-output regressions for each confirmed repair.
-
-Include short run-in labels before an em dash in emphasis review, even when
-most of the following paragraph is roman; a majority-style paragraph audit
-will miss a label such as bold `Painted` followed by unbold `wood`. Review
-adjacent entries together, including labels that lost all emphasis. A short
-bold label below a drawing may be its caption rather than a subsection title;
-confirm its position, attach it to the figure, and exclude it from the crop.
-
-Run the fragmented-emphasis audit after every structural markup rewrite as
-well as after initial assembly. Converting literal bullet paragraphs into
-semantic lists must reuse the already reviewed inline styles; regenerating
-text from raw OCR at that stage can silently reintroduce repaired errors.
-Retain source-verified exceptions in the review report, such as a deliberately
-roman word within italic prose or a roman introductory label before an italic
-sentence. An audit finding is a review candidate, not an automatic correction.
-
-For titles and named works, audit the entire phrase at every occurrence,
-including initial articles and short words such as `A`, `The`, `De`, `of`, and
-`and`. A correctly italicized occurrence elsewhere does not validate a broken
-one. Use capitalization and neighboring italic spans to find candidates, then
-verify their full boundaries in the scan; a person's name preceding a title
-may correctly remain roman. Accent or apostrophe variants can prevent a reviewed
-phrase rule from matching, so flag near-matches as well as checking exact hits.
-Restore missing accents only from source evidence, and assert that every
-confirmed title occurrence has a continuous emphasis span. Check final words,
-subtitles and parenthetical title extensions as well as short opening words.
-Adjacent italic works separated by quotation marks or citation punctuation
-need separate spans; do not bridge punctuation merely because both neighboring
-words are italic. Keep surrounding author names, publication data and separators
-outside the title, and validate the complete title in packaged markup.
-
-Review an isolated italic word at a sentence or paragraph opening, especially
-beside a large italic heading or list numeral. Style can leak from that nearby
-object. Do not flatten the rest of the passage: a later emphasized word may be
-genuine. Likewise, an apparent initial `I` beside otherwise parallel checklist
-entries may be a misread bullet. Restore one semantic list after verifying its
-membership and marker shape against the scan.
-
-A slant detector may classify ordinary initial `W` or `A` glyphs as italic,
-producing repeated false openings such as `We're`, `We've`, or `Are`. When one
-occurs, audit all short italic openings across the book, including multiword
-spans such as `Water is`. Compare each with neighboring source letters; remove
-only the falsely styled span, retaining genuine emphasis elsewhere. A valid
-italic opening such as `Time` does not justify extending italics into the
-following roman `is`.
-
-Audit complete style spans, including a bold opening followed by a roman tail
-in the same paragraph. Reviewing only paragraphs that are mostly bold misses
-such openings. Short function words provide weak pixel measurements: recover
-their style from reliable words on the same physical line, or from an explicitly
-continuous span on both sides, and retain reviewed span boundaries. OCR repair
-and dehyphenation can also split formatting inside one word; check the rebuilt
-word as a unit. Preserve real italic words inside bold prose and deliberate
-changes of style. Do not flatten whole mixed paragraphs to a majority style.
-
-When false emphasis recurs, inventory every packaged italic span in body and
-notes for source review; a shortlist of frequently misclassified words is not
-whole-book coverage. Also inspect missing emphasis independently. Length-based
-filters can discard genuine two-letter foreign words, initials, numerals and
-variables, and a neighbor-fill rule can miss two consecutive short italic words.
-Review complete foreign phrases and titles across physical lines, plus fused
-tokens that contain both roman and italic text even when the detector classified
-the entire token as roman. Preserve explicitly reviewed roman decisions through
-later gap filling, and retain source-supported internal puns as exceptions.
-Use the shared `inline_audit.find_emphasis_issues` on final packaged XHTML;
-include known complete titles/foreign phrases and review its positive and
-negative boundaries. Make new, unresolved findings release-blocking, with
-source-positioned exceptions for valid isolated emphasis and roman connectives.
-Do not merely generate a candidate report or approve an entire failure class.
-When a spelling repair restores letters mistaken for slash strokes, classify
-the corrected token length using its original glyph evidence, then audit its
-emphasis again. A recovered word must not inherit its damaged spelling's
-short-token rejection.
-
-When OCR produces underscores in prose, inspect the source for underlining
-before deleting them. If the author uses underlining to identify advice or
-another meaningful category, recover the complete source-supported underline
-spans and their roman boundaries; removing OCR debris alone loses that meaning.
-Distinguish printed underlines from handwritten annotations and scan artifacts.
-
-Keep spaces within one continuous source-underlined phrase inside the same
-`u` span. Separate per-word tags with roman spaces can leave visible gaps in
-mobile readers. Bridge only intervening whitespace between verified underline
-runs; never extend underlining across a genuine roman word or punctuation
-boundary without source evidence. Check final markup as well as desktop export;
-reader-specific rendering needs an actual device check before claiming support.
-Printed underlines can also resemble box rules: review apparent panels that
-start or end inside prose, and restore complete paragraphs before styling them.
-
-
-Audit the roman word immediately before each multiword italic run, including
-capitalized question openings such as “What’s”, “With” and “When”. A zero slant
-score can be a glyph-shape failure, not proof of roman type. Compare the complete
-question or expression against the source, and assert both its italic opening
-and its roman surroundings. Conversely, italic words on either side of a roman
-word do not prove a continuous italic phrase: retain source-verified roman gaps
-through span joining and test them explicitly in the final package.
-
-Audit every isolated italic word in long prose when false emphasis recurs.
-Roman `very`, `every`, `way`, and pronouns can acquire false slant scores, while
-other occurrences really are emphasized. Keep source-positioned decisions for
-each occurrence, including retained genuine emphasis; never remove italics by
-word dictionary alone. Review the whole corrected word and adjacent words so a
-repair does not leave partial-word styling.
-
-## Emphasis boundaries need negative checks
-
-OCR can fuse text across an em dash into one token despite a change of typeface
-(e.g. italic `Perplex` followed by roman `—mostly`). Audit dash-containing
-styled tokens throughout body and notes. Review each side against the source,
-split its style spans at character boundaries, and test the roman side as well
-as the emphasized side. Either side may legitimately carry emphasis; do not
-strip or propagate it automatically. Short-word style inference must not cross
-a dash without source evidence.
-
-A mostly styled paragraph audit cannot detect every kind of style leak. Also
-flag a single italic word immediately after an em dash when the following prose
-is roman, and a bold initial word such as `If`, `It`, or `We` at the start of an
-otherwise roman sentence following bold text. Verify these against the scan;
-retain real contrastive emphasis and complete italic run-in labels. Test where
-emphasis stops as well as where it starts. A numbered entry's description is
-not necessarily styled like its number or label.
-
-Short-word fallback must preserve explicit reviewed style decisions and must
-not inherit style blindly from a preceding numeral, punctuation, sentence end,
-or run-in label. After joining a line-end hyphen, treat the resulting word as a
-unit: a short suffix on a new bold line can acquire that line's style even when
-it completes the preceding roman word. Use the longer, more informative glyph
-fragment and surrounding source evidence, then audit the complete word and
-sentence again. Do not fix one partial word by imposing its weakest fragment's
-style on the whole word. Keep legitimate internal emphasis when source-verified.
-
-## Parallel list label formatting
-
-Audit every list for inconsistent emphasis among parallel entries. Compare the
-number, run-in label, and explanatory prose separately; one or two labels in a
-different bold/italic style are suspicious even when their words are complete.
-Also flag a label whose final word lost its emphasis. Review these outliers
-against neighboring source entries, preserving genuine contrasts such as one
-italic word inside otherwise roman instructions. Do not make all list prose
-uniform merely because its opening labels share a style. Record retained
-exceptions as well as repairs, and validate the final packaged list membership
-and complete label spans after structural assembly.
-
-Superscript note numerals can merge with a neighboring closing quotation mark
-or question mark during OCR. Use the raised ink and character geometry to
-separate the marker from ordinary punctuation. A numeric OCR result outside the
-expected note range may reflect that merger; review the glyph rather than
-silently dropping its link or leaving symbols such as a degree sign in prose.
-Printed underlining can also obscure letters and defeat both OCR engines.
-Inspect emphasized quotations independently, restore missing source words, and
-preserve the underline when it carries an explicitly stated editorial distinction.

@@ -15,7 +15,9 @@ Treat extraction as source recovery. Keep every correction reproducible.
 The guides are part of this manual. Their separation reduces unrelated reading;
 it does not make applicable instructions optional. Existing book recipes vary:
 verify which checks they actually run rather than assuming a previous builder
-already enforces the current manual. No single helper runs the whole workflow.
+already enforces the current manual. The [release runner](conversion/common/README.md#release-runner)
+enforces execution and evidence freshness; book-specific checks and actual
+source/visual review still establish correctness.
 
 ## Non-negotiable rules
 
@@ -61,7 +63,8 @@ Do not substitute another edition or translation merely because it is easier.
 
 | Feature or observed failure | Read before handling it |
 | --- | --- |
-| Chapter/part boundaries, paragraphs, dialogue, lists, notes, indexes, print references or keeping a source-page dedication together | [Structure](conversion/guides/structure.md) |
+| Chapter/part boundaries, paragraphs, dialogue, notes, indexes, print references or keeping a source-page dedication together | [Structure](conversion/guides/structure.md) |
+| Bullets, numbering, nesting, hanging continuations or lists interrupted by columns/images | [Lists](conversion/guides/lists.md), plus typography for label styles |
 | Italics, bold, small capitals, fragmented styles, quotations, apostrophes, dashes or punctuation spacing | [Typography](conversion/guides/typography.md) |
 | Columns, floating figures, tables, exercise plates, marginal notes, shaded panels, captions, image crops, spreads, decorative ornaments or drop caps | [Illustrations and layout](conversion/guides/illustrations.md) |
 | Equations, scripts, fractions, stacked coefficients, overlaid operators or equation images | [Mathematics](conversion/guides/mathematics.md), including its failure inventory |
@@ -109,6 +112,14 @@ Keep a book-specific QA record with the output filename/checksum, checks run,
 results, reviewed exceptions and remaining limitations. Mark a feature genuinely
 absent as not applicable with a reason. Generating a candidate report is not the
 same as resolving its findings. Do not claim a pass for an unperformed check.
+
+Use the release runner with a book-specific configuration for new conversions
+and substantive rebuilds. Adapt existing validators instead of replacing their
+source checks with generic ones. A runner pass requires fresh automated checks,
+the shared audit, a new Calibre text export, and separately recorded second-pass
+and visual reviews bound to the final artifact and reviewed evidence. Verify
+the release receipt immediately before delivery; changed inputs or evidence
+invalidate it. See [the workflow](conversion/README.md#release-orchestration).
 
 | Gate | Required evidence |
 | --- | --- |

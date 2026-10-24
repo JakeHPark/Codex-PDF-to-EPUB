@@ -23,6 +23,93 @@ python3 -m unittest discover -s conversion/common -p 'test_*.py'
 Focused tests are listed below. Modules use both repository-qualified and
 sibling imports; use discovery from the root, or explicitly provide the root
 and `conversion/common` on `PYTHONPATH` when invoking an individual test.
+
+## Release runner
+
+`release.py run CONFIG` executes a release against an **already built EPUB**;
+`release.py verify REPORT` checks whether a successful receipt still matches
+every bound file. Both exit nonzero on failure. Copy
+[release.example.json](release.example.json) into `tmp/pdfs/<book>/release.json`
+and adapt it; the template is not a ready-to-run book validator. Paths resolve
+from the configuration directory, except review evidence paths, which resolve
+from their review record's directory. The default command working directory is
+the configuration directory; a check can set `cwd` explicitly.
+
+The runner performs ZIP/XML/manifest/spine/navigation/fragment and basic
+metadata/cover-declaration checks, the strict shared packaged audit, and a fresh
+Calibre text export. It then runs book-specific commands sequentially without a
+shell. Each successful command must create a **new** JSON report; the runner
+deletes its old report first. Commands receive these argument placeholders:
+`{epub}`, `{reader_text}`, `{work_dir}`, `{config_dir}`. Use argument arrays,
+not shell command strings. Select the needed Python/runtime in that array.
+
+Configure checks to cover every following gate, using these exact identifiers:
+
+| Evidence supplied by book checks | Gate identifiers |
+| --- | --- |
+| Source/edition inventory and retained stream reconciliation | `edition_coverage`, `text_structure` |
+| Source-reviewed textual candidates and complete style/roman boundaries | `textual_sanity`, `typography` |
+| Object ownership/crops and note occurrence/entry associations | `objects_layout`, `notes_links` |
+| Complete reading blocks, punctuation, headings and list values in the fresh reader text | `reader_export` |
+| Recipe repairs, regressions and current QA evidence | `reproducibility` |
+
+The runner supplies the mechanical `container_metadata` gate. Book checks may
+also cover it to enforce expected title/author, image formats/pixels and other
+source-specific policies. The generic check does **not** decode image interiors,
+resolve CSS-dependent styles, verify typography/source coverage, or prove a
+working link has the right semantic destination. These remain book obligations.
+
+A check's report must contain:
+
+```json
+{
+  "epub_sha256": "the actual final EPUB SHA-256",
+  "status": "pass",
+  "unresolved_findings": 0,
+  "summary": "What was actually checked, including reviewed exceptions"
+}
+```
+
+Keep detailed book reports separately. An adapter should run the existing
+validator, propagate failure, then produce this envelope only after its checks
+pass. Do not stamp an old report with a new EPUB hash or claim source/style gates
+from a container-only validator. A zero exit code without the new, correctly
+bound report fails. `inputs` must include authoritative source files and all
+recipe/correction/validation inputs needed to reproduce the checks; omission
+from that list means the runner cannot track that dependency.
+
+`second_pass` and `visual_review` require separate review-record paths under
+`reviews`, using [release-review.example.json](release-review.example.json).
+After performing each review, record `status: "pass"`, zero unresolved findings,
+the actual reviewer, scope and decisions, the EPUB's SHA-256, and `evidence`
+entries containing `path` and `sha256`. Bind **all** declared inputs; the second
+pass must also bind `reader_text`. Bind relevant visual exports/contact sheets
+and detailed review records for visual approval. Placeholders and pending
+statuses deliberately fail. These records document agent/human review, not a
+cryptographic identity or proof that a review was thorough.
+
+Only `objects_layout` may be absent: add a nonempty reason under
+`not_applicable.objects_layout`, omit that gate from commands, and supply a
+review record under `reviews.objects_layout` with `status: "not_applicable"`.
+The cover remains mandatory. Notes/link checks cannot be omitted even when no
+footnotes exist because navigation still needs checking. Other gates always
+apply, including review of a short article's complete reading stream.
+
+The runner exports text again during release, so first produce the export and
+complete review before recording its hash. If the new export differs, inspect
+the difference and refresh the actual review; do not approve it by changing a
+hash alone. `calibre` selects the command prefix (default `["ebook-convert"]`);
+the EPUB and reader paths are appended automatically. No alternative converter
+is implied by that setting. `timeout_seconds` defaults to 600 per command.
+
+The final `work_dir/release-report.json` binds the EPUB, config, declared inputs,
+the runner and its loaded shared detectors,
+review records and evidence, Calibre text, shared audit, check reports and logs.
+Failure replaces the previous pass; changed/missing files invalidate `verify`.
+This enforces execution and freshness, not the truth of a custom check or review
+claim. Run only trusted configurations. Tests: `test_release.py` covers successful
+runs, missing gates, stale reviews/exports, command failures, artifact/evidence
+mutation, unresolved findings, allowed absence and receipt verification.
 Shared tests establish helper behavior, not the quality of a generated EPUB.
 
 ## Extraction, geometry and reading order

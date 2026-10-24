@@ -1,0 +1,15 @@
+{
+  "epub_sha256": "REPLACE_WITH_FINAL_EPUB_SHA256_AFTER_REVIEW",
+  "status": "pending",
+  "unresolved_findings": null,
+  "reviewed_by": "",
+  "scope": "",
+  "summary": "",
+  "evidence": [
+    {"path": "../../../input/Source.pdf", "sha256": "REPLACE_WITH_REVIEWED_FILE_SHA256"},
+    {"path": "build.py", "sha256": "REPLACE_WITH_REVIEWED_FILE_SHA256"},
+    {"path": "validate_release.py", "sha256": "REPLACE_WITH_REVIEWED_FILE_SHA256"},
+    {"path": "corrections.json", "sha256": "REPLACE_WITH_REVIEWED_FILE_SHA256"},
+    {"path": "reader.txt", "sha256": "REPLACE_WITH_REVIEWED_FILE_SHA256"}
+  ]
+}

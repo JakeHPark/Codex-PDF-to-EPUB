@@ -1,4 +1,4 @@
-# Reading order, paragraphs, headings, lists and notes
+# Reading order, paragraphs, headings and notes
 
 Detailed operating rules supporting [AGENTS.md](../../AGENTS.md). Read the
 sections selected by its source and feature routing tables before implementing
@@ -9,29 +9,26 @@ can be satisfied by merely generating a report.
 
 - [Inspect all source regions](#inspect-all-source-regions)
 - [Section map and shared-page boundaries](#section-map-and-shared-page-boundaries)
+- [Keep physical line evidence independent of joined text](#keep-physical-line-evidence-independent-of-joined-text)
+- [Wide justification gaps mistaken for paragraph breaks](#wide-justification-gaps-mistaken-for-paragraph-breaks)
+- [Column fragments and scan skew](#column-fragments-and-scan-skew)
 - [Paragraph continuity](#paragraph-continuity)
+- [Stranded fragments after reconstruction](#stranded-fragments-after-reconstruction)
+- [Meaningful versus print-only hard breaks](#meaningful-versus-print-only-hard-breaks)
+- [Parallel textual witnesses in scholarly editions](#parallel-textual-witnesses-in-scholarly-editions)
 - [Semantic XHTML and inherited styles](#semantic-xhtml-and-inherited-styles)
 - [Preserve substantive front matter](#preserve-substantive-front-matter)
 - [Generated versus extracted headings](#generated-versus-extracted-headings)
-- [Keep physical line evidence independent of joined text](#keep-physical-line-evidence-independent-of-joined-text)
-- [Wide justification gaps mistaken for paragraph breaks](#wide-justification-gaps-mistaken-for-paragraph-breaks)
-- [Hanging lists and publication credits](#hanging-lists-and-publication-credits)
 - [Dialogue, inscriptions and secondary headings](#dialogue-inscriptions-and-secondary-headings)
+- [Publication credits and bibliographic entries](#publication-credits-and-bibliographic-entries)
 - [Footnotes and endnotes](#footnotes-and-endnotes)
 - [Stranded footnote-marker punctuation](#stranded-footnote-marker-punctuation)
 - [Superscript numeric endnotes misread as symbols](#superscript-numeric-endnotes-misread-as-symbols)
+- [Note markers inside headings](#note-markers-inside-headings)
 - [Running-head variants absorbed into prose](#running-head-variants-absorbed-into-prose)
 - [Print indexes in reflowable EPUBs](#print-indexes-in-reflowable-epubs)
-- [Note markers inside headings](#note-markers-inside-headings)
-- [Soft line breaks in structured tables](#soft-line-breaks-in-structured-tables)
-- [Reconstruct complete list sequences around illustrations](#reconstruct-complete-list-sequences-around-illustrations)
-- [Column fragments and navigation leftovers](#column-fragments-and-navigation-leftovers)
 - [Print references and navigation leftovers](#print-references-and-navigation-leftovers)
-- [Oversized and detached list markers](#oversized-and-detached-list-markers)
-- [Semantic bullets and clean item text](#semantic-bullets-and-clean-item-text)
-- [List continuity across column changes](#list-continuity-across-column-changes)
-- [Stranded fragments after reconstruction](#stranded-fragments-after-reconstruction)
-- [Meaningful versus print-only hard breaks](#meaningful-versus-print-only-hard-breaks)
+- [Soft line breaks in structured tables](#soft-line-breaks-in-structured-tables)
 
 ## Inspect all source regions
 
@@ -79,26 +76,52 @@ Treat page ranges as search bounds, not ownership boundaries. Extract each physi
 
 After changing one boundary, audit all later boundaries. A single mistaken offset often becomes progressive drift, causing each later chapter to lose its opening and inherit the next chapter’s heading.
 
+## Keep physical line evidence independent of joined text
+
+Joining a discretionary hyphen must not change the original line's bounding
+rectangle. Removing the continuation token and then recalculating that line's
+left edge can make an ordinary continuation appear indented, creating false
+paragraphs throughout a book. Retain the original physical line geometry and
+use a separate character map for the joined text. Infer the body margin robustly
+from ordinary full-width lines, allowing for page skew; a single dust speck at
+the extreme left must not define the margin. Audit both unusually short
+paragraphs and runs of lowercase continuations after reconstruction.
+
+Do not classify short ordinary words as mathematics merely because they occupy
+a separate PDF text line. Fragments such as “In” can share the surrounding
+prose baseline and should be merged before equation detection. Keep mathematical
+operator names distinct. Decimal points in a math font do not require emphasis:
+retain the number as continuous text and audit against forms such as
+`0<em>.</em>7` in the packaged output.
+
+## Wide justification gaps mistaken for paragraph breaks
+
+Digital PDF extractors may return separate “lines” for words on the same
+physical baseline when justified text has unusually wide spaces. In ordinary
+prose, consecutive, horizontally ordered fragments within the same source block
+and baseline belong to one physical line. Join them before interpreting their
+horizontal positions as paragraph indents or column changes, preserving inline
+formatting and the original row's left edge for the following wrapped line.
+Do not extend this rule across independent table cells, exercise descriptions,
+headings, or columns merely because they share a baseline.
+
+Audit the packaged paragraph boundaries against positioned source lines. Flag
+boundaries that split one physical prose line, as well as isolated short words
+and lowercase sentence continuations. Verify candidates against the rendered
+page and test the complete reconstructed sentence; text coverage alone can pass
+while every word is present in the wrong paragraph.
+
+## Column fragments and scan skew
+
+Slight scan skew can displace the baselines of adjacent fragments of one line
+by a few points. Before treating a short fragment as another column or paragraph,
+compare its horizontal gap, vertical overlap, and column gutters with the prior
+line. Use a constrained, source-verified joining tolerance that remains below
+ordinary interline spacing. Test the rejoined word and its surrounding paragraph.
+A styled sentence can also begin midway through one physical line; retain a
+verified word-level paragraph boundary instead of requiring a separate OCR row.
+
 ## Paragraph continuity
-
-Review long merged blocks containing several short label-plus-colon phrases.
-They may be independent bullet items whose dots were missed by OCR. Compare
-the left marker column and hanging text margins in the scan, recover every
-peer item and its complete continuation across page turns, and restore label
-emphasis separately. A following label such as `Compensation:` belongs to a
-new item when the source shows a new bullet; a preceding italic sentence is
-not evidence that the next label belongs in the same paragraph. Use this as
-a review trigger, not a rule to split every colon in prose.
-
-Do not require colons or visible bullets to detect a list. A short run of
-parallel, capitalized fragments on separate baselines, especially italic and
-more deeply indented beneath an existing item, can be an unmarked sublist.
-Keep each complete example separate and attach the group to its governing
-item; do not flatten it into a quotation paragraph or split the outer list
-around it. Preserve the absence of printed markers with an unmarked nested
-list when appropriate. Audit other short, nonterminal lines followed by a
-capital at the same indent, but retain ordinary wraps before names, titles,
-initials and the pronoun `I` as source-reviewed controls.
 
 For scans, use physical baselines and the local line leading as additional
 paragraph evidence. Ascenders, descenders, superscripts and page skew make OCR
@@ -159,28 +182,83 @@ predictable or mechanical
 
 Do not apply lowercase-continuation logic blindly to poetry, lists, headings, equations, or intentionally fragmentary prose.
 
+OCR-derived line heights can vary within one printed block quotation because
+of capitals, punctuation, or inconsistent hidden font sizes. Recover a sustained
+inset stream from its left edge, baseline spacing, and surrounding lines rather
+than one exact height threshold. Audit short lowercase blocks and successive
+inset lines classified as ordinary paragraphs; reconstruct the whole quotation
+before deciding its genuine internal paragraph boundaries.
+
+## Stranded fragments after reconstruction
+
+At the end of a pass, inventory prose paragraphs ending with a comma,
+hyphen, or function word such as `the`, `and`, or `be`. Inspect the following
+blocks even when they start with uppercase text: diagram debris or a displaced
+`Before`/`After` label can prevent ordinary lowercase-continuation repair.
+Check display titles split across a paragraph and heading as well. Capture
+complete diagram labels with their illustration, or associate them explicitly
+as captions, instead of letting them interrupt neighboring prose.
+
+## Meaningful versus print-only hard breaks
+
+An imported HTML container named `poem` or a preformatted wrapper can contain
+ordinary prose copied from a plain-text edition. Classify its complete contents
+before preserving its line breaks: recover paragraphs from verified blank-line
+boundaries, retain actual verse extracts, and separate explanatory notes from
+the interrupted prose stream. A container's name alone does not establish verse.
+
+Do not assume an HTML `<br>` is a deliberate authorial line break. Inventory
+hard breaks inside prose, especially immediately before emphasized words or
+between conditional clauses. Rejoin verified continuous sentences with a
+separating space while retaining inline emphasis. Preserve actual verse,
+dialogue, addresses, and source-supported display lists; grammar and structure,
+not the mere presence of a `<br>` tag, determine the role.
+
+## Parallel textual witnesses in scholarly editions
+
+Verify volume numbers on printed title pages before ordering files; filenames
+can be reversed. Inventory each source-language text, translation, supplementary
+witness and apparatus separately. A page can contain two translations of the
+same numbered passage. Repeated section numbers establish parallel witnesses,
+not duplicate extraction.
+
+Recover each witness as a continuous stream across pages. Its next page may
+begin with an unnumbered continuation well before the next numbered paragraph.
+Locate the first line of the witness from source spacing, typography and the
+preceding page's unfinished sentence; do not split only at paragraph numbers,
+at a fixed page height, or at the largest gap. Some pages may contain only one
+witness even within an otherwise parallel run. Small note panels can occur
+between streams, so classify those panels independently before paragraph joining.
+Check both streams' paragraph-number sequences and sentence continuations.
+
+When making a translation-only reading edition, remove the parallel source
+texts by stream or verified region, not by script detection across the book.
+Keep distinct translated witnesses, translated fragments, English commentary
+and notes; quoted source-language terms within that commentary are a separate
+editorial role. Check mixed-language appendices region by region. Repoint note
+links to the retained notes, rebuild navigation and the manifest, and confirm
+that removed facsimiles are absent from the archive. Small English note panels
+can occur near the top of a short page: exclude a generated title by its actual
+identity, never by a blanket upper-page cutoff. Record omitted textual apparatus
+and any retained image-based English material in the edition description.
+
+When original-language text or critical apparatus is preserved as facsimiles,
+keep its marginal line numbers, sigla, variant readings and reference system.
+Link the reading text to the corresponding original pages and state which
+material remains image-based and therefore lacks searchable text. Preserve a
+print index when explicitly requested; retained original-page anchors make its
+pagination usable alongside the reflowed text.
+
+An internal subheading within the first witness can create the same vertical
+gap as the start of the second witness. Check both sides of every proposed
+boundary against the page and its continuations; a plausible spacing threshold
+alone cannot establish ownership. Include numbered paragraphs with OCR-damaged
+final punctuation in structural audits, so a comma misread for a full stop does
+not merge several numbered sections into one paragraph.
+
 ## Semantic XHTML and inherited styles
 
-Do not infer a quotation from the hanging indent of a list item. Before
-classifying indented prose as a blockquote, identify source bullet/number
-markers and their complete wrapped items. Group consecutive peers in one
-semantic list and retain only source-supported nesting. Audit every packaged
-list's ancestor chain: a mixture of direct items and individually blockquoted
-items creates inconsistent reader indents even when their text is correct.
-Likewise, indentation alone must not attach ordinary following prose to the
-last item; verify item continuations and the list's closing boundary.
-
-A hanging list can place every continuation line beyond the ordinary paragraph
-indent threshold. Measure continuation from the item's text margin, separately
-from its numeral, or retain verified item-region ownership; otherwise every
-physical line may become a paragraph and leave word fragments such as a line-end
-hyphen followed by a detached suffix. Check the final item-to-prose transition
-across page turns as well as the numbered starts. A four-digit year followed by
-a full stop is normally sentence text, not a list marker: constrain ordinal
-detection and source-check digit-initial paragraph splits.
-Empty physical-page anchors between consecutive items do not end their semantic
-list. Skip such anchors when grouping peers, and preserve their correct source
-ownership when moving an item into the shared list.
+For lists, read [the list reconstruction guide](lists.md) before interpreting indents or grouping items.
 
 Navigation lists should not add an automatic ordinal before a chapter label
 that already contains its printed number. Use semantic nested lists with
@@ -286,116 +364,9 @@ that treats every large front-matter font as body text can append “Preface” 
 “Introduction” to an author's sign-off. Check every substantive preliminary
 section for one correctly placed heading and no leaked title in body paragraphs.
 
-## Keep physical line evidence independent of joined text
-
-Joining a discretionary hyphen must not change the original line's bounding
-rectangle. Removing the continuation token and then recalculating that line's
-left edge can make an ordinary continuation appear indented, creating false
-paragraphs throughout a book. Retain the original physical line geometry and
-use a separate character map for the joined text. Infer the body margin robustly
-from ordinary full-width lines, allowing for page skew; a single dust speck at
-the extreme left must not define the margin. Audit both unusually short
-paragraphs and runs of lowercase continuations after reconstruction.
-
-## Wide justification gaps mistaken for paragraph breaks
-
-Digital PDF extractors may return separate “lines” for words on the same
-physical baseline when justified text has unusually wide spaces. In ordinary
-prose, consecutive, horizontally ordered fragments within the same source block
-and baseline belong to one physical line. Join them before interpreting their
-horizontal positions as paragraph indents or column changes, preserving inline
-formatting and the original row's left edge for the following wrapped line.
-Do not extend this rule across independent table cells, exercise descriptions,
-headings, or columns merely because they share a baseline.
-
-Audit the packaged paragraph boundaries against positioned source lines. Flag
-boundaries that split one physical prose line, as well as isolated short words
-and lowercase sentence continuations. Verify candidates against the rendered
-page and test the complete reconstructed sentence; text coverage alone can pass
-while every word is present in the wrong paragraph.
-
-## Hanging lists and publication credits
-
-A parenthesized publication year at the start of a wrapped line is not a list
-marker. Require a plausible item sequence and source indentation before
-creating an ordered list; never let `(1970)` or `(1974)` split a continuous
-bibliographic sentence. Validate each list's complete values and separately
-assert that publication years remain visible in the surrounding prose. Reader
-exports may omit generated list numbers, concealing an accidental year-as-item
-conversion even when an intermediate text comparison passes.
-
-OCR-derived line heights can vary within one printed block quotation because
-of capitals, punctuation, or inconsistent hidden font sizes. Recover a sustained
-inset stream from its left edge, baseline spacing, and surrounding lines rather
-than one exact height threshold. Audit short lowercase blocks and successive
-inset lines classified as ordinary paragraphs; reconstruct the whole quotation
-before deciding its genuine internal paragraph boundaries.
-
-A superscript reference fused into an italic word's OCR box can corrupt its
-slant score. Contractions can likewise defeat a short-word fallback when their
-combined letter count exceeds the threshold. Review complete titles and the
-last word of emphasized passages, including attached references; separate the
-reference geometry where possible or record a source-verified span repair.
-Do not extend emphasis into the note number or adjacent roman prose.
-
-Recognize numbered and bulleted lists before ordinary paragraph indentation.
-A hanging item's continuation lines are indented relative to its number; they
-are not fresh paragraphs. Join wrapped words and sentences within each item,
-start a new item only at a verified marker, and preserve continuations across
-physical pages. Emit semantic lists with distinct items. Check the entire list
-sequence in the packaged EPUB and reader export, including long items crossing
-pages. Do not mistake endnotes, equation numbers, or years for list markers.
-
-Determine quotation margins from sustained inset lines, since a PDF block
-can contain both ordinary prose and a quotation. Reconstruct quotation
-paragraphs relative to that inset. Audit every paragraph ending in a line-wrap
-hyphen and review the next block; a lowercase continuation should not remain
-stranded because indentation changed. Bibliographies may distinguish entries
-by a modest extra baseline gap while every line shares the same left margin.
-Do not treat every left-aligned reference line as a new citation. Verify the
-source entry spacing and join wrapped publication names and words within each
-entry before applying hanging-indent styling.
-
-A repeated-author rule may disappear from OCR while its year survives farther
-right. On pages dominated by these entries, continuation lines can become the
-apparent left margin. Identify entry starts from the source rule, author/year
-pattern and spacing together; do not split every hanging continuation. Review
-uppercase title continuations and city/publisher lines as well as lowercase
-fragments. Preserve repeated-author rules explicitly in the rebuilt references.
-
-Numeric-only lines can be ordinary citation continuations, such as a volume
-number and page range. Classify them from their font, baseline, left edge,
-and entry spacing before equation detection. Never attach their digits to a
-nearby author name. Audit the whole bibliography when one such fragment is
-found; test complete citations and page ranges, since character-presence
-checks can pass even when those characters occur in the wrong order.
-
 Join wrapped heading lines when matching fonts, consecutive baselines, and
 heading structure show that they form one title. Use the joined title in both
 body and navigation; do not join a following numbered heading or Notes label.
-
-Reconstruct index columns in source reading order and distinguish entry starts,
-subentry starts, and their hanging continuations from verified indentation
-levels. A PDF block's minimum left edge is not a reliable entry boundary.
-Preserve subentry indentation in the EPUB and check transitions between columns
-and pages, especially where one subentry continues at the next column's top. Do not
-attach characters from whitespace-only PDF lines to nearby text. Sorting those
-spacer characters by horizontal position can insert spaces inside valid words.
-
-A chapter-opening publication or permissions credit below a separator rule is
-paratext. Keep it in a distinct credit block near the chapter opening, and
-remove it from the main prose stream before joining pages. Otherwise it can
-split an unfinished sentence at the bottom of the opening page. Inventory and
-verify every chapter's credit separator rather than applying a blanket bottom
-margin cutoff, which could discard actual prose. Preserve chapter bylines too;
-they must not be discarded with the generated chapter title.
-
-Do not classify short ordinary words as mathematics merely because they occupy
-a separate PDF text line. Fragments such as “In” can share the surrounding
-prose baseline and should be merged before equation detection. Keep mathematical
-operator names distinct. Decimal points in a math font do not require emphasis:
-retain the number as continuous text and audit against forms such as
-`0<em>.</em>7` in the packaged output.
 
 ## Dialogue, inscriptions and secondary headings
 
@@ -429,6 +400,40 @@ Also audit paragraph beginnings for stray punctuation or a single word that
 completes the preceding sentence. Move a verified stranded final word back to
 its sentence while preserving the following real paragraph; merging both whole
 paragraphs would conceal a different structural error.
+
+## Publication credits and bibliographic entries
+
+A chapter-opening publication or permissions credit below a separator rule is
+paratext. Keep it in a distinct credit block near the chapter opening, and
+remove it from the main prose stream before joining pages. Otherwise it can
+split an unfinished sentence at the bottom of the opening page. Inventory and
+verify every chapter's credit separator rather than applying a blanket bottom
+margin cutoff, which could discard actual prose. Preserve chapter bylines too;
+they must not be discarded with the generated chapter title.
+
+Determine quotation margins from sustained inset lines, since a PDF block
+can contain both ordinary prose and a quotation. Reconstruct quotation
+paragraphs relative to that inset. Audit every paragraph ending in a line-wrap
+hyphen and review the next block; a lowercase continuation should not remain
+stranded because indentation changed. Bibliographies may distinguish entries
+by a modest extra baseline gap while every line shares the same left margin.
+Do not treat every left-aligned reference line as a new citation. Verify the
+source entry spacing and join wrapped publication names and words within each
+entry before applying hanging-indent styling.
+
+A repeated-author rule may disappear from OCR while its year survives farther
+right. On pages dominated by these entries, continuation lines can become the
+apparent left margin. Identify entry starts from the source rule, author/year
+pattern and spacing together; do not split every hanging continuation. Review
+uppercase title continuations and city/publisher lines as well as lowercase
+fragments. Preserve repeated-author rules explicitly in the rebuilt references.
+
+Numeric-only lines can be ordinary citation continuations, such as a volume
+number and page range. Classify them from their font, baseline, left edge,
+and entry spacing before equation detection. Never attach their digits to a
+nearby author name. Audit the whole bibliography when one such fragment is
+found; test complete citations and page ranges, since character-presence
+checks can pass even when those characters occur in the wrong order.
 
 ## Footnotes and endnotes
 
@@ -537,6 +542,24 @@ Remove the entire OCR marker cluster, including false leading digits, quote shap
 
 Make this release-blocking: all packaged XHTML—not only the main body—must contain zero unresolved `°`, `®`, or `©` marker glyphs (apart from individually verified legitimate uses), zero leaked internal placeholders, and the expected number of recovered `<sup>` references. Also inspect reader-exported text, because page-bottom bleed-through in the notes can be joined to a valid note on the following page and evade body-only checks. When a glyph class is discovered late, rebuild and rerun the check across the entire book rather than adding a single contextual exception.
 
+## Note markers inside headings
+
+A heading can contain a note reference in the middle of its wording. Retain
+that reference and destination in the content heading, but omit the note digit
+from its navigation label. Derive the label from a clone and remove only the
+reference's text: preserve the removed element's tail (the words following the
+marker) by attaching it to its preceding sibling or parent text. Deleting the
+whole element without preserving its tail can silently truncate a chapter
+title. Check the complete title around a middle-of-heading reference, as well
+as the forward and return note links.
+
+Generate labels from the final semantic heading, after multiline joining and
+note linking. `conversion/common/navigation.py:heading_label` omits only
+explicit note-reference elements and preserves their following text. Audit
+every packaged contents entry against its target heading, excluding those
+references; do not strip trailing digits with a regular expression, since
+years, numbered figures and other genuine title numbers must survive.
+
 ## Running-head variants absorbed into prose
 
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
@@ -585,62 +608,15 @@ those anchors at their original text positions, redirect links after splitting
 chapters, and validate every destination. Hide only the visible folio labels;
 retaining a functional index must not insert printed page numbers into prose.
 
-## Note markers inside headings
+Reconstruct index columns in source reading order and distinguish entry starts,
+subentry starts, and their hanging continuations from verified indentation
+levels. A PDF block's minimum left edge is not a reliable entry boundary.
+Preserve subentry indentation in the EPUB and check transitions between columns
+and pages, especially where one subentry continues at the next column's top. Do not
+attach characters from whitespace-only PDF lines to nearby text. Sorting those
+spacer characters by horizontal position can insert spaces inside valid words.
 
-A heading can contain a note reference in the middle of its wording. Retain
-that reference and destination in the content heading, but omit the note digit
-from its navigation label. Derive the label from a clone and remove only the
-reference's text: preserve the removed element's tail (the words following the
-marker) by attaching it to its preceding sibling or parent text. Deleting the
-whole element without preserving its tail can silently truncate a chapter
-title. Check the complete title around a middle-of-heading reference, as well
-as the forward and return note links.
-
-Generate labels from the final semantic heading, after multiline joining and
-note linking. `conversion/common/navigation.py:heading_label` omits only
-explicit note-reference elements and preserves their following text. Audit
-every packaged contents entry against its target heading, excluding those
-references; do not strip trailing digits with a regular expression, since
-years, numbered figures and other genuine title numbers must survive.
-
-## Soft line breaks in structured tables
-
-HTML table cells may use `br` solely to wrap a name or phrase for print, for
-example `Beauclerk or<br/>Beauclerc` or `Cal'dron not<br/>Cauldron`. When the
-lineation has no semantic role, replace that break with an ordinary space while
-preserving adjacent emphasis and text. Readers, copy/export paths, and text
-extractors can otherwise concatenate the words when they flatten the cell.
-Keep meaningful lineation in verse, addresses and comparable structured text.
-Validate table phrases with whitespace collapsed to one space, not removed
-entirely: a character-only comparison cannot detect `orBeauclerc`. Check both
-packaged cell text and reader-exported text for the full separated phrase.
-
-## Reconstruct complete list sequences around illustrations
-
-Inventory every expected number for each list, including numbers detached by
-oversized typography or mistaken for punctuation. A printed number may be
-missing entirely from OCR even when the entry's label is present. Recover it
-from the scan, mark the structural boundary before paragraph assembly, and
-verify the complete monotonic sequence. A numbered item with a stray literal
-bullet after its number should have one marker; remove the duplicate glyph only
-within a confirmed numbered list, preserving its text and reviewed inline styles.
-
-Finish a list before placing unrelated illustrations. When a print spread puts
-an illustration for a later section above the continuation of the current list,
-move it beside that later section's heading or discussion. Keep diagrams for the
-current list together after its final item when that gives the clearest reading
-order. Validate both the list's item membership and the neighboring figure IDs;
-text coverage and figure counts alone cannot establish correct placement.
-
-## Column fragments and navigation leftovers
-
-Slight scan skew can displace the baselines of adjacent fragments of one line
-by a few points. Before treating a short fragment as another column or paragraph,
-compare its horizontal gap, vertical overlap, and column gutters with the prior
-line. Use a constrained, source-verified joining tolerance that remains below
-ordinary interline spacing. Test the rejoined word and its surrounding paragraph.
-A styled sentence can also begin midway through one physical line; retain a
-verified word-level paragraph boundary instead of requiring a separate OCR row.
+## Print references and navigation leftovers
 
 Parse whole print-page reference expressions, including comma-separated and
 `and`-joined references as well as ranges. Give each distinct destination a
@@ -648,8 +624,6 @@ reader-independent link label and check that no residual number remains after
 an earlier reference was changed to `here`. Separately flag bare folios or
 quotation-glyph OCR masquerading as numbers near headings, without deleting
 legitimate numbered content.
-
-## Print references and navigation leftovers
 
 Replace linked print-page references with reader-independent wording such as
 `here`, preserving the verified destination. Consume the whole page range,
@@ -663,133 +637,14 @@ author's `p. 207` does not become a reference to this book merely because this
 book also has a page 207. Require evidence of an internal navigation instruction
 or a verified index destination; preserve external citation numbers as text.
 
-## Oversized and detached list markers
+## Soft line breaks in structured tables
 
-A genuine numbered list need not print a full stop after each number. Confirm
-its sequence and geometry rather than requiring `1.` as the only marker form.
-Some numbered entries use ordinary first-line paragraph indents with unindented
-continuations instead of hanging indents. Derive the item's continuation edge
-from the source; do not use its indented opening label as that edge. Validate
-the complete item and the return to ordinary prose in both cases.
-
-An oversized numeral may also be fused into the previous line's last word
-(`forts.4`, for example), or recognized as two letter-shaped pieces. Compare
-independent OCR and the scan, split the text/geometry at the real line boundary,
-and restore the numeral to the following item. Do not merely replace the token
-in place: its tall bounding box can still reorder both lines. Check the complete
-number sequence after recovery. For a shaded panel continued on another page,
-exclude prose below the shaded edge and join the continued panel before returning
-to that prose; assigning the entire physical page to the panel interleaves
-unrelated streams.
-
-A detached ordinal can be recognized as a short prose word (such as `Be` for
-`3.`), or sorted to the top of the page independently of its item. Review tiny
-standalone OCR regions and numeric tails on complete sentences against marker
-positions and baselines. Restore the marker to its source item before paragraph
-assembly; do not guess its owner from extraction order. Reconcile every printed
-ordinal with its item opening, including absent middle entries, and compare the
-actual source values rather than testing only a consecutive generated sequence.
-Keep later paragraphs inside their verified item and stop at the return to prose.
-
-For list numbering, account for both an OCR numeral and a separately extracted
-full stop. Adding a full stop to the numeral without consuming its separate
-glyph creates forms such as `1.. Fish`. Normalize the verified marker before
-paragraph assembly, then check the complete semantic number sequence.
-
-When a numbered opening uses separate spans for the marker and drop cap, check
-the complete visible text after flattening that display typography. Retain an
-explicit space between the closing marker and first word, such as `(1.) After`.
-Audit every numbered remark for a marker touching a letter; inline span counts
-and word-only text comparisons cannot detect this missing separator.
-
-
-## Semantic bullets and clean item text
-
-Represent printed bullets as semantic `ul`/`li` markers and remove the literal
-bullet and its following source whitespace from the item text. Each item should
-begin with its first word, without an ASCII space or non-breaking space before
-it; let list layout position the marker. Audit all list items and reader exports
-for leading whitespace and duplicated literal bullets, preserving inline styles
-when removing the source marker.
-
-## List continuity across column changes
-
-A new heading or short list low in one column can precede the continuation of
-an earlier paragraph in the next column. Check for fragments stranded after
-short entries and complete the earlier paragraph before the new section. For
-illustrated numbered instructions, keep one ordered list with each illustration
-inside its corresponding item; a figure should not restart the sequence.
-
-A short display list's final entry can absorb prose from the next column even
-when the combined paragraph ends normally. Audit short bold/italic prefixes
-followed immediately by capitalized roman prose, and compare their coordinates
-with the preceding parallel entries. Preserve genuine run-in labels, but give
-a verified display item its own block and start the next column's explanation
-as a new paragraph; checking paragraph endings alone cannot detect this merge.
-
-## Stranded fragments after reconstruction
-
-At the end of a pass, inventory prose paragraphs ending with a comma,
-hyphen, or function word such as `the`, `and`, or `be`. Inspect the following
-blocks even when they start with uppercase text: diagram debris or a displaced
-`Before`/`After` label can prevent ordinary lowercase-continuation repair.
-Check display titles split across a paragraph and heading as well. Capture
-complete diagram labels with their illustration, or associate them explicitly
-as captions, instead of letting them interrupt neighboring prose.
-
-## Meaningful versus print-only hard breaks
-
-An imported HTML container named `poem` or a preformatted wrapper can contain
-ordinary prose copied from a plain-text edition. Classify its complete contents
-before preserving its line breaks: recover paragraphs from verified blank-line
-boundaries, retain actual verse extracts, and separate explanatory notes from
-the interrupted prose stream. A container's name alone does not establish verse.
-
-Do not assume an HTML `<br>` is a deliberate authorial line break. Inventory
-hard breaks inside prose, especially immediately before emphasized words or
-between conditional clauses. Rejoin verified continuous sentences with a
-separating space while retaining inline emphasis. Preserve actual verse,
-dialogue, addresses, and source-supported display lists; grammar and structure,
-not the mere presence of a `<br>` tag, determine the role.
-
-### Parallel textual witnesses in scholarly editions
-
-Verify volume numbers on printed title pages before ordering files; filenames
-can be reversed. Inventory each source-language text, translation, supplementary
-witness and apparatus separately. A page can contain two translations of the
-same numbered passage. Repeated section numbers establish parallel witnesses,
-not duplicate extraction.
-
-Recover each witness as a continuous stream across pages. Its next page may
-begin with an unnumbered continuation well before the next numbered paragraph.
-Locate the first line of the witness from source spacing, typography and the
-preceding page's unfinished sentence; do not split only at paragraph numbers,
-at a fixed page height, or at the largest gap. Some pages may contain only one
-witness even within an otherwise parallel run. Small note panels can occur
-between streams, so classify those panels independently before paragraph joining.
-Check both streams' paragraph-number sequences and sentence continuations.
-
-When making a translation-only reading edition, remove the parallel source
-texts by stream or verified region, not by script detection across the book.
-Keep distinct translated witnesses, translated fragments, English commentary
-and notes; quoted source-language terms within that commentary are a separate
-editorial role. Check mixed-language appendices region by region. Repoint note
-links to the retained notes, rebuild navigation and the manifest, and confirm
-that removed facsimiles are absent from the archive. Small English note panels
-can occur near the top of a short page: exclude a generated title by its actual
-identity, never by a blanket upper-page cutoff. Record omitted textual apparatus
-and any retained image-based English material in the edition description.
-
-When original-language text or critical apparatus is preserved as facsimiles,
-keep its marginal line numbers, sigla, variant readings and reference system.
-Link the reading text to the corresponding original pages and state which
-material remains image-based and therefore lacks searchable text. Preserve a
-print index when explicitly requested; retained original-page anchors make its
-pagination usable alongside the reflowed text.
-
-An internal subheading within the first witness can create the same vertical
-gap as the start of the second witness. Check both sides of every proposed
-boundary against the page and its continuations; a plausible spacing threshold
-alone cannot establish ownership. Include numbered paragraphs with OCR-damaged
-final punctuation in structural audits, so a comma misread for a full stop does
-not merge several numbered sections into one paragraph.
+HTML table cells may use `br` solely to wrap a name or phrase for print, for
+example `Beauclerk or<br/>Beauclerc` or `Cal'dron not<br/>Cauldron`. When the
+lineation has no semantic role, replace that break with an ordinary space while
+preserving adjacent emphasis and text. Readers, copy/export paths, and text
+extractors can otherwise concatenate the words when they flatten the cell.
+Keep meaningful lineation in verse, addresses and comparable structured text.
+Validate table phrases with whitespace collapsed to one space, not removed
+entirely: a character-only comparison cannot detect `orBeauclerc`. Check both
+packaged cell text and reader-exported text for the full separated phrase.

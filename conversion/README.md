@@ -3,8 +3,9 @@
 Start with [AGENTS.md](../AGENTS.md): it defines source selection, mandatory
 release gates and where to find detailed operating rules. This directory holds
 book-independent methods; each book's reproducible recipe and evidence live
-under `tmp/pdfs/<book>/`. There is no universal PDF-to-EPUB builder or single
-command that performs every check.
+under `tmp/pdfs/<book>/`. The release runner orchestrates common checks and
+book-specific validators; it does not replace extraction, source reconciliation
+or actual proofreading.
 
 ## Documentation map
 
@@ -15,7 +16,8 @@ command that performs every check.
 | [common/README.md](common/README.md) | Actual shared APIs, defaults, limitations, dependencies and test commands. |
 | [guides/sources.md](guides/sources.md) | Authority, comparative editions, HTML/EPUB recovery, outlined text and academic papers. |
 | [guides/ocr.md](guides/ocr.md) | Scan recovery, damaged text layers, conservative corrections and scholarly diacritics. |
-| [guides/structure.md](guides/structure.md) | Boundaries, paragraphs, headings, dialogue, lists, notes, indexes and references. |
+| [guides/structure.md](guides/structure.md) | Boundaries, paragraphs, headings, dialogue, notes, indexes and references. |
+| [guides/lists.md](guides/lists.md) | List identification, markers, nesting, continuations and image/column interruptions. |
 | [guides/typography.md](guides/typography.md) | Font/pixel evidence, complete emphasis spans, quotations and punctuation. |
 | [guides/illustrations.md](guides/illustrations.md) | Figures, tables, columns, sidebars, panels, masks, captions, spreads and crop QA. |
 | [guides/mathematics.md](guides/mathematics.md) | Native mathematics, source outlines, failure inventory and visual release checks. |
@@ -93,6 +95,46 @@ paragraph transfer can invalidate formatting; caption repairs can invalidate
 alternative text; punctuation changes can invalidate note matching and reader
 regressions. Regenerate affected evidence before final package/reader checks.
 Never carry forward a successful report tied to an earlier output checksum.
+
+## Release orchestration
+
+For new books and substantive rebuilds, copy
+[the configuration template](common/release.example.json) into the book's work
+directory as `release.json`. Paths resolve from that file's directory; adapt all
+example filenames and commands. List the authoritative sources and the recipe,
+corrections and validation inputs that must remain unchanged during release.
+Keep existing book-specific validators and add a small adapter for the runner's
+[check report contract](common/README.md#release-runner).
+
+1. Build the EPUB and complete the initial repairs.
+2. Export the packaged EPUB with Calibre and perform the mandatory complete
+   second pass. Inspect a reader-generated visual result against the source.
+3. Store separate second-pass and visual-review records with the final EPUB hash,
+   actual review scope/decisions and hashes of the evidence examined. Pending or
+   unresolved reviews cannot pass. A command cannot substitute for these reviews.
+4. Run the release runner. It checks the container and shared audit, regenerates
+   Calibre text, invokes every configured validator and verifies the review records.
+   If the fresh text differs from the reviewed export, review it again; do not
+   merely update its hash. Resolve every failure, rebuilding when needed.
+5. Verify the resulting receipt immediately before delivering the identical EPUB:
+
+```sh
+python3 conversion/common/release.py run tmp/pdfs/book/release.json
+python3 conversion/common/release.py verify tmp/pdfs/book/release/release-report.json
+```
+
+All applicable gates in AGENTS.md must be represented. Only genuinely absent
+body objects/layout can be marked not applicable, with a reason and reviewed
+evidence; the cover and navigation still require checks. Failed runs replace
+the old pass report. Receipts bind the EPUB, configuration, declared inputs,
+review records, evidence, reader text, audit, command reports and logs by hash.
+Changing any bound file invalidates the receipt. Use trusted configurations:
+their command arrays execute programs on the local machine.
+
+The runner verifies that checks ran and their evidence is current. It cannot
+judge whether an adapter really reconciles the source or whether a recorded
+visual review was thorough. Review those contracts and report limitations
+honestly; never wrap an inventory-only report in a success receipt.
 
 ## Recover scan formatting with the shared tools
 

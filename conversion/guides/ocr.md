@@ -15,15 +15,13 @@ can be satisfied by merely generating a report.
 - [Decorative initials](#decorative-initials)
 - [Fused words and digit errors inherited from an OCR ebook](#fused-words-and-digit-errors-inherited-from-an-ocr-ebook)
 - [Sentence dashes represented by ordinary hyphens](#sentence-dashes-represented-by-ordinary-hyphens)
-- [Orphaned symbols and punctuation clusters](#orphaned-symbols-and-punctuation-clusters)
-- [Stray OCR glyphs and contradictory punctuation](#stray-ocr-glyphs-and-contradictory-punctuation)
+- [Suspicious symbols and punctuation](#suspicious-symbols-and-punctuation)
 - [Unmatched brackets and parentheses in OCR](#unmatched-brackets-and-parentheses-in-ocr)
 - [Pāli and other scholarly transliterations](#pāli-and-other-scholarly-transliterations)
 - [Deskewing and technical identifiers](#deskewing-and-technical-identifiers)
 - [Word-shape confusions](#word-shape-confusions)
 - [Constrained shared token repairs](#constrained-shared-token-repairs)
 - [Accidental repetition](#accidental-repetition)
-- [Punctuation clusters and intrusive strokes](#punctuation-clusters-and-intrusive-strokes)
 
 ## Conservative page extraction
 
@@ -271,7 +269,6 @@ Also flag one or two lowercase letters inside an otherwise uppercase word
 glyph as lowercase. Repair the verified heading and its navigation label
 together; preserve intentional mixed-case names, brands and notation.
 
-
 ## Bleed-through and divider pages
 
 OCR can turn faint reverse-side printing or decorative pages into convincing-looking gibberish. A mostly blank page is not necessarily usable text. Compare suspicious output with a page image and exclude it when appropriate.
@@ -347,7 +344,9 @@ hyphens retained. An unknown compound is a review candidate, not a safe general
 rule for automatic replacement. Test genuine compounds, suspended compounds,
 names, year/page ranges, and sentence dashes in the packaged reader export.
 
-## Orphaned symbols and punctuation clusters
+## Suspicious symbols and punctuation
+
+### Unexpected symbols and scripts
 
 Include unmatched guillemets (`«`, `»`, `‹`, `›`) in the packaged punctuation
 audit. A lone `»` after a sentence can be scan debris rather than a closing
@@ -368,15 +367,10 @@ copyright notices, mathematics, note markers and deliberate ornaments. Remove
 confirmed artifacts in the reproducible builder and test their full contexts.
 An unexpected symbol is an audit trigger, not permission to delete that symbol
 globally or assume it is a missing numeric note.
-Include both comma-before-stop and stop-before-comma clusters (`person, .`,
-`arise. ,`) across inline markup. Resolve them before release; do not treat the
-absence of a crash or the generation of an audit file as a successful check.
 Inventory degree-like glyphs even after numbers: a French ordinal `3e` can
 lose its superscript `e` as `3°`. Preserve genuine angles and temperatures;
 recover a verified ordinal with ordinary-letter superscript markup (`3<sup>e</sup>`)
 when font support makes a small Unicode glyph ambiguous in the reader.
-
-## Stray OCR glyphs and contradictory punctuation
 
 Audit the entire packaged text for unexpected Unicode scripts and non-ASCII
 digits, even when the surrounding text is ordinary English. A Bengali digit
@@ -385,8 +379,10 @@ book, can be OCR interpretations of ink specks. Inventory every occurrence and
 check the scan; preserve genuine foreign-language text, numerals, trademarks,
 note markers and technical symbols. Never delete all non-Latin characters.
 
+### Contradictory punctuation and sentence boundaries
+
 Flag isolated apostrophes between words (`in ' sentiment`), adjacent conflicting
-punctuation (`person, .`, `them,.`, `want,,.`), and full stops followed by a
+punctuation (`person, .`, `arise. ,`, `them,.`, `want,,.`), and full stops followed by a
 lowercase word (`lazy. and active`). These are review candidates, not automatic
 global replacements. An apparent full stop may be a speck, a misread comma, or
 a real sentence boundary with a misrecognized lowercase initial; it can also
@@ -395,6 +391,42 @@ mark, restore another punctuation mark, join a word, or capitalize the next
 word. Preserve abbreviations, initials, decimals, ellipses and deliberate
 lowercase quotation openings. Record exact verified repairs and rerun the audit
 across the whole book, including text split by emphasis markup.
+
+OCR punctuation confusion works in both directions: a comma may become a full
+stop, and a full stop plus a capitalized next word may become a comma followed
+by lowercase text. Review conspicuous run-on clauses against the scan, including
+captions. Restore both the punctuation and capitalization when verified; do not
+globally replace comma-plus-`if`, which is often grammatical.
+
+### Intrusive strokes and punctuation-shaped letters
+
+Flag exclamation marks embedded between letters (`Beansta!k`, `mere!y`),
+including across inline markup. They can be misread stems of `l` or `i`, but
+the source determines the replacement. Keep normal exclamations, factorials,
+code and deliberately punctuated names as reviewed exceptions; never globally
+replace `!` with a letter. The packaged punctuation audit reports this class.
+Include a following discretionary hyphen and whitespace in this check:
+`know!- edge` can hide the same misread `l` at a physical line break. Verify
+the complete word and its emphasis after joining, rather than fixing only
+the punctuation character.
+
+Treat `.'` and `.’` after a word as review candidates, especially without a
+matching opening quotation. The pair can be a damaged exclamation mark or
+question mark, a genuine closing quote, or a raised note marker. Inventory the
+pattern across the whole book and verify the printed glyph; never translate
+all occurrences to the same punctuation. The shared punctuation audit flags
+these clusters without rewriting them.
+
+Flag asterisks or carets inside apparent words, including a short space after
+the mark, for source review. Such marks can represent a line-end hyphen, a
+compound's real hyphen, or a stray stroke from nearby artwork. They can also be
+legitimate notes or mathematical notation, so detection must not imply global
+removal. Verify whether to join the word, retain a hyphen, or remove an artifact.
+Unexpected capitalization within prose likewise needs contextual source review;
+do not globally lowercase names or technical terms.
+
+Resolve verified defects across inline markup before release; generating an
+inventory alone is not a successful check.
 
 ## Unmatched brackets and parentheses in OCR
 
@@ -530,6 +562,10 @@ protecting substrings inside longer tokens. Broader word-shape similarities are
 review candidates, not automatic spelling changes: `clog` versus `dog`, `toll`
 versus `tell`, and `lime` versus `time` can all be legitimate words.
 
+For ordinary English OCR, apply the whole-token `Mosi` → `Most` (`mosi` → `most`)
+default repair. Protect substrings such as `Mosiac`, and preserve source-verified
+names or other-language uses as explicit exceptions.
+
 ## Accidental repetition
 
 Search for adjacent repeated phrases as well as duplicated whole paragraphs.
@@ -537,39 +573,3 @@ Compare their source coordinates and the scan: repetition may be an extraction
 duplicate or an obvious typo already printed in the source. Remove a verified
 accidental repetition with a narrow reproducible correction; preserve deliberate
 rhetorical repetition. Distinct source lines do not prove intentional repetition.
-
-## Punctuation clusters and intrusive strokes
-
-Flag exclamation marks embedded between letters (`Beansta!k`, `mere!y`),
-including across inline markup. They can be misread stems of `l` or `i`, but
-the source determines the replacement. Keep normal exclamations, factorials,
-code and deliberately punctuated names as reviewed exceptions; never globally
-replace `!` with a letter. The packaged punctuation audit reports this class.
-Include a following discretionary hyphen and whitespace in this check:
-`know!- edge` can hide the same misread `l` at a physical line break. Verify
-the complete word and its emphasis after joining, rather than fixing only
-the punctuation character.
-
-Treat `.'` and `.’` after a word as review candidates, especially without a
-matching opening quotation. The pair can be a damaged exclamation mark or
-question mark, a genuine closing quote, or a raised note marker. Inventory the
-pattern across the whole book and verify the printed glyph; never translate
-all occurrences to the same punctuation. The shared punctuation audit flags
-these clusters without rewriting them. In ordinary English OCR, apply the
-whole-token `Mosi` → `Most` (`mosi` → `most`) default repair; do not change
-substrings such as `Mosiac`, and preserve source-verified names or other-language
-uses as explicit exceptions.
-
-Flag asterisks or carets inside apparent words, including a short space after
-the mark, for source review. Such marks can represent a line-end hyphen, a
-compound's real hyphen, or a stray stroke from nearby artwork. They can also be
-legitimate notes or mathematical notation, so detection must not imply global
-removal. Verify whether to join the word, retain a hyphen, or remove an artifact.
-Unexpected capitalization within prose likewise needs contextual source review;
-do not globally lowercase names or technical terms.
-
-OCR punctuation confusion works in both directions: a comma may become a full
-stop, and a full stop plus a capitalized next word may become a comma followed
-by lowercase text. Review conspicuous run-on clauses against the scan, including
-captions. Restore both the punctuation and capitalization when verified; do not
-globally replace comma-plus-`if`, which is often grammatical.

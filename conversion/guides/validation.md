@@ -32,10 +32,26 @@ can be satisfied by merely generating a report.
 
 ## Contents
 
+- [Release orchestration and evidence freshness](#release-orchestration-and-evidence-freshness)
 - [Cover, metadata and EPUB container](#cover-metadata-and-epub-container)
 - [Container, structural and reader checks](#container-structural-and-reader-checks)
 - [Visual review coverage](#visual-review-coverage)
 - [Keep source filenames out of EPUB metadata](#keep-source-filenames-out-of-epub-metadata)
+
+## Release orchestration and evidence freshness
+
+Use [the release workflow](../README.md#release-orchestration) to enforce common
+checks and the book's own validators. The runner requires separate second-pass
+and visual-review records; it does not perform those reviews or make a generic
+container check stand in for source fidelity. Record scope, source decisions,
+remaining limitations and hashes of the actual evidence examined. Pending
+checks and unresolved findings must fail.
+
+The final receipt binds the EPUB and evidence, including the reader export.
+Verify it immediately before delivery. After repairs, regenerate affected
+evidence, inspect the rebuilt result and rerun release; changing a checksum in
+an old review is not a new review. See the [API and schema](../common/README.md#release-runner)
+for adapter requirements and the deliberately limited meaning of a runner pass.
 
 ## Cover, metadata and EPUB container
 
