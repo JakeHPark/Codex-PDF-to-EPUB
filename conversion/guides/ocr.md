@@ -262,6 +262,15 @@ OCR layer repairs case-sensitive whole-token `Iam` to `I am`; leave `IAM`,
 `Iams` and substrings in legitimate words unchanged. A plausible dictionary word
 or matching pair of OCR errors does not establish that the scan was recovered.
 
+Flag whole-token `nota` in English prose as a possible fused `not a`, including
+across inline markup. Confirm the space against the source and sentence grammar;
+Latin `nota bene`, names and other-language uses remain valid. Keep this a
+review-only detector rather than an unconditional spelling replacement.
+Also flag one or two lowercase letters inside an otherwise uppercase word
+(`UsING SCRIPTS`). Inspect source small capitals: OCR may treat a small-cap
+glyph as lowercase. Repair the verified heading and its navigation label
+together; preserve intentional mixed-case names, brands and notation.
+
 
 ## Bleed-through and divider pages
 
@@ -339,6 +348,12 @@ rule for automatic replacement. Test genuine compounds, suspended compounds,
 names, year/page ranges, and sentence dashes in the packaged reader export.
 
 ## Orphaned symbols and punctuation clusters
+
+Include unmatched guillemets (`«`, `»`, `‹`, `›`) in the packaged punctuation
+audit. A lone `»` after a sentence can be scan debris rather than a closing
+quotation. Check the source before removing it; balanced foreign quotations,
+continued quotations and other language-specific conventions are valid review
+controls. Never strip all guillemets globally.
 
 Audit the entire packaged text for symbols with no plausible role in their
 surrounding prose, including isolated copyright or degree signs, angle brackets,
@@ -530,6 +545,10 @@ including across inline markup. They can be misread stems of `l` or `i`, but
 the source determines the replacement. Keep normal exclamations, factorials,
 code and deliberately punctuated names as reviewed exceptions; never globally
 replace `!` with a letter. The packaged punctuation audit reports this class.
+Include a following discretionary hyphen and whitespace in this check:
+`know!- edge` can hide the same misread `l` at a physical line break. Verify
+the complete word and its emphasis after joining, rather than fixing only
+the punctuation character.
 
 Treat `.'` and `.’` after a word as review candidates, especially without a
 matching opening quotation. The pair can be a damaged exclamation mark or

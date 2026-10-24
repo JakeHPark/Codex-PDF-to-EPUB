@@ -146,11 +146,38 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
-        ("embedded exclamation mark", r"(?<=[A-Za-z])!(?=[A-Za-z])"),
+        ("embedded exclamation mark", r"(?<=[A-Za-z])!(?=[A-Za-z]|-[ \t\r\n]*[A-Za-z])"),
         ("space before closing quote", r"[ \t\u00a0]+(?:”|’(?=$|[\s\d,.;:!?—–”)\]]))"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
+        ("possibly fused not a", r"\bnota\b"),
     ]
     issues = []
+    # Review only: Latin `nota`, real mixed-case brands and foreign quotation
+    # conventions must not be rewritten by an English OCR spelling rule.
+    for match in re.finditer(r"\b[A-Za-z]{4,}\b", text):
+        token = match.group()
+        upper = sum(c.isupper() for c in token)
+        lower = len(token) - upper
+        if upper >= 3 and 0 < lower <= 2 and upper / len(token) >= .75:
+            issues.append(dict(position=match.start(), symbol=token,
+                               reason="lowercase outlier in uppercase word",
+                               context=text[max(0, match.start()-50):match.end()+60]))
+    for opener, closer in [("«", "»"), ("‹", "›")]:
+        stack = []
+        for position, char in enumerate(text):
+            if char == opener:
+                stack.append(position)
+            elif char == closer:
+                if stack:
+                    stack.pop()
+                else:
+                    issues.append(dict(position=position, symbol=char,
+                                       reason="unpaired guillemet",
+                                       context=text[max(0, position-50):position+61]))
+        for position in stack:
+            issues.append(dict(position=position, symbol=opener,
+                               reason="unpaired guillemet",
+                               context=text[max(0, position-50):position+61]))
     # Inspect each complete dot run, not just adjacent pairs: a legitimate
     # sentence stop plus ellipsis has four dots, but mixed spacing can hide
     # malformed forms such as ". . ..". These remain review-only candidates.

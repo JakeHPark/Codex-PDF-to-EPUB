@@ -81,6 +81,25 @@ After changing one boundary, audit all later boundaries. A single mistaken offse
 
 ## Paragraph continuity
 
+Review long merged blocks containing several short label-plus-colon phrases.
+They may be independent bullet items whose dots were missed by OCR. Compare
+the left marker column and hanging text margins in the scan, recover every
+peer item and its complete continuation across page turns, and restore label
+emphasis separately. A following label such as `Compensation:` belongs to a
+new item when the source shows a new bullet; a preceding italic sentence is
+not evidence that the next label belongs in the same paragraph. Use this as
+a review trigger, not a rule to split every colon in prose.
+
+Do not require colons or visible bullets to detect a list. A short run of
+parallel, capitalized fragments on separate baselines, especially italic and
+more deeply indented beneath an existing item, can be an unmarked sublist.
+Keep each complete example separate and attach the group to its governing
+item; do not flatten it into a quotation paragraph or split the outer list
+around it. Preserve the absence of printed markers with an unmarked nested
+list when appropriate. Audit other short, nonterminal lines followed by a
+capital at the same indent, but retain ordinary wraps before names, titles,
+initials and the pronoun `I` as source-reviewed controls.
+
 For scans, use physical baselines and the local line leading as additional
 paragraph evidence. Ascenders, descenders, superscripts and page skew make OCR
 rectangle gaps unreliable: a visibly separated, unindented paragraph may have
