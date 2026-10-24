@@ -99,6 +99,13 @@ Run formatting recovery across every content page, not merely a representative s
 
 Short words require a stricter classifier, not a global exception. The current detector uses the ordinary slant/gain threshold for words of four or more letters and substantially higher thresholds for two- or three-letter words. A short word inside a consistently italic run can also inherit the run classification. Retain exact contextual overrides only when image evidence cannot classify an isolated occurrence; do not use them as a substitute for the whole-book pass.
 
+Also audit the first word of an emphasized sentence or clause. A short,
+capitalised word can receive a low slant score even when the following run is
+clearly italic; reviewing only gaps between two italic neighbors misses it.
+Review the preceding roman word against source pixels, and retain roman
+introducers before italic titles or selectively emphasized phrases. Store
+occurrence-specific positive and negative boundary assertions.
+
 Do not bridge a short word solely because both neighbors are italic. The source
 may intentionally use italic labels or contrast words around a roman connective,
 such as italic “fourth category” and “lack” around roman “is”. Require glyph or
