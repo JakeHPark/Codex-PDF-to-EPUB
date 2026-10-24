@@ -204,6 +204,12 @@ Examples include a heading with only its last words italicized, a bold sentence
 with an unbold initial article, and `du` italicized inside roman `durable`.
 Add packaged-output regressions for each confirmed repair.
 
+Scope a short-word style repair to its verified occurrence. Replacing every
+literal `a` in a paragraph can style letters inside other words; even a
+whole-word replacement can wrongly style the paragraph's other articles.
+Use positioned word identifiers or an anchored complete phrase, verify roman
+lookalikes elsewhere in the same block, and rerun the packaged audit afterward.
+
 Include short run-in labels before an em dash in emphasis review, even when
 most of the following paragraph is roman; a majority-style paragraph audit
 will miss a label such as bold `Painted` followed by unbold `wood`. Review

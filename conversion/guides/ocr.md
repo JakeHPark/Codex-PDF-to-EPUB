@@ -46,6 +46,12 @@ discretionary. Search all occurrences of the same compound after a repair.
 
 Printed typography can confuse extractors. Drop caps and letter-spaced small capitals may become forms such as `A p pa R e n t ly`. Verify these against the rendered page and repair them explicitly.
 
+Audit semantic block boundaries for a trailing continuation hyphen followed by
+a lowercase word fragment. A false paragraph or quotation boundary can strand
+the two halves even when ordinary line joining works. Verify the complete
+source block and its style before joining; deliberately suspended compounds
+and authored sentence endings still need individual review.
+
 Some PDF text layers also leak invisible font-run delimiters as standalone characters. Confirm them against the page image before removing them. For example, an isolated `*` may be an internal italic-run marker rather than a printed ornament; genuine scene breaks usually have a distinct repeated or centered form that should be retained.
 
 A reconstructed scan may combine a faint residual bitmap with synthetic vector
@@ -177,6 +183,14 @@ pages. Preserve positioned original words where they overlap reliable image
 OCR; recover missing regions with their own coordinates and provenance, then
 review them in reading order. Exact coverage of the original hidden word stream
 alone cannot establish completeness against the printed book.
+
+Two OCR readings can omit the same short standalone line, including the last
+word of a paragraph or a punctuation-heavy example. Compare the page pixels
+with the combined positioned coverage as well. A residual-ink row inventory
+can expose these omissions after known text bands, figures and furniture are
+accounted for. Inspect every candidate: dotted panel borders, footnote rules
+and oversized initials also leave residual ink. Recover confirmed text with
+its coordinates; do not treat agreement between the OCR readings as a pass.
 
 When parsing hOCR, inventory every text-bearing line class, not only
 `ocr_line`. Engines can emit `ocr_header`, `ocr_caption` or `ocr_textfloat`
