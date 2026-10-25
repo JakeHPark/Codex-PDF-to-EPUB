@@ -437,6 +437,13 @@ word. Preserve abbreviations, initials, decimals, ellipses and deliberate
 lowercase quotation openings. Record exact verified repairs and rerun the audit
 across the whole book, including text split by emphasis markup.
 
+Flag a comma followed by a capitalized word that could begin a new sentence
+(`their pleasure, How about that?`). Review the complete clauses against the
+source; a misread period can leave two sentences joined by a comma. Include
+capital `I` and text across inline emphasis. Preserve valid commas before proper
+names, titles, direct address, quotations and pronouns after introductory or
+subordinate clauses; capitalization alone never authorizes changing a comma.
+
 OCR punctuation confusion works in both directions: a comma may become a full
 stop, and a full stop plus a capitalized next word may become a comma followed
 by lowercase text. Review conspicuous run-on clauses against the scan, including

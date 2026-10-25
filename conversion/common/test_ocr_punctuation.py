@@ -48,4 +48,18 @@ class OCRPunctuationTests(unittest.TestCase):
  def test_apostrophe_at_block_edge(self):
   self.assertEqual(find_ocr_punctuation_issues("' I am not of that opinion.")[0]['reason'],'isolated apostrophe')
 
+
+class CommaCapitalTests(unittest.TestCase):
+ def test_sentence_candidates_are_review_only(self):
+  for text in ['their pleasure, How about that?', 'a profit, I agree.', 'well served, And believe it.']:
+   before=text
+   self.assertIn('comma before possible sentence start',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+   self.assertEqual(text,before)
+ def test_valid_capitals_remain_review_candidates(self):
+  for text in ['Richmond, Virginia', 'When ready, I left.', 'Thank you, Mary.', 'the book, Your Erroneous Zones, is here.']:
+   self.assertIn('comma before possible sentence start',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+ def test_lowercase_and_numbers_are_not_capital_candidates(self):
+  for text in ['yes, indeed', '1,000', 'one, two, three', 'finished. How about that?']:
+   self.assertNotIn('comma before possible sentence start',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+
 if __name__=='__main__': unittest.main()

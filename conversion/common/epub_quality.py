@@ -141,6 +141,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
     import unicodedata
 
     patterns = [
+        ("comma before possible sentence start", r",\s+(?:[A-Z][a-z]+\b|[AI]\b)"),
         ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
         ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+,|,{2,}"),
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
