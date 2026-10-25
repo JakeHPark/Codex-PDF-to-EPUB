@@ -419,6 +419,13 @@ note markers and technical symbols. Never delete all non-Latin characters.
 
 ### Contradictory punctuation and sentence boundaries
 
+Contraction repairs must match complete tokens, including both ends of a
+multiword OCR form. An unbounded replacement of `can t` can corrupt `can tell`,
+`can take` and `can think` into false apostrophe words. Test genuine damaged
+contractions alongside those valid phrases, and audit every occurrence of a
+repaired stem when this failure occurs. Do not treat a plausible-looking
+apostrophe insertion as proof of a valid contraction.
+
 Flag isolated apostrophes between words (`in ' sentiment`), adjacent conflicting
 punctuation (`person, .`, `arise. ,`, `them,.`, `want,,.`), and full stops followed by a
 lowercase word (`lazy. and active`). These are review candidates, not automatic
