@@ -147,6 +147,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
+        ("punctuation interrupts hyphenated word", r"\b[A-Za-z]+[-¬][ \t\r\n]*(?:[,;:!|][ \t\r\n]*)+(?=[A-Za-z])"),
         ("embedded exclamation mark", r"(?<=[A-Za-z])!(?=[A-Za-z]|-[ \t\r\n]*[A-Za-z])"),
         ("space before closing quote", r"[ \t\u00a0]+(?:”|’(?=$|[\s\d,.;:!?—–”)\]]))"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),

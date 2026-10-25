@@ -31,6 +31,14 @@ class OCRPunctuationTests(unittest.TestCase):
   self.assertNotIn('internal word symbol',{i['reason'] for i in find_ocr_punctuation_issues('A word*. With a footnote.')})
  def test_ordinary_prose(self):
   self.assertEqual(find_ocr_punctuation_issues("It's 3.14. Next, ‘a quotation’ and a name’s possessive…"),[])
+ def test_punctuation_obstructing_dehyphenation(self):
+  reason='punctuation interrupts hyphenated word'
+  for text in ['price-, less', 'CONSCIOUS- ! NESS.', 'conscious-\n!\nness']:
+   before=text
+   self.assertIn(reason,{i['reason'] for i in find_ocr_punctuation_issues(text)})
+   self.assertEqual(text,before)
+  for text in ['price-less', 'over- and under-estimates', 'Wait—! Really?', 'word- ... another', 'x - y', 'Stop! Next.']:
+   self.assertNotIn(reason,{i['reason'] for i in find_ocr_punctuation_issues(text)})
  def test_malformed_ellipsis_runs(self):
   for text in ['hollow . . .. Owing', 'Done.. Next', 'Wait.....', 'eyes!. . . . The cry']:
    self.assertTrue(any('ellipsis' in i['reason'] for i in find_ocr_punctuation_issues(text)),text)

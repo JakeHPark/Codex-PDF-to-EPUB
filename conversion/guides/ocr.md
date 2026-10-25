@@ -53,6 +53,12 @@ the two halves even when ordinary line joining works. Verify the complete
 source block and its style before joining; deliberately suspended compounds
 and authored sentence endings still need individual review.
 
+Stray punctuation beside a print-wrap hyphen can defeat ordinary dehyphenation:
+`price-, less` or `CONSCIOUS- ! NESS` may remain split even after lines join.
+Audit punctuation between the hyphen and following fragment across complete
+blocks, and compare the pixels before repairing the source line. Preserve
+genuine suspended compounds, quoted punctuation and technical notation.
+
 Some PDF text layers also leak invisible font-run delimiters as standalone characters. Confirm them against the page image before removing them. For example, an isolated `*` may be an internal italic-run marker rather than a printed ornament; genuine scene breaks usually have a distinct repeated or centered form that should be retained.
 
 A reconstructed scan may combine a faint residual bitmap with synthetic vector
