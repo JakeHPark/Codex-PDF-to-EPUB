@@ -215,6 +215,12 @@ OCR token containing both italic and roman words.
 
 ## Loose text and notes in malformed HTML
 
+When a note entry has no working call, inspect raw anchor attributes as well as
+the parsed links. An unclosed attribute quote can swallow the intended `href`
+into an anchor name. Repair only when the source location, surrounding note
+sequence and entry establish the association; do not invent a call to balance
+the counts.
+
 A web page can display complete notes while its parsed HTML leaves their text
 outside paragraph elements, split between element text, sibling emphasis tags,
 and element tails. Inventory those fragments before selecting only `p` nodes.

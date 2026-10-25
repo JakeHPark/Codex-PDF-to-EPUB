@@ -459,6 +459,11 @@ all findings, while retaining separate source-region completeness checks.
 
 Detect note markers and note text while page structure is still available. Associate each note with its chapter and render it in a predictable location. Chapter-end notes are acceptable when page-local placement cannot be represented reliably.
 
+Allow long, multi-paragraph notes to flow across reader pages. Keep the label
+with the opening paragraph rather than applying `break-inside: avoid` to the
+entire note. An oversized keep-together group can strand the Notes heading or
+leave excessive blank space even when every word survives a text export.
+
 In scanned books, a note can begin with a short or separately extracted line,
 or continue from the previous page before the next numbered entry. Expand the
 verified small-type region to its actual first baseline; do not start it at the
