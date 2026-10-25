@@ -126,6 +126,11 @@ lowercase transforms. Respect inherited spans and parent-owned text tails;
 verify all occurrences in packaged text and reader output without capitalizing
 neighboring prose or changing unrelated lowercase quotations.
 
+Review scientific letter strings separately from prose: OCR may lowercase
+small-cap nucleotide sequences or assign them false italics. Restore their
+source-verified letters, case and upright/italic style together; do not infer
+case from a word dictionary or treat every capital sequence as a variable.
+
 A superscript reference fused into an italic word's OCR box can corrupt its
 slant score. Contractions can likewise defeat a short-word fallback when their
 combined letter count exceeds the threshold. Review complete titles and the
