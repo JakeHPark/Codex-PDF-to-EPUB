@@ -600,6 +600,10 @@ is an ordinary English word. Confirm the context and scan, keep ambiguous
 repairs book-specific, use whole-token boundaries where appropriate, and check
 that legitimate substrings such as `bump` and `bumps` remain intact.
 
+Check grammatical roles as well as spelling: `you` before a noun phrase may be
+a damaged or misprinted `your`. Source-check the complete clause; ordinary
+forms such as `give you money` are valid and must not be changed automatically.
+
 `rn` can be read as `m`, yielding valid-looking words such as `comer` for
 `corner`. Inventory the whole book when one is found, but verify the uses before
 repairing them: `comer` is itself a valid English word, and longer words must not
