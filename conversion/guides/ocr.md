@@ -8,6 +8,7 @@ can be satisfied by merely generating a report.
 ## Contents
 
 - [Conservative page extraction](#conservative-page-extraction)
+- [Reader highlighting and annotations](#reader-highlighting-and-annotations)
 - [Correction scope and common normalization](#correction-scope-and-common-normalization)
 - [Correct very obvious typos in the source](#correct-very-obvious-typos-in-the-source)
 - [Verify a scan's hidden text layer against the images](#verify-a-scans-hidden-text-layer-against-the-images)
@@ -60,6 +61,29 @@ an incomplete cover or illustration. Compare the extracted asset with the fully
 rendered page before accepting it. When the composition itself is the intended
 asset, preserve all layers in a suitably resolved render and record that choice;
 native bitmap dimensions alone do not prove completeness.
+
+## Reader highlighting and annotations
+
+Treat a previous reader’s highlights, underlining, arrows and marginal writing
+as annotations, independently of the author’s typography. When instructed to
+ignore them, exclude their meaning and recovered handwriting from the reading
+stream; preserve the supplied source unchanged. Check whether marks are PDF
+annotations or burned into the scan before choosing an extraction method.
+
+For translucent yellow highlighting, ordinary grayscale can darken the marked
+background and corrupt otherwise clear text. Test a colour-channel working
+raster: taking the maximum RGB channel can suppress yellow while retaining
+black print. Calibrate against marked and unmarked roman text, genuine italics,
+small reference numerals and faint pages. Apply contrast scaling with clamped
+black/white points; sparse pages must remain white rather than acquiring a dark
+background. This is a scan-specific method, not a universal colour-removal rule:
+coloured authored text and illustrations may be lost. Keep original-quality
+cover/figure assets independent of the OCR raster.
+
+Do not promote highlighted words to emphasis or assume the existing text layer
+is reliable in marked regions. Compare independent OCR with the page pixels,
+retain coordinates, and review both missing text and spurious punctuation.
+Recover authored emphasis from typeface evidence rather than annotation colour.
 
 ## Correction scope and common normalization
 
