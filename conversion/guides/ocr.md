@@ -432,6 +432,13 @@ contractions alongside those valid phrases, and audit every occurrence of a
 repaired stem when this failure occurs. Do not treat a plausible-looking
 apostrophe insertion as proof of a valid contraction.
 
+Check possessives as well as contractions: a detached `s` (`the nation s banks`)
+or forms such as `mans belief` and `mens stores` can hide a missing apostrophe.
+Search the complete packaged stream, including across inline styles. Compare
+the source before joining or inserting punctuation: a variable named `s`, the
+verb `mans`, Latin `mens`, and proper names can be valid. Keep repairs specific
+to verified occurrences rather than rewriting every matching token.
+
 Flag isolated apostrophes between words (`in ' sentiment`), adjacent conflicting
 punctuation (`person, .`, `arise. ,`, `them,.`, `want,,.`), and full stops followed by a
 lowercase word (`lazy. and active`). These are review candidates, not automatic

@@ -31,6 +31,14 @@ class OCRPunctuationTests(unittest.TestCase):
   self.assertNotIn('internal word symbol',{i['reason'] for i in find_ocr_punctuation_issues('A word*. With a footnote.')})
  def test_ordinary_prose(self):
   self.assertEqual(find_ocr_punctuation_issues("It's 3.14. Next, ‘a quotation’ and a name’s possessive…"),[])
+ def test_missing_possessives_are_review_only(self):
+  reason='possibly missing possessive apostrophe'
+  for text in ['the nation s banks', 'the mans belief', 'discount mens stores', 'the variable s', 'He mans the station.', 'mens rea']:
+   before=text
+   self.assertIn(reason,{i['reason'] for i in find_ocr_punctuation_issues(text)})
+   self.assertEqual(text,before)
+  for text in ['the nation’s banks', 'the man’s belief', 'men’s stores', 'Le Mans', 'many nations', 'a = s']:
+   self.assertNotIn(reason,{i['reason'] for i in find_ocr_punctuation_issues(text)})
  def test_punctuation_obstructing_dehyphenation(self):
   reason='punctuation interrupts hyphenated word'
   for text in ['price-, less', 'CONSCIOUS- ! NESS.', 'conscious-\n!\nness']:

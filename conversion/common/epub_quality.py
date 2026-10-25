@@ -152,6 +152,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("space before closing quote", r"[ \t\u00a0]+(?:”|’(?=$|[\s\d,.;:!?—–”)\]]))"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
         ("possibly fused not a", r"\bnota\b"),
+        ("possibly missing possessive apostrophe", r"\b[A-Za-z]{2,}[ \t]+s\b|\b(?:mans|womans|mens|womens|childrens)\b"),
     ]
     issues = []
     # Review only: Latin `nota`, real mixed-case brands and foreign quotation
