@@ -158,6 +158,12 @@ for drop-cap continuations, including explicit exceptions where a genuine new
 paragraph begins alongside the capital. Check complete opening paragraphs and
 line-end hyphen joins in the packaged EPUB and reader export.
 
+Check leading punctuation before measuring an OCR line's indent from its first
+recognized word. Missed ellipsis dots or quotation marks can make an ordinary
+wrapped continuation appear indented. Inspect the ink at the apparent left
+margin before creating a new paragraph or block quotation; retain the whole
+source quotation and its citation in their verified structure.
+
 A paragraph can end with a parenthetical citation whose final character is `)`,
 with no following full stop. Treat that as a possible complete boundary, not
 automatic evidence of a column/page continuation. Check source paragraph spacing
