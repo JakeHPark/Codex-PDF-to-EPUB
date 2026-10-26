@@ -100,7 +100,16 @@ verified surviving navigation/spine data and document that reconstruction.
 
 ### Structural and textual assertions
 
-Add regression assertions for every confirmed error. Examples:
+Add regression assertions for every confirmed error.
+
+Require each configured reviewed correction to match its intended occurrence
+and apply the expected number of times. Fail a build for an unused or overbroad
+correction, including one excluded by an incorrect page or region guard. If
+structural joining or a shared normalizer already resolves it, document that
+stage and test the resulting text instead of keeping a dormant replacement.
+Check both the corrected context and the absence of the defective context in
+the packaged EPUB and reader export; a correction recorded in a recipe is not
+proof that it ran. Examples:
 
 ```python
 assert "predictable or mechanical" in text
