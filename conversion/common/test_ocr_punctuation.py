@@ -1,6 +1,13 @@
 import unittest
 from conversion.common.epub_quality import find_ocr_punctuation_issues
 
+class OpeningQuoteSpacingTests(unittest.TestCase):
+ def test_opening_gaps_are_review_candidates(self):
+  for text in ['“ ‘feudal law’ was imposed.”', '“ word”', '‘ word’', '“\u00a0‘word’”', '“\u202fword”']:
+   self.assertIn('space after opening quote', {i['reason'] for i in find_ocr_punctuation_issues(text)})
+  for text in ['“‘feudal law’ was imposed.”', '“word”', '‘word’', '« texte »', '“\n  verse”']:
+   self.assertNotIn('space after opening quote', {i['reason'] for i in find_ocr_punctuation_issues(text)})
+
 class OCRPunctuationTests(unittest.TestCase):
  def test_space_before_closing_quote_is_reviewed(self):
   for text in ['“Confusion. ”', '“word ”23', '‘word ’', 'word\u00a0”']:

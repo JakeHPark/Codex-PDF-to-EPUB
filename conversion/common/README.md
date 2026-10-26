@@ -165,6 +165,7 @@ Tests: `test_ocr_corrections.py`.
   preserving the DOM and respecting block, `br`, code and formula boundaries.
 
 Repairs include a word fused to an opening curly double quote, a stray space
+between English nested curly openers (`“ ‘` → `“‘`), a stray space
 before a sentence stop, and missing comma spaces in a constrained enumeration
 of at least three short integers with `and` or `or`. Preserve ellipses,
 decimals, thousands groups and mathematical notation. The common OCR normalizer

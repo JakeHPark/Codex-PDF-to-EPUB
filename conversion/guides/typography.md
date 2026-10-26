@@ -576,6 +576,12 @@ quotation globally merely to clear the audit.
 In ordinary English prose, flag spaces immediately inside opening quotation
 marks, immediately before closing quotation marks (`Confusion. ”`), and
 before semicolons, colons, question marks and exclamation marks.
+Include the gap between nested openers: `“ ‘word’”` should read `“‘word’”`.
+Check complete visible blocks across inline tags; a quotation-balance check
+alone cannot detect this spacing defect. The shared punctuation audit flags
+opening-quote gaps, and the prose-spacing helper closes horizontal gaps between
+English curly double and nested single openers. Preserve deliberate lineation
+and source-supported foreign quotation spacing as reviewed exceptions.
 Repair verified extraction spacing across emphasis boundaries without flattening
 the formatting. Apply rules for the passage's language: French normally uses
 spacing before punctuation such as an exclamation mark, often a nonbreaking or

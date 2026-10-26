@@ -6,6 +6,12 @@ from conversion.common.package_audit import audit_epub
 
 
 class PackageAuditTests(unittest.TestCase):
+    def test_opening_quote_gap_crosses_inline_markup(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=self.package(d,'<p>“<span> </span>‘feudal law’ was imposed.”</p>')
+            self.assertTrue(any(r['finding']['reason']=='space after opening quote' for r in audit_epub(path)['records']))
+            self.package(d,'<p>“‘feudal law’ was imposed.”</p>')
+            self.assertEqual(audit_epub(path)['unreviewed_count'],0)
     def test_closing_quote_space_crosses_inline_markup(self):
         with tempfile.TemporaryDirectory() as d:
             path=self.package(d,'<p>“Confusion.<span> </span>”</p>')

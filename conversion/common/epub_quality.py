@@ -150,6 +150,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("punctuation interrupts hyphenated word", r"\b[A-Za-z]+[-¬][ \t\r\n]*(?:[,;:!|][ \t\r\n]*)+(?=[A-Za-z])"),
         ("embedded exclamation mark", r"(?<=[A-Za-z])!(?=[A-Za-z]|-[ \t\r\n]*[A-Za-z])"),
         ("space before closing quote", r"[ \t\u00a0]+(?:”|’(?=$|[\s\d,.;:!?—–”)\]]))"),
+        ("space after opening quote", r"[“‘][ \t\u00a0\u202f]+(?=\S)"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
         ("possibly fused not a", r"\bnota\b"),
         ("possibly missing possessive apostrophe", r"\b[A-Za-z]{2,}[ \t]+s\b|\b(?:mans|womans|mens|womens|childrens)\b"),

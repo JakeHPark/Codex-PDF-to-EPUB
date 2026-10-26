@@ -2,6 +2,9 @@
 import re
 
 OPEN_QUOTE = re.compile(r"(?<=[^\W_])(?=“)", re.UNICODE)
+# English nested openers have no internal gap. General opening-quote spacing
+# remains a review candidate: verse and foreign typography need source context.
+NESTED_OPEN_GAP = re.compile(r"(?<=“)[ \t\u00a0\u202f]+(?=‘)")
 # A spaced ellipsis or dot progression is not a sentence full stop. Do not
 # consume line breaks, spaces after digits (numeric notation), or math/code.
 BEFORE_STOP = re.compile(r"(?<=[^\W\d_]|[’”\)\]])[ \t\u00a0]+(?=\.(?!\s*\.|\d))", re.UNICODE)
@@ -15,6 +18,7 @@ def spacing_edits(text):
     """Return nonoverlapping (start, end, replacement) edits in plain prose."""
     edits = [(m.start(), m.end(), " ") for m in OPEN_QUOTE.finditer(text)]
     edits += [(m.start(), m.end(), "") for m in BEFORE_STOP.finditer(text)]
+    edits += [(m.start(), m.end(), "") for m in NESTED_OPEN_GAP.finditer(text)]
     for group in ENUMERATION.finditer(text):
         edits += [(group.start()+m.end(), group.start()+m.end(), " ")
                   for m in re.finditer(r",(?=\d)", group.group())]

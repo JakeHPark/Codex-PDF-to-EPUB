@@ -5,6 +5,15 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_nested_opening_gap_repair_preserves_both_quote_levels(self):
+        for source, expected in [
+            ('“ ‘feudal law’ [which] was imposed.”', '“‘feudal law’ [which] was imposed.”'),
+            ('“ ‘Bastard Feudalism,’”', '“‘Bastard Feudalism,’”'),
+        ]:
+            result = apply_common_ocr_corrections(source)
+            self.assertEqual(result, expected)
+            self.assertEqual(apply_common_ocr_corrections(result), expected)
+
     def test_iato_is_whole_token_and_case_sensitive(self):
         self.assertEqual(apply_common_ocr_corrections('elevated iato it; Iato (iato).'),
                          'elevated into it; Into (into).')

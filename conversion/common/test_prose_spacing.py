@@ -4,6 +4,16 @@ from prose_spacing import normalize_prose_spacing, normalize_xhtml_prose_spacing
 
 
 class ProseSpacingTests(unittest.TestCase):
+    def test_nested_opening_quotes(self):
+        for gap in [' ', '\t', '\u00a0', '\u202f']:
+            self.assertEqual(normalize_prose_spacing('“'+gap+'‘feudal law’ [which] was imposed.”'), '“‘feudal law’ [which] was imposed.”')
+        for value in ['“‘feudal law’ was imposed.”', '« texte »', '“\n  verse”', 'He said “law”.']:
+            self.assertEqual(normalize_prose_spacing(value), value)
+        p = etree.fromstring('<p>“<span> </span><em>‘feudal law’</em> was imposed.”</p>')
+        self.assertEqual(normalize_xhtml_prose_spacing(p), 1)
+        self.assertEqual(''.join(p.itertext()), '“‘feudal law’ was imposed.”')
+        self.assertEqual(p[1].text, '‘feudal law’')
+
     def test_word_before_opening_double_quote(self):
         self.assertEqual(normalize_prose_spacing('the word“number”'), 'the word “number”')
         self.assertEqual(normalize_prose_spacing('λέξη“number”'), 'λέξη “number”')
