@@ -26,11 +26,12 @@ can be satisfied by merely generating a report.
 
 For digitally typeset PDFs, first inspect embedded font glyphs as well as font
 names, sizes, and baselines. Some fonts encode small capitals and superscript
-digits as glyph variants (`N.sc`, `one.super`) while the text map returns an
+digits as glyph variants (`N.sc`, `Tsmall`, `one.super`, `onesuperior`) while the
+text map returns an
 ordinary lowercase letter or digit at the ordinary body size and baseline.
 Size-based superscript detection misses these. `conversion/common/digital_pdf.py`
 maps CFF glyph names from PyMuPDF's text trace back to positioned characters.
-Use verified `.sc` variants for semantic small-cap spans and `.super` variants
+Use verified small-cap variants for semantic small-cap spans and superior variants
 for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
 absence of a recognized glyph suffix is not proof of absent formatting.
@@ -43,6 +44,19 @@ and expand the actual ligature while retaining its emphasis. Do not promote this
 into joining arbitrary short words or ordinary `fi`/`fl` sequences. Validate the
 complete words and style stream after line joining; a normalizer that expands
 `ﬁ` first can conceal the evidence that the gap came from a single glyph.
+
+A digital PDF can omit encoded spaces throughout a tightly justified line even
+when the rendered words remain visibly separated. Inventory anomalous gaps
+between adjacent positioned glyphs, normalized to the local type size, including
+boundaries within one font run. Review the rendered line before inserting spaces;
+ordinary kerning, italic corrections and mathematical notation are negative
+controls. Keep each reviewed insertion tied to its source characters rather than
+guessing word boundaries from a dictionary.
+
+Small raster or vector rules can carry text semantics: a repeated-author dash,
+a deliberately obscured word, or an underscore in a URL. Recover these from their
+positions and context before treating tiny graphics as disposable decoration.
+Validate the reconstructed citation or link as a whole.
 
 When classifying small digits by baseline, exclude whitespace-only spans from
 reference-baseline estimates. A PDF may position a separator at the preceding
