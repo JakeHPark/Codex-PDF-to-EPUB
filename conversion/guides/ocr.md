@@ -68,6 +68,11 @@ rendered page before accepting it. When the composition itself is the intended
 asset, preserve all layers in a suitably resolved render and record that choice;
 native bitmap dimensions alone do not prove completeness.
 
+For layered mixed-raster scans, include the foreground mask, background and
+other visible layers in the composition. Render at the native foreground grid
+when practical, rather than enlarging a low-resolution background. Record the
+grid and source crop coordinates so retained illustration quality is verifiable.
+
 ## Reader highlighting and annotations
 
 Treat a previous reader’s highlights, underlining, arrows and marginal writing
@@ -231,8 +236,10 @@ modes on hanging notes: one mode may turn the entire number column into a
 vertical nonsense token, while a region-specific uniform-block pass recovers
 the individual labels. Verify the labels and continuations against the scan.
 
-For three-column books, assign lines to column regions using the actual column
-starts, allowing scan drift and hanging list indents. Do not use a boundary
+For multicolumn books, assign lines to column regions using the actual column
+starts on each page, allowing scan drift and hanging list indents. A fixed page
+centre can fall inside a column, especially on alternating recto/verso scans.
+Place boundaries in verified gutters. Do not use a boundary
 that lies on a column's left edge: small horizontal changes can then send its
 first lines into the preceding column. Reconstruct hanging-indent list items
 before applying ordinary first-line paragraph indentation rules, and retain

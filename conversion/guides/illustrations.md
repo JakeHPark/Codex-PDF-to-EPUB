@@ -100,6 +100,13 @@ clipped labels or leaked prose, and check representative narrow and wide objects
 in a reader preview. Compare the retained prose separately from captured object
 text, so a completeness check cannot quietly excuse missing text as graphics.
 
+Check both ends of a panel against its actual frame and neighboring prose.
+Detecting a colored heading does not establish the illustration's top edge:
+artwork may begin beside that heading. An oversized bottom can swallow the next
+paragraph, while a mixed panel's old prose bounds can become invalid after its
+art bounds change. Reconcile text ownership after every boundary repair and
+review the actual packaged crops, including mixed text-and-diagram panels.
+
 When an image description is derived from its caption, regenerate that
 description after final caption repairs and cross-reference rewrites. Validate
 the packaged caption and derived alternative text together so a repaired

@@ -168,6 +168,11 @@ same type size, and retain positioned word/line scores for the whole book.
 Thresholds belong in the book recipe; they depend on resolution, font, contrast,
 and scan quality. Review roman controls as well as candidate bold lines.
 
+Calibrate structure within each text stream. A sidebar may have uniformly bold
+body prose; applying the main text's bold-heading threshold to it can turn every
+physical line into a heading. Use panel-local typography, paragraph spacing and
+source hierarchy to distinguish its body from its headings.
+
 Reconstruct full question or prompt paragraphs across lines and pages, then
 wrap their text in `<strong>`; preserve nested `<em>` when a bold question also
 contains italics. Statements can be bold prompts and ordinary prose can contain
@@ -637,3 +642,11 @@ rule to a range or a suspended construction such as `42- and 48-inch`.
 Measurements with mixed fractions also need source review: OCR may turn `3½`
 into `3 '/2`. Recover a legible Unicode fraction or accurate mathematical form,
 retaining the dimension's units and its relationship to neighboring numbers.
+
+Include plausible bare integers in fraction and script review. A stacked mixed
+fraction can lose its slash and spacing and become an ordinary-looking digit
+string; a denominator can also resemble a percent sign or quote. Use positioned
+ink and surrounding measurements to generate candidates, then verify pixels.
+Protect genuine lumber sizes, years, page numbers and percentages; none of these
+patterns warrants a global replacement. Prefer readable native fractions when
+their structure does not require an image.
