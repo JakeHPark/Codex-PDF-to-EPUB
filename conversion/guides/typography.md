@@ -59,6 +59,13 @@ reconstruction, especially in references. Check source-observed word gaps at
 ligature/font boundaries and discard verified italic-correction spacing before
 punctuation or variable primes without introducing spaces inside notation.
 
+Treat baseline position and font style as independent properties. A subscript
+or superscript can itself be italic or bold; assigning `sub` or `sup` must not
+discard that evidence. Preserve both with nested semantic markup, including
+italic variable indices and raised ordinal suffixes inside italic book titles.
+Compare the full source emphasis stream after script reconstruction, and check
+roman indices as negative controls rather than italicizing all scripts.
+
 Retain line coordinates until paragraphs and quotations have been reconstructed.
 A single indented first line usually begins an ordinary paragraph; a sustained
 inset across consecutive lines denotes a block quotation or list. Determine
