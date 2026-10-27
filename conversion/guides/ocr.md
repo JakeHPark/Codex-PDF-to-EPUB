@@ -304,6 +304,20 @@ word stem, skips symbols or accepts any substring can conceal these defects.
 Include omitted/mismatched tokens and compare meaningful word coverage as well
 as character coverage. Review the source region before applying each repair.
 
+A largest-overlap native word may cover only part of an independently recognized
+word. Replacing the whole recognition with that fragment can silently delete a
+neighbouring article or pronoun. Align complete source runs before choosing a
+reading. Likewise, spaces in a damaged text layer can be font-fragment gaps
+inside intact words; do not copy them all into cleaner OCR. Require corroborated
+word boundaries, retain the replaced span, and check both lost words and newly
+split words in the packaged text.
+
+When reading hOCR, inventory all line-bearing classes, including `ocr_header`,
+`ocr_textfloat`, and `ocr_caption`, as well as `ocr_line`. These labels describe
+the recognizer's guesses, not verified source roles: an ordinary note opening
+can be labelled as a float. Recover those rows before classifying headings,
+furniture, captions and prose against the source regions.
+
 Use a dictionary only to prioritize suspicious tokens, never to auto-correct
 names, acronyms or technical vocabulary. Supplement it with context, matched
 bracket checks, dates containing letters, and fused pronoun forms. The shared

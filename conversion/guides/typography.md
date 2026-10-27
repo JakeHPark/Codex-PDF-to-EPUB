@@ -36,6 +36,17 @@ for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
 absence of a recognized glyph suffix is not proof of absent formatting.
 
+Reconstructed scans can use opaque CID-keyed CFF fonts for both roman and italic
+ink, with raised numerals encoded inside ordinary-size glyphs. A font reported
+as `cid` may contain CFF data. Resolve the CFF charset's actual CID identities,
+not just its ordinal glyph positions, and transform outline bounds through the
+font matrix before comparing visible ink. Calibrated pixel measurements and
+repeated outline identities can support short-word style recovery; retain the
+evidence and inspect contradictions. Keep punctuation and digits independent:
+an italic citation suffix does not make its year or page range italic. A tiny
+reference extracted as a separate row must be attached to its verified heading
+or prose baseline; omit reference numbers from navigation labels.
+
 A reliable digital PDF can also insert extraction-only spaces immediately after
 an encoded ligature, producing `ﬁ rst`, `ofﬁ ce` or `conﬂ ict`. Inspect the printed
 word and its character positions before normalizing the ligature. Inventory all

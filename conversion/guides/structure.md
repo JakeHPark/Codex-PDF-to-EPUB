@@ -87,6 +87,15 @@ from ordinary full-width lines, allowing for page skew; a single dust speck at
 the extreme left must not define the margin. Audit both unusually short
 paragraphs and runs of lowercase continuations after reconstruction.
 
+On slanted leaves, estimate the text edge at each line's vertical position,
+rather than using one left coordinate for the whole page. Fit ordinary lines
+robustly and treat paragraph indents as outliers; otherwise every line near one
+end of the page can become a separate paragraph. Compare vertical line spacing
+as well as indentation. OCR boxes enlarged by a pen stroke, and nominal origins
+inside reconstructed fonts, can both give false paragraph gaps. Inspect complete
+reader pages after changing the model, and regress whole paragraphs across the
+affected page boundaries.
+
 Do not classify short ordinary words as mathematics merely because they occupy
 a separate PDF text line. Fragments such as “In” can share the surrounding
 prose baseline and should be merged before equation detection. Keep mathematical
