@@ -202,6 +202,17 @@ Do not reproduce print-only line breaks or describe an editorial sidebar as a
 quotation. Remove a leading print-marker asterisk only after its role and
 association have been confirmed; keep substantive asterisks elsewhere.
 
+A framed panel may continue on another physical page without repeating its
+title. Inventory these continuations across the whole book: an untitled panel,
+a lowercase opening, or a preceding panel ending mid-sentence is a review
+candidate. Reassemble the complete panel before inserting surrounding body
+prose. Join verified sentence continuations across its parts, preserve each
+illustration and its labels in sequence, and retain stable targets for the
+original parts. Separate word-ownership and image-count checks can both pass
+while the reader still encounters a detached sentence ending or illustration.
+Verify the complete grouped panel in a reader, including image fit at a usable
+viewport size; a complete working crop alone cannot prove reader presentation.
+
 Do not limit recognition to one small font size, a list of page numbers, or
 blocks already classified as notes. A pull quote or marginal commentary may use
 larger type and initially be mistaken for body text or an inset quotation.

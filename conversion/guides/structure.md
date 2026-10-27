@@ -389,6 +389,19 @@ Join wrapped heading lines when matching fonts, consecutive baselines, and
 heading structure show that they form one title. Use the joined title in both
 body and navigation; do not join a following numbered heading or Notes label.
 
+Audit every generated panel title and caption as well as paragraph text. Titles
+recovered by a separate image or colour-analysis stage can bypass the prose
+correction ledger. Check complete wording, internal word spaces and wrapped-line
+order against the source; reconcile their final strings with content and
+navigation independently of body word ownership.
+
+A bold or italic run-in label may share its physical line with ordinary prose.
+Keep the complete paragraph together and style only the verified label; a
+line-level weight score must not turn the label plus the sentence opening into
+a heading and strand its continuation below. Likewise, a number at a wrapped
+line opening can complete an earlier parenthesis or sentence. Require actual
+list structure before treating it as an item marker.
+
 ## Dialogue, inscriptions and secondary headings
 
 A secondary transcription may already have collapsed several printed dialogue
@@ -662,6 +675,13 @@ Establish which work a page citation belongs to before linking it. A quoted
 author's `p. 207` does not become a reference to this book merely because this
 book also has a page 207. Require evidence of an internal navigation instruction
 or a verified index destination; preserve external citation numbers as text.
+
+After joining a paragraph across source pages, resolve each illustration
+reference from its original occurrence and verified object, not merely the
+paragraph's first page. Continued panels may put “left”, “right” or “below”
+drawings on a facing page. Preserve a precise target for each call and inspect
+the surrounding image placement; a resolving link to the wrong source-page
+anchor is still incorrect.
 
 ## Soft line breaks in structured tables
 
