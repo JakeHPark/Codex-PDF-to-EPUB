@@ -280,6 +280,12 @@ Retain source-verified exceptions in the review report, such as a deliberately
 roman word within italic prose or a roman introductory label before an italic
 sentence. An audit finding is a review candidate, not an automatic correction.
 
+Preserve those roman exceptions in the reader's computed style too. A blanket
+italic rule on a quotation, sidebar or subtitle can override correctly recovered
+roman runs even when the inline markup and text audit pass. Prefer explicit
+source-supported emphasis spans; if the container supplies italics, explicitly
+reset verified roman exceptions and inspect them in a reader.
+
 For titles and named works, audit the entire phrase at every occurrence,
 including initial articles and short words such as `A`, `The`, `De`, `of`, and
 `and`. A correctly italicized occurrence elsewhere does not validate a broken
