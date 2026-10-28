@@ -527,6 +527,11 @@ of examples before a subsequent checklist, even when the checklist lies below
 the first column and the examples occupy the next column. Validate the final
 sequence and test the repaired surrounding prose as well as the box itself.
 
+A prose sentence mentioning `Figure N.N` is not automatically a caption.
+Confirm a caption opening from its position, local type size and complete
+paragraph group; do not let a reference in ordinary prose remove that line
+from the text stream or expand the adjacent image crop into it.
+
 Caption selection must compare all neighboring text, not merely choose the
 nearest bold paragraph. A bold body paragraph can resemble a caption while the
 real caption is roman in the hidden OCR. Audit unexpectedly distant captions,

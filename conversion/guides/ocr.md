@@ -309,6 +309,10 @@ can also become a dash, numeral or punctuation. A filter that requires a shared
 word stem, skips symbols or accepts any substring can conceal these defects.
 Include omitted/mismatched tokens and compare meaningful word coverage as well
 as character coverage. Review the source region before applying each repair.
+Retain pure insertion/deletion candidates, including numeric-only continuation
+lines on otherwise populated pages. Reconcile each stream’s reading order
+before declaring text missing: interleaved hidden-OCR rows can produce false
+omissions even when the fresh positioned text contains the complete passage.
 
 A largest-overlap native word may cover only part of an independently recognized
 word. Replacing the whole recognition with that fragment can silently delete a
@@ -625,6 +629,7 @@ initials, abbreviations, variables and genuine foreign words as controls;
 short-token disagreement is a review trigger, never a global substitution.
 
 Flag apparent words beginning with a slash, such as `/ocal`, `/ess` or `“/t`,
+words beginning with a backslash (including literal `\n` inside prose),
 and words ending abruptly in `]`, such as `If]`. Italic `l` or capital `I`
 can be misrecognized as those strokes; a damaged `If I` can become `If]`.
 Review the complete word and neighboring text against the source. Preserve
