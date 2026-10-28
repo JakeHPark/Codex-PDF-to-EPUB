@@ -126,6 +126,21 @@ Shared tests establish helper behavior, not the quality of a generated EPUB.
 
 ## OCR text and spacing
 
+### `tesseract_tsv.py`
+
+`read_tesseract_tsv(path)` returns the positioned OCR rows, preserving literal
+quotation marks. Tesseract's text field is not CSV-quoted: a CSV reader with
+ordinary quote handling can consume subsequent rows into one recognized word.
+The helper splits physical rows and checks their field counts. Validate retained
+word-row counts before deriving layout or pixel-style evidence. Tests:
+`test_tesseract_tsv.py`.
+
+With a private tessdata directory lacking Tesseract's output configuration files,
+request positioned outputs explicitly (`-c tessedit_create_hocr=1` and
+`-c tessedit_create_tsv=1`, plus `-c tessedit_create_txt=1` when needed). Verify
+every expected file and its rows before continuing; successful plain-text output
+does not establish that hOCR or TSV evidence was produced.
+
 ### `ocr_corrections.py`
 
 `apply_common_ocr_corrections(text)` applies constrained cross-book repairs to

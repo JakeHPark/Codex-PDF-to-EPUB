@@ -170,6 +170,14 @@ in builder, validator and delivery link. An explicit user filename overrides thi
 
 ## Correction and documentation maintenance
 
+When push access is available, automatically commit and push completed, validated
+repository changes to the configured remote branch without asking again. Review
+the diff, run applicable checks, and include only task-related files. Respect
+ignored source/output directories; do not force-add them. Use an ordinary push;
+never force-push or overwrite unrelated work. If access or a remote change blocks
+the push, preserve the local work and report the blocker. Follow any explicit
+user instruction to defer committing or pushing.
+
 For every reader report, find the defect in the package and source, identify
 its cause, audit that failure class throughout the book, repair the recipe,
 add positive and negative regressions where useful, rebuild, validate and inspect

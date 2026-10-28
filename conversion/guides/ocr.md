@@ -26,6 +26,12 @@ can be satisfied by merely generating a report.
 
 ## Conservative page extraction
 
+Parse positioned OCR evidence according to its actual format. In Tesseract TSV,
+recognized quotation marks are literal text, not CSV delimiters. Disable CSV
+quote interpretation or use the shared TSV reader, and reconcile physical word
+rows before calculating ownership, crop boundaries or styles. A swallowed row
+can resemble a giant word and hide an otherwise clean page's prose or diagrams.
+
 For each page:
 
 - Remove running heads and isolated printed page numbers.

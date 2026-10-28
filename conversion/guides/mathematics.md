@@ -65,6 +65,12 @@ are insufficient: ordinary italic words such as “of”, “by” and “for”
 subscripted notation. Apply this restraint to roman text and names too.
 
 Identify prose and structural roles before classifying mathematical shapes.
+Do not propagate a prose role to every line in an OCR paragraph: the same OCR
+group can include a neighboring equation's numerator, denominator or radical.
+Use the actual line's geometry and content when delimiting display crops. Check
+for mathematical fragments left outside each crop as well as ink touching its
+edges; an entirely omitted denominator can leave a deceptively clean white
+edge. Conversely, keep an adjacent short prose continuation outside the image.
 Parenthesized item labels such as `(1)` and `(2)`, the pronoun “I”, years,
 chapter references and ordinals such as “19th” remain text. Raised ordinal
 suffixes are typography, not equation scripts. Strip a list marker before
@@ -92,6 +98,14 @@ expression rather than making the whole sentence an image. An override created b
 a fragment-merging heuristic is not reviewed evidence: tiny OCR rows can be
 duplicate descenders, dots or quotation strokes from ordinary prose. Verify the
 source ink before forcing their neighboring words into a math asset.
+
+An OCR word box can truncate an unfamiliar Greek letter even when its recognized
+text looks plausible. Inspect a padded source region and the complete connected
+glyph before using a crop for transcription, style measurement or a matching
+prototype. A clipped rho or sigma can resemble an unrelated Latin stroke and
+poison later matches. Calibrate with complete positive glyphs and ordinary Latin
+words/numerals as negative controls; review proposed readings in context, with
+scripts and adjacent punctuation accounted for separately.
 
 Inventory the source tokens assigned to every inline math asset. Audit common
 prose words, unexpected asset counts and formulas containing whole sentences.
