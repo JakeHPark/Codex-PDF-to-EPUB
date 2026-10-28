@@ -438,6 +438,15 @@ copyright notices, mathematics, note markers and deliberate ornaments. Remove
 confirmed artifacts in the reproducible builder and test their full contexts.
 An unexpected symbol is an audit trigger, not permission to delete that symbol
 globally or assume it is a missing numeric note.
+
+Include ordinary letters in margin-noise review. A speck well beyond the local
+text column can become a plausible single-letter token appended to a sentence.
+Inventory low-confidence short tokens outside verified text bounds and compare
+the complete source line with the scan; confidence or position alone does not
+authorize removal. Preserve genuine marginalia, note markers and short words
+as negative controls, and assert the repaired sentence in the packaged text
+and reader export. Punctuation-only detectors will miss this failure.
+
 Inventory degree-like glyphs even after numbers: a French ordinal `3e` can
 lose its superscript `e` as `3°`. Preserve genuine angles and temperatures;
 recover a verified ordinal with ordinary-letter superscript markup (`3<sup>e</sup>`)
