@@ -493,6 +493,13 @@ capital `I` and text across inline emphasis. Preserve valid commas before proper
 names, titles, direct address, quotations and pronouns after introductory or
 subordinate clauses; capitalization alone never authorizes changing a comma.
 
+Review commas at semantic paragraph endings separately from comma-plus-capital
+candidates. OCR can repeatedly read a printed full stop as a comma at the end
+of a paragraph, list item or bold summary label. Compare the final glyph and
+next block against the scan, preserving deliberately continued clauses and
+lists. Retain exact source-backed decisions rather than converting every
+terminal comma automatically.
+
 OCR punctuation confusion works in both directions: a comma may become a full
 stop, and a full stop plus a capitalized next word may become a comma followed
 by lowercase text. Review conspicuous run-on clauses against the scan, including
@@ -609,6 +616,13 @@ Verify unfamiliar technical identifiers against the source and an authoritative
 reference when letter/digit confusion remains; do not guess from OCR shape.
 
 ## Word-shape confusions
+
+Include one- and two-letter tokens in independent-OCR disagreement review;
+a spelling dictionary or a minimum three-letter cutoff can miss `ic`/`Ic`
+for `it`/`It`, or damaged fragments of `I’ll`. Check the complete clause and
+source glyphs, including repeated occurrences elsewhere in the book. Preserve
+initials, abbreviations, variables and genuine foreign words as controls;
+short-token disagreement is a review trigger, never a global substitution.
 
 Flag apparent words beginning with a slash, such as `/ocal`, `/ess` or `“/t`,
 and words ending abruptly in `]`, such as `If]`. Italic `l` or capital `I`
