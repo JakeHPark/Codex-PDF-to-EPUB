@@ -56,6 +56,14 @@ into joining arbitrary short words or ordinary `fi`/`fl` sequences. Validate the
 complete words and style stream after line joining; a normalizer that expands
 `ﬁ` first can conceal the evidence that the gap came from a single glyph.
 
+Artificial separators can also split a word's final letter or a Roman numeral,
+even when no Unicode ligature survives extraction. Compare the separator's
+origin with its neighbors along the actual text direction: a zero-advance or
+backtracking space is a review candidate. Calibrate against rendered words and
+real word gaps, retain the coordinate evidence, and apply the same review to
+rotated captions and URLs. Do not use horizontal coordinates alone for vertical
+text, or turn this into a blanket spelling-based word join.
+
 A digital PDF can omit encoded spaces throughout a tightly justified line even
 when the rendered words remain visibly separated. Inventory anomalous gaps
 between adjacent positioned glyphs, normalized to the local type size, including

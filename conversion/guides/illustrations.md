@@ -52,6 +52,13 @@ with text and ruling lines, vector diagrams, and labels placed over images.
 Record each object's source page, bounding rectangle, caption, and reading-order
 position. Account for rotated landscape pages and multipage continuations.
 
+Distinguish PDF page rotation, image-placement transforms and native bitmap
+orientation. An extracted bitmap may already be upright even when its PDF page
+is rotated; applying the page rotation again turns it sideways. Check the actual
+pixels, captions and overlaid labels before rotating. Keep folios and running
+heads outside the artwork's ownership as well as outside the prose: an otherwise
+complete crop can accidentally include a detached page number on a rotated leaf.
+
 Use semantic HTML tables where row/column associations and merged headers can
 be reconstructed and checked against the source. For complex statistical tables
 or diagrams, a verified high-resolution crop is preferable to guessing cells or
