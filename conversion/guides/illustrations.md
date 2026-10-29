@@ -114,6 +114,13 @@ paragraph, while a mixed panel's old prose bounds can become invalid after its
 art bounds change. Reconcile text ownership after every boundary repair and
 review the actual packaged crops, including mixed text-and-diagram panels.
 
+Write editorial additions for a stranger reading the finished ebook without the
+conversion conversation. Captions and replacement notes must stand on their own;
+avoid workflow-relative wording such as “reader-supplied” or references to
+“your image.” Describe the relevant editorial change directly, for example,
+“Image replaced with a colour photograph.” Keep provenance and conversion
+logistics in the QA record unless they help the ebook reader.
+
 When an image description is derived from its caption, regenerate that
 description after final caption repairs and cross-reference rewrites. Validate
 the packaged caption and derived alternative text together so a repaired
