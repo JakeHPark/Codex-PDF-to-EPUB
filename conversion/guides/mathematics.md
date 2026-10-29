@@ -195,6 +195,16 @@ from an overlaid negation stroke and equals glyph. Recover that construction as
 `≠` in semantic text, or retain its complete source outlines; never export the
 stroke as a separate `/` or combining mark beside an equals sign.
 
+In scans, a faint lower stroke can turn `±` into `+` in OCR. Review signed
+measurements, tolerances, deviations and modulation extents against the pixels,
+including standalone signs and signs fused to a number. After finding this
+failure, inventory every extracted plus sign throughout the book and check for
+other damaged representations of the same source symbol. Restore verified
+`±` as semantic text. Preserve genuine addition and positive-value signs, and
+source-written `+/−` notation; numerical context alone does not authorize
+replacing `+`. Regressions must cover both the repaired values and valid plus
+signs, and verify the lower stroke in the rebuilt reader rendering.
+
 Inspect overlaid text glyphs as well as drawn rules for accents and bars.
 A roman macron and mathematical letter can have nearly identical origins,
 although extraction emits them as separate adjacent characters. Preserve them
