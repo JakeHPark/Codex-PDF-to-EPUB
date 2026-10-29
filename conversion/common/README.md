@@ -59,6 +59,16 @@ source-specific policies. The generic check does **not** decode image interiors,
 resolve CSS-dependent styles, verify typography/source coverage, or prove a
 working link has the right semantic destination. These remain book obligations.
 
+For covers, add a `container_metadata` check using `cover_audit.py` under a
+Pillow-enabled runtime: `python cover_audit.py book.epub --report cover.json`.
+It fully decodes the JPEG/PNG, checks its extension/media type and portable color
+mode, reconciles EPUB 3 and legacy thumbnail declarations, and checks the first
+spine image. Optional `--max-bytes N` enforces a book-specific mobile image budget;
+there is no universal size limit. The report follows the release check contract.
+It cannot establish CSS layout, image content, thumbnail legibility or behavior
+in a particular Android reader; inspect extracted thumbnails and reader output.
+Focused regressions: `python -m unittest conversion.common.test_cover_audit`.
+
 A check's report must contain:
 
 ```json

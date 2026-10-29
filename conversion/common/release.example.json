@@ -14,6 +14,12 @@
       "argv": ["python3", "validate_release.py", "--epub", "{epub}", "--reader", "{reader_text}", "--report", "release/book-check.json"],
       "gates": ["edition_coverage", "text_structure", "textual_sanity", "typography", "objects_layout", "notes_links", "reader_export", "reproducibility"],
       "report": "release/book-check.json"
+    },
+    {
+      "id": "decoded-cover",
+      "argv": ["python3", "../../../conversion/common/cover_audit.py", "{epub}", "--report", "release/cover-check.json"],
+      "gates": ["container_metadata"],
+      "report": "release/cover-check.json"
     }
   ],
   "reviews": {

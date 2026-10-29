@@ -66,6 +66,20 @@ first in the spine. Include legacy cover metadata when needed for reader
 thumbnails. Verify the packaged image, cover metadata, reading order, thumbnail
 legibility and full-size rendering.
 
+Run `conversion/common/cover_audit.py` with a Pillow-enabled Python and include
+its report in the release checks. It must decode the packaged cover, reconcile
+its actual encoding with the extension/media type, and confirm that EPUB 3,
+legacy thumbnail metadata and the first spine page identify the same image.
+Legacy `meta name="cover"` must contain the image's manifest **ID**, not its
+filename or the cover document's ID. Check library-thumbnail extraction as well
+as the opened cover page; either can work while the other fails. For mobile
+compatibility, avoid unnecessarily large scan PNGs: a proportionately resized
+RGB baseline JPEG is often suitable for the cover. Preserve the original source,
+inspect the replacement at full size and thumbnail size, and give the cover
+image explicit responsive sizing with an aspect-ratio-preserving fallback that
+does not depend solely on viewport units. Image weight is a compatibility
+candidate, not proof of the cause of an unobserved reader failure.
+
 Identify the cover document semantically as well as declaring its image. Use an
 EPUB navigation landmark and compatible legacy guide information when required
 by the target reader/converter. Check that a reader does not add a second cover
