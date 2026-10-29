@@ -610,6 +610,13 @@ page. Audit removed ornament tokens separately: a short indented word such as
 “Many,” “This,” or “Was” is not decorative merely because it occupies the same
 horizontal position as an ornament elsewhere.
 
+Match the complete normalized running-title line, with separately classified
+folios, rather than searching for the title as a substring. Ordinary prose and
+small-font quotations can mention the book's subject near the top of a page.
+A matching phrase plus a short font or generous top band is insufficient.
+Inventory all excluded lines outside the verified header area, review them
+against the scan, and assert that recovered first lines survive packaging.
+
 A running-head cutoff must leave the highest genuine body line intact in each
 column. Font rectangles may extend above the visible ink, and top baselines can
 vary by a few points across pages. Inventory excluded lines near the cutoff and
