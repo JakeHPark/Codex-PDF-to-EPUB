@@ -117,6 +117,13 @@ does not authorize converting a prose word into a mathematical image. Recover
 the reading as text; see [the prose/math boundary rules](mathematics.md#keep-prose-out-of-mathematical-assets)
 for formula classification and searchability checks.
 
+Independent OCR readings can agree on the same damaged glyph. Include lexical
+and contextual review even where confidence is high or both readings match.
+Faint gutter strokes can turn an ordinary initial into punctuation, remove a
+line-ending hyphen, or corrupt the next fragment. Audit the reconstructed word
+across its physical lines and inspect both source fragments. Keep valid names,
+transliterations, numerical labels and genuine quotation marks as controls.
+
 Track which exact corrections have already been applied when normalizing both
 source lines and reconstructed blocks. A replacement that contains its own
 search text can grow a second letter, quotation mark or year if applied again.

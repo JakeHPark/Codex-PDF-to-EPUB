@@ -192,6 +192,14 @@ sidebar from its complete text block, sustained narrow width, smaller type,
 and position relative to the main text column. Small type alone is insufficient;
 figure labels, captions, table cells, and footnotes can share that font.
 
+Estimate prose-column edges from repeated ordinary line extents. Whole-page OCR
+may fuse a body line with a margin note, making extreme endpoints misleading.
+Use a robust estimate, calibrated to the page's layout, then split mixed rows by
+word coordinates before joining either stream. Review every changed assignment,
+including short words and punctuation near the boundary, and recover any sidebar
+words the combined OCR row lost. A plausible body sentence can still contain an
+album title, reference label or other marginal text in its middle.
+
 Read and join all wrapped lines within the sidebar first, preserving genuine
 paragraphs, bullets, and emphasis. Render it as a visible semantic `<aside>`,
 with restrained styling and no fixed width that makes it unreadable on a small
