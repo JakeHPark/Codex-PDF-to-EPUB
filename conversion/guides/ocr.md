@@ -194,6 +194,12 @@ Pay special attention to:
 - false hyphenation at line or page breaks;
 - spaces around em dashes;
 - zero/O and one/I confusion;
+  Audit numbered labels and cross-references as a separate corpus: narrow `1`
+  and repeated `11` can become `I`, `l`, `|` or `||` after words such as Track,
+  Figure or Table. Check every occurrence against source pixels and the target
+  inventory, restore only verified digits, and verify each resulting link.
+  A link detector accepting only digits will otherwise silently skip precisely
+  these damaged references. Preserve genuine letters, Roman labels and operators.
 - unexpected capitals inside a sentence, especially a common pronoun such as
   `It` after a comma or within a subordinate clause. Inventory every occurrence
   across the book when one appears. Check the scan before lowercasing: proper
