@@ -206,6 +206,15 @@ before deciding its genuine internal paragraph boundaries.
 
 ## Stranded fragments after reconstruction
 
+Audit isolated first lines classified as quotations when ordinary prose continues
+below, especially an indented opening followed by a lowercase continuation.
+Scan height estimates can make one body line look smaller than its neighbors;
+font-size or first-line indentation alone does not prove an inset quotation.
+Review both sides of the boundary against source pixels, including figures
+between a paragraph and its stranded final line. Short unlexical fragments may
+also be ornaments or diagram labels: classify their original regions and check
+the full graphic before removing their OCR from the prose.
+
 At the end of a pass, inventory prose paragraphs ending with a comma,
 hyphen, or function word such as `the`, `and`, or `be`. Inspect the following
 blocks even when they start with uppercase text: diagram debris or a displaced
