@@ -216,6 +216,15 @@ as captions, instead of letting them interrupt neighboring prose.
 
 ## Meaningful versus print-only hard breaks
 
+Preserve clearly intentional source line breaks and indentation in signatures,
+attributions, credentials, affiliations, datelines, addresses and other display
+blocks. For example, keep a name, professional role and institution on their
+separate source lines, and keep a signature separate from its place/date line.
+Use semantic blocks or explicit line breaks with appropriate relative indentation;
+do not flatten these into prose or reproduce incidental scan offsets. Review
+similar blocks throughout the book and assert their breaks in packaged XHTML
+and reader output, not just whitespace-normalized text coverage.
+
 An imported HTML container named `poem` or a preformatted wrapper can contain
 ordinary prose copied from a plain-text edition. Classify its complete contents
 before preserving its line breaks: recover paragraphs from verified blank-line
@@ -600,6 +609,13 @@ references; do not strip trailing digits with a regular expression, since
 years, numbered figures and other genuine title numbers must survive.
 
 ## Running-head variants absorbed into prose
+
+Folio detection must include Roman numerals, including lowercase and OCR-mixed
+case forms such as `xv`/`Xv`, as well as Arabic numbers. Check original coordinates,
+page sequence and surrounding page furniture before excluding them; OCR reading
+order may append a top-margin folio to the preceding page’s paragraph. Do not
+remove Roman numerals globally: they can be legitimate section labels, notation
+or prose. Audit preliminary pages separately from the main pagination.
 
 Running heads may be extracted at a physical page boundary and then joined into a continuing paragraph. Recognizers must tolerate folio variants such as `405` and `407.`, typographic apostrophe variants, and every running title actually used by the book. After conversion, scan body chapters (excluding the contents, notes, and index) for a page number followed by a known running title. When one failure is found, audit all chapters because the same incomplete header rule usually affects many pages.
 
