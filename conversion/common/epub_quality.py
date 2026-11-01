@@ -156,6 +156,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("space after opening quote", r"[“‘][ \t\u00a0\u202f]+(?=\S)"),
         ("period-apostrophe cluster", r"\.['’](?=\s|$|[,;:])"),
         ("possibly fused not a", r"\bnota\b"),
+        ("possibly fused short English phrase", r"(?<![\w-])(?:toa|froma|isa|Isaw|Awax)(?![\w-])"),
         ("possibly missing possessive apostrophe", r"\b[A-Za-z]{2,}[ \t]+s\b|\b(?:mans|womans|mens|womens|childrens)\b"),
     ]
     issues = []

@@ -210,9 +210,15 @@ Pay special attention to:
   `conversion/common/epub_quality.py` provides the shared detector;
 
 - fused words (`selfknowledge`, `Ihave`);
-- fused short phrases (`ina` for `in a`), which should be repaired with
+- fused short phrases (`ina` for `in a`, `toa` for `to a`, `froma` for
+  `from a`, `isa` for `is a`, and starts such as `Isaw`/`Awax`), which should be repaired with
   case-preserving whole-word matches so substrings in names such as `Karenina`
-  are not damaged;
+  are not damaged. Review these in English prose before correction: names such
+  as `Isa` and `Toa`, foreign words and technical identifiers are valid lookalikes.
+  The packaged punctuation audit flags the demonstrated whole-token forms; it
+  does not silently rewrite them. Include sentence-initial capitalized forms in
+  the lexical review; a lowercase-only unknown-word pass misses fused articles
+  and short phrases at the start of a sentence;
 - false hyphenation at line or page breaks;
 - spaces around em dashes;
 - standalone `ol` as a possible misreading of `of`, particularly in phrases

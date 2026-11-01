@@ -329,8 +329,30 @@ Treat large typographic quotations, calligraphic pages and graphic chapter
 dividers as designed illustrations when their aesthetic arrangement is part of
 the book or the user requests it. Keep them inline in the source reading order,
 with sensible viewport sizing and semantic navigation. Do not turn OCR of those
-pages into duplicate body paragraphs. Preserve full-page photographic captions
-and any multi-panel arrangement already integral to the image. Identify dense
+pages into duplicate body paragraphs. Recover ordinary photographic captions as selectable text, including rotated
+outer-margin descriptions and credits on designed quotation pages. Retaining a
+page image does not justify retaining its explanatory caption inside the image.
+Crop the artwork independently, preserving substantive internal lettering and
+original multi-panel relationships. Split independent pictures when needed to
+exclude a caption embedded between them; retain explicit links/labels so the
+recovered description still identifies each object. Audit every facsimile and
+stitched spread for this failure, not only prose-page illustration bands.
+A shared dark background does not prove a continuous photograph: inspect for
+repeated subjects and separate exposures as well as visible gutters. Split
+independent photographic grids into individual native-pixel assets, retaining
+shared captions and source order; keep internal panels of a historical document
+or artwork intact. Check crop edges at native scale across **all** image classes,
+including unnumbered plates and newly recovered panels. Thumbnail review and
+numbered-figure-only checks miss one-pixel white or pale interpolation fringes.
+Reserve reader viewport space for the selectable caption; a near-full-height
+image can push it onto an otherwise empty page even inside one figure. Review
+the packaged reader output and size captioned plates accordingly.
+If a caption is overlaid on otherwise blank photographic background and a
+rectangular crop would discard meaningful artwork, remove only its reviewed
+text region on a working copy with a source-matched background. Record this
+exception, its bounds and fill; compare every unmasked pixel to the source and
+inspect the result for a visible patch. Do not paint over subjects or describe
+the masked region as byte-identical original artwork. Identify dense
 back matter retained as facsimiles in the book's conversion record.
 
 In image-led books, marginal text that resembles a sidebar may actually caption

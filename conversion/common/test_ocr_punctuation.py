@@ -85,4 +85,14 @@ class CommaCapitalTests(unittest.TestCase):
   for text in ['yes, indeed', '1,000', 'one, two, three', 'finished. How about that?']:
    self.assertNotIn('comma before possible sentence start',{i['reason'] for i in find_ocr_punctuation_issues(text)})
 
+
+class FusedShortPhraseReviewTest(unittest.TestCase):
+ def test_whole_tokens_are_review_candidates(self):
+  for token in ['toa', 'froma', 'isa', 'Isaw', 'Awax']:
+   hits=find_ocr_punctuation_issues('Text '+token+' next.')
+   self.assertIn('possibly fused short English phrase',{x['reason'] for x in hits})
+ def test_names_and_longer_words_are_unchanged(self):
+  text='Isa Toa oasis misaligned Protoa fromage a-toa code_isa'
+  self.assertNotIn('possibly fused short English phrase',{x['reason'] for x in find_ocr_punctuation_issues(text)})
+
 if __name__=='__main__': unittest.main()
