@@ -488,6 +488,12 @@ Do not retain an OCR or normalization-inserted space that lets the closing mark
 wrap alone onto the next line. Preserve the source dots and quotation nesting;
 verify the complete sentence in the reader export and visual rendering.
 
+Audit a comma, semicolon or colon followed by an apostrophe fused to the next
+word, such as `pitches,’from`. It may be a stray source mark as well as an OCR
+error. Inspect the source and complete quotation context before deleting it;
+quoted speech and leading elisions remain valid lookalikes. Verify both removal
+of the stray mark and restoration of the word space in the packaged reader text.
+
 OCR may duplicate a closing quotation mark, but repeated quote characters can also arise near nested quotations. Do not collapse every doubled quote globally. Verify the source and use an exact or tightly contextual repair, then add a regression assertion for the corrected phrase.
 
 Audit duplicated opening quotes and a quotation beginning with digit `1` followed
