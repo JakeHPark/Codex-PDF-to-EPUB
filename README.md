@@ -5,7 +5,7 @@ Examples for [Codex PDF to EPUB](https://github.com/JakeHPark/Codex-PDF-to-EPUB)
 These files are maintained separately from the main project and stored with Git LFS.
 
 - [Postural Disorders and Musculoskeletal Dysfunction - Gill Solberg.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/Postural%20Disorders%20and%20Musculoskeletal%20Dysfunction%20-%20Gill%20Solberg.epub)
-- [The Anatomical Venus - Joanna Ebenstein.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/The%20Anatomical%20Venus%20-%20Joanna%20Ebenstein.epub)
+- [The Anatomical Venus - Joanna Ebenstein.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/The%20Anatomical%20Venus%20-%20Joanna%20Ebenstein.epub) [(PDF input)](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/The%20Anatomical%20Venus%20-%20Joanna%20Ebenstein.pdf)
 - [The Story of Zoya and Shura - L Kosmodemyanskaya.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/The%20Story%20of%20Zoya%20and%20Shura%20-%20L%20Kosmodemyanskaya.epub)
 - [The experience of drowning - Michael Tipton, Hugh Montgomery.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/The%20experience%20of%20drowning%20-%20Michael%20Tipton%2C%20Hugh%20Montgomery.epub)
 - [Ukraine and Russia - Paul D'Anieri.epub](https://media.githubusercontent.com/media/JakeHPark/Codex-PDF-to-EPUB/refs/heads/examples/Ukraine%20and%20Russia%20-%20Paul%20D%27Anieri.epub)
