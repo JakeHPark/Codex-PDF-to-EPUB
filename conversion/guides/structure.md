@@ -489,6 +489,12 @@ checks can pass even when those characters occur in the wrong order.
 
 ## Footnotes and endnotes
 
+Recognize numbered bibliography entries using the expected sequence and marker
+position as well as a leading number and full stop. A wrapped publication year
+such as `1972.` can begin a new physical line without beginning a new reference.
+Keep it with the complete preceding entry and assert the ordered reference
+identifiers, not only the number of entries.
+
 Never leave a printed footnote embedded between ordinary prose paragraphs.
 
 Chapter-opening pages can carry a symbolic note attached to the title, byline,

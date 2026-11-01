@@ -330,6 +330,12 @@ before extracting each row. A PDF may report each cell as a separate text line;
 extracting the entire row once for every cell duplicates all its values. Check
 expected row counts, every value's row/column association, and numeric-cell
 coverage with multiplicity. Preserve multilevel headers and blank cells.
+Allow for small baseline offsets between symbol fonts and ordinary labels:
+an arrow can belong to the same row despite having a different reported origin.
+Calibrate the row tolerance below the actual row spacing, and verify complete
+label/value associations rather than accepting alternating label-only and
+value-only rows. Retain semantic cell separators in reader text exports,
+including between adjacent header cells.
 
 An embedded figure bitmap's native aspect ratio can differ from its printed PDF
 placement. Inspect its transformation/placement rectangle before reusing the
