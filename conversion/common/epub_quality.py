@@ -141,6 +141,9 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
     import unicodedata
 
     patterns = [
+        ("closing quote touches following word", r'”(?=[^\W\d_])|(?<=[\w.,;!?])"(?=[^\W\d_])'),
+        ("space inside possessive apostrophe", r"(?<=\w)[’'][ \t\u00a0]+s\b"),
+        ("possible of misread as ol", r"(?<![\w-])ol(?![\w-])"),
         ("comma before possible sentence start", r",\s+(?:[A-Z][a-z]+\b|[AI]\b)"),
         ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
         ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+,|,{2,}"),

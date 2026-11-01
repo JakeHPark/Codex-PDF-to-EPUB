@@ -193,6 +193,10 @@ Pay special attention to:
   are not damaged;
 - false hyphenation at line or page breaks;
 - spaces around em dashes;
+- standalone `ol` as a possible misreading of `of`, particularly in phrases
+  such as `composers ol that time`; check all occurrences against the source
+  without changing substrings in names, foreign words, identifiers or hyphenated
+  forms. This is a review candidate, not a global replacement;
 - zero/O and one/I confusion;
   Audit numbered labels and cross-references as a separate corpus: narrow `1`
   and repeated `11` can become `I`, `l`, `|` or `||` after words such as Track,

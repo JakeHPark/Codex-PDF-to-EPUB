@@ -6,6 +6,18 @@ from conversion.common.package_audit import audit_epub
 
 
 class PackageAuditTests(unittest.TestCase):
+    def test_word_boundary_candidates_cross_inline_markup(self):
+        cases = [
+            ('<p>“integrations”<span>of</span> it.</p>', 'closing quote touches following word'),
+            ('<p>one’<span> </span>s thoughts</p>', 'space inside possessive apostrophe'),
+            ('<p>composers <span>o</span>l that time</p>', 'possible of misread as ol'),
+        ]
+        with tempfile.TemporaryDirectory() as d:
+            for markup, reason in cases:
+                path = self.package(d, markup)
+                self.assertTrue(any(r['finding']['reason'] == reason for r in audit_epub(path)['records']))
+            path = self.package(d, '<p>“integrations” <span>of</span> it. One’s thoughts. Mongol music.</p>')
+            self.assertEqual(audit_epub(path)['unreviewed_count'], 0)
     def test_opening_quote_gap_crosses_inline_markup(self):
         with tempfile.TemporaryDirectory() as d:
             path=self.package(d,'<p>“<span> </span>‘feudal law’ was imposed.”</p>')

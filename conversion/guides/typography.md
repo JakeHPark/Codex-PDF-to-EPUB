@@ -587,6 +587,13 @@ merged fields.
 
 ## Spacing at quotation and emphasis boundaries
 
+Flag a closing quotation mark immediately followed by a letter, including across
+inline markup: `integrations”of` normally needs `integrations” of`. Classify ASCII
+marks as openers or closers first; an opening quote legitimately touches its
+first word, and measurements or technical syntax need separate review. Also
+check split possessives such as `one’ s`: join only source-confirmed apostrophes,
+without collapsing genuine quotation boundaries or mathematical letter labels.
+
 Audit the visible prose stream across inline markup, not each text node in
 isolation. An opening double quotation mark fused to a preceding word normally
 needs a space: `the word“number”` becomes `the word “number”`. Likewise, remove
