@@ -272,6 +272,9 @@ literal `a` in a paragraph can style letters inside other words; even a
 whole-word replacement can wrongly style the paragraph's other articles.
 Use positioned word identifiers or an anchored complete phrase, verify roman
 lookalikes elsewhere in the same block, and rerun the packaged audit afterward.
+Match full lexical boundaries: `head` must not select part of `heads`, and a
+short phrase ending in punctuation must not match the end of an unrelated
+longer word. Assert the intended occurrence, including its roman surroundings.
 
 Include short run-in labels before an em dash in emphasis review, even when
 most of the following paragraph is roman; a majority-style paragraph audit

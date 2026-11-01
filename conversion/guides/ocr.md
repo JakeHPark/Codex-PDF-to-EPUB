@@ -79,6 +79,19 @@ other visible layers in the composition. Render at the native foreground grid
 when practical, rather than enlarging a low-resolution background. Record the
 grid and source crop coordinates so retained illustration quality is verifiable.
 
+A bilevel PDF image may be a stencil (`ImageMask`), not a complete grayscale
+page. Its extracted samples can look like white lettering on black even though
+the PDF paints black lettering on white. Check the decode array, paint colour
+and a rendered page before OCR or illustration extraction; preserve the native
+sample grid while reproducing the displayed composition. Do not infer polarity
+from the filter name or invert every bilevel image.
+
+Protective tissue leaves can show captions in reverse through the paper.
+Compare mirrored and rotated working views with the adjacent plate and, when
+available, another copy. Recover the verified caption as ordinary text; do not
+mistake show-through for a new illustration or rotate the associated portrait
+without separate evidence.
+
 ## Reader highlighting and annotations
 
 Treat a previous reader’s highlights, underlining, arrows and marginal writing
