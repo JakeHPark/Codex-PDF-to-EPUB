@@ -137,6 +137,15 @@ line-ending hyphen, or corrupt the next fragment. Audit the reconstructed word
 across its physical lines and inspect both source fragments. Keep valid names,
 transliterations, numerical labels and genuine quotation marks as controls.
 
+When reviewing physical line joins, include split pairs whose fragments are both
+valid words: `cur` + `rent` can be a damaged `current`, and `mas` + `ter` can
+hide `master`. A spelling dictionary accepting each fragment does not clear the
+join. Enumerate overlapping adjacent pairs, retain their original word boxes,
+and inspect both line edges; punctuation attached to the second fragment must
+not hide a candidate. Preserve genuine phrases such as `as well`, `can not`
+with deliberate emphasis, and `to be`; never join every dictionary-recognized
+concatenation. Assert the repaired complete contexts and reviewed lookalikes.
+
 Track which exact corrections have already been applied when normalizing both
 source lines and reconstructed blocks. A replacement that contains its own
 search text can grow a second letter, quotation mark or year if applied again.

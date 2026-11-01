@@ -234,6 +234,16 @@ do not flatten these into prose or reproduce incidental scan offsets. Review
 similar blocks throughout the book and assert their breaks in packaged XHTML
 and reader output, not just whitespace-normalized text coverage.
 
+Apply the same distinction inside marginal discographies and similar compact
+credits: keep performer, complete work title, recording credit and label/catalogue
+information in separate semantic fields when the source distinguishes them.
+Join incidental narrow-column wraps within each field. A complete sidebar is
+not necessarily one prose paragraph. Recheck complete title emphasis after
+joining, including its first/last word and short roman outliers; verify the
+field breaks explicitly in XHTML and the reader result. Keep a compact credit
+group together when it fits comfortably on a reader page; do not force a long
+prose sidebar or note to stay on one page.
+
 An imported HTML container named `poem` or a preformatted wrapper can contain
 ordinary prose copied from a plain-text edition. Classify its complete contents
 before preserving its line breaks: recover paragraphs from verified blank-line
