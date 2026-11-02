@@ -344,6 +344,22 @@ shared captions and source order; keep internal panels of a historical document
 or artwork intact. Check crop edges at native scale across **all** image classes,
 including unnumbered plates and newly recovered panels. Thumbnail review and
 numbered-figure-only checks miss one-pixel white or pale interpolation fringes.
+Distinguish the photograph's actual background from an added mounting matte.
+Review broad black borders around reproduced paintings, documents and portrait
+panels as well as white gutters. Thin edge pixels can be grey or coloured blends
+from the page/image boundary; a near-white threshold alone misses them. Inspect
+all four edges against their immediate inner neighbours at native scale. Record
+reviewed source coordinates and preserve genuine image content and frames.
+For designed text images, check visible left/right balance around the lettering;
+a rectangle centred on the source page can still contain unequal internal
+margins. Trim excess blank margin without re-typesetting the design.
+Audit separately photographed views even when they share one figure number
+and caption. Preserve that number/description and update positional wording to
+the new reading sequence; a numbered-figure inventory is not a panel inventory.
+Where picture credits are retained, link captions to their source-supported
+credit entry. Resolve page/position codes against source regions; do not assign
+one of several photographers solely because their entries share a page number.
+Record ambiguous associations instead of inventing a specific attribution.
 Reserve reader viewport space for the selectable caption; a near-full-height
 image can push it onto an otherwise empty page even inside one figure. Review
 the packaged reader output and size captioned plates accordingly.
