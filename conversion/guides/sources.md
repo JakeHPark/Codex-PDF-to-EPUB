@@ -44,6 +44,12 @@ flag generic or missing descriptions for review rather than inventing facts.
 Use responsive image CSS so illustrations fit the reading viewport without
 distortion.
 
+A scholarly web edition may insert live age/duration counters, inflation-adjusted
+amounts or visual-only citation separators. Remove transient display counters
+while retaining historical dates; state an original monetary amount and year
+explicitly when replacing a dynamic inflation widget. Inspect author/year
+boundaries after removing CSS: a visual gap may not exist in the text nodes.
+
 A saved HTML edition may replace every illustration with an identical broken-image
 or security-warning icon while retaining useful image positions and captions.
 If the user supplies a matching PDF with intact illustrations, inventory the
@@ -231,6 +237,11 @@ that tail after assigning it to the note; otherwise it can appear twice or be
 mistaken for another body reference. Check ordered text and emphasis coverage,
 including spaces between roman and italic runs, in both the package and reader
 export. Do not silently omit content merely because the source markup is invalid.
+
+A note boundary may use a single hard break even when neighboring notes use
+blank-line gaps. Segment entries by their verified anchors and ordered labels,
+not a fixed count of `br` elements. Keep quoted verse inside its owning note
+and require a return link for every reference occurrence.
 
 Apply the same inventory to body prose around layout tables. A table nested in
 an invalid paragraph can cause the HTML parser to close the paragraph early,
