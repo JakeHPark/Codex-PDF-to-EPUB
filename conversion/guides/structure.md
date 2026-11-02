@@ -397,6 +397,13 @@ or at large font sizes rather than shrinking or clipping the text.
 
 If a chapter title is generated from metadata, strip the printed title from extracted body text. Check that it appears exactly once in a reader export.
 
+Reconcile the removed title regions with the actual generated wording and
+byline. An opening internal subheading can use the subtitle's font and size;
+do not consume every large-type line on the opening page. Likewise, a bold
+contributor name starts a biography, not a byline to discard. Check the first
+complete paragraph and any opening subheading independently of retained-row
+coverage, which cannot detect a region mistakenly classified as furniture.
+
 Printed headings may consist of several blank-line-delimited display blocks,
 such as a large main title followed by an italic subtitle. Do not remove only
 the first block. Normalize the words of each consecutive opening block and
