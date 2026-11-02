@@ -670,6 +670,14 @@ broader numeric strings require contextual review.
 
 ## Line-end hyphens and sentence dashes
 
+Audit multi-part compounds after joining too: `black-and-` + `white` must
+remain `black-and-white`, not `black-andwhite`. A surviving earlier hyphen
+does not make the final wrap hyphen disposable. Review the complete compound
+against the source; do not preserve every wrap inside a hyphenated expression,
+since `sex-as-commod-` + `ity` still requires `sex-as-commodity`. The shared OCR
+normalizer repairs the demonstrated whole token `black-andwhite`; digital
+builders should fix the verified join rather than invoke OCR spelling cleanup.
+
 Do not treat a line-final hyphen followed by lowercase text as sufficient proof
 of discretionary hyphenation. Inventory the original token pairs before joining
 lines, including caption columns and paragraph continuations across images or

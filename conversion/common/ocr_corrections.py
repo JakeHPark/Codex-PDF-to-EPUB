@@ -41,6 +41,8 @@ COMMON_TOKEN_REPLACEMENTS = {
     # meaningful in technical text.
     "8c": "&",
     "factbased": "fact-based",
+    "black-andwhite": "black-and-white",
+    "Black-andwhite": "Black-and-white",
     "ofliterature": "of literature",
     "selfknowledge": "self-knowledge",
     "teligion": "religion",

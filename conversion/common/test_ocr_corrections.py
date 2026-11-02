@@ -5,6 +5,13 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_black_and_white_compound_requires_whole_token(self):
+        source = 'black-andwhite; Black-andwhite. black-and-white black-andwhitefish'
+        expected = 'black-and-white; Black-and-white. black-and-white black-andwhitefish'
+        result = apply_common_ocr_corrections(source)
+        self.assertEqual(result, expected)
+        self.assertEqual(apply_common_ocr_corrections(result), result)
+
     def test_nested_opening_gap_repair_preserves_both_quote_levels(self):
         for source, expected in [
             ('“ ‘feudal law’ [which] was imposed.”', '“‘feudal law’ [which] was imposed.”'),
