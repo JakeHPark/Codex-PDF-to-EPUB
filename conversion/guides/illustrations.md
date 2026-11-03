@@ -68,6 +68,14 @@ to each responsive inline image; do not hotlink assets. Retain enough resolution
 to enlarge dense panels. Document when tables remain images rather than
 searchable, accessible HTML tables.
 
+For a small illustration embedded in a sentence, verify the horizontal gap and
+the surrounding words as well as vertical overlap. Its rectangle can touch the
+preceding line while its actual insertion point lies between quotation marks on
+the next line. Reject an association that would place the image over existing
+letters. Reconcile every occurrence, including repeated identical signs, and
+check the words on both sides in the reader. Keep immediately following
+punctuation with the image without baking that punctuation into its pixels.
+
 Keep short figures and tables together with their captions when they fit a
 reader page, and discourage a break immediately after a caption. Verify this in
 a paginated reader; adjacent XHTML elements alone do not prevent an orphaned

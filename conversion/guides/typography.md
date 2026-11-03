@@ -77,6 +77,13 @@ a deliberately obscured word, or an underscore in a URL. Recover these from thei
 positions and context before treating tiny graphics as disposable decoration.
 Validate the reconstructed citation or link as a whole.
 
+Dedicated rule fonts can also map ordinary letters to visible punctuation.
+Inspect repeated glyphs against the rendered page before recovering an em dash
+from such a font. Bind the mapping to the verified font and glyph, preserve its
+real spaces, and retain ordinary prose letters as negative controls. Adjacent em
+and en rules can deliberately form a longer continuous dash. Check their ink
+before applying a duplicate-dash repair.
+
 When classifying small digits by baseline, exclude whitespace-only spans from
 reference-baseline estimates. A PDF may position a separator at the preceding
 superscript's height even though the surrounding words remain on the body
