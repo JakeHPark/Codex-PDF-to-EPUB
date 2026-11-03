@@ -26,6 +26,15 @@ chapter coverage and provenance can be verified. Record the source URL and
 inventory every chapter before building so a partial web mirror is never
 mistaken for the whole book.
 
+Whenever the user supplies a source URL, retain a visible, clickable link to
+that source in the EPUB, normally in a brief source or publication note.
+Identify the work and edition in language meaningful to an unfamiliar reader.
+For a multi-page work, link the supplied index and preserve useful links to
+individual source sections. Keep this attribution separate from removed website
+navigation and advertising. Record the URL in the external provenance evidence
+as well; metadata alone does not satisfy the visible-link requirement.
+Include that source link alongside the EPUB delivery link as well.
+
 Check publication metadata against the versioned record and matching PDF.
 A regenerated scholarly HTML edition can evaluate a dynamic source command
 such as TeX's `\today` again, displaying its conversion date as if it were the
@@ -226,6 +235,15 @@ the parsed links. An unclosed attribute quote can swallow the intended `href`
 into an anchor name. Repair only when the source location, surrounding note
 sequence and entry establish the association; do not invent a call to balance
 the counts.
+
+An unclosed attribute can also consume visible body text or citation labels.
+Compare raw source regions with the parsed reading stream before accepting a
+successful HTML parse. Inventory malformed links throughout the work, repair
+only established associations, and reconcile their visible text separately
+from their targets. Check every localized fragment against the actual target
+document. If the source names a nonexistent article, preserve ambiguous citation
+wording and document a verified question/section-level fallback; do not invent
+an article target or claim that the original precise reference works.
 
 A web page can display complete notes while its parsed HTML leaves their text
 outside paragraph elements, split between element text, sibling emphasis tags,
