@@ -133,6 +133,12 @@ misread exponents; preserve real angles, temperatures and degree notation.
 
 ### Recover complete native expressions
 
+Keep an exponent's internal punctuation at the same raised level as its digits.
+Mixing Unicode superscript digits with an ordinary comma leaves a thousands
+separator on the prose baseline. Use a single semantic `<sup>350,000</sup>`
+run when the source raises the complete number, and keep any following sentence
+comma outside that run. Check the complete expression in a reader export.
+
 For complex digital-PDF formulas that cannot be reconstructed faithfully as
 semantic mathematics, preserve isolated source glyph outlines in SVG with black
 ink and a white background rectangle. Select the actual glyph occurrences and
