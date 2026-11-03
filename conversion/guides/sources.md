@@ -53,6 +53,13 @@ flag generic or missing descriptions for review rather than inventing facts.
 Use responsive image CSS so illustrations fit the reading viewport without
 distortion.
 
+Semantic HTML can still contain an OCR-derived transcription. When the user
+identifies OCR errors or the text demonstrates them, review the complete prose
+under the OCR rules while preserving its useful markup. Do not mistake valid
+paragraphs and emphasis tags for proof of reliable spelling or notation.
+Distinguish lexical repairs from historical spelling, and check logical or
+mathematical sequences separately, including letter/digit confusions in subscripts.
+
 A scholarly web edition may insert live age/duration counters, inflation-adjusted
 amounts or visual-only citation separators. Remove transient display counters
 while retaining historical dates; state an original monetary amount and year
