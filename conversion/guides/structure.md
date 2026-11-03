@@ -532,6 +532,9 @@ Allow long, multi-paragraph notes to flow across reader pages. Keep the label
 with the opening paragraph rather than applying `break-inside: avoid` to the
 entire note. An oversized keep-together group can strand the Notes heading or
 leave excessive blank space even when every word survives a text export.
+Keep return links attached to the note's final text, for example with compact
+inline links and a nonbreaking separator. Check for a return link stranded on
+its own reader page without forcing the entire note to stay together.
 
 In scanned books, a note can begin with a short or separately extracted line,
 or continue from the previous page before the next numbered entry. Expand the
@@ -616,6 +619,15 @@ baseline evidence, preserve the complete ordinary number, and include years and
 list labels as negative controls. If a line-end word is joined across a hyphen,
 transfer any reference attached to its continuation into the reconstructed word.
 Reconcile reference locations and surrounding punctuation as well as counts.
+
+An ordinary question mark can resemble a raised `2`, while the real reference
+elsewhere on the page can be read as an apostrophe. Compare the mark with the
+local baseline before using the expected note sequence to assign it. OCR may
+also include an unrecognized superscript's ink inside an ordinary word's box
+without transcribing it. Inspect the image within that box as well as gaps
+between boxes. After assigning references, review the remaining raised-mark
+candidates for missed or repeated calls instead of stopping when the number of
+assigned references equals the number of notes.
 
 Convert confirmed markers to the same semantic linked-superscript form as other numeric notes. Treat unconfirmed marks as punctuation candidates and resolve them from the rendered source and sentence context; do not globally delete ASCII or curly apostrophes after full stops. Add packaged-XHTML checks for all reviewed cases, for leaked raw marker clusters, for every note target, and for the expected whole-book reference count.
 
