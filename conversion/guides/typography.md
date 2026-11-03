@@ -31,6 +31,11 @@ text map returns an
 ordinary lowercase letter or digit at the ordinary body size and baseline.
 Size-based superscript detection misses these. `conversion/common/digital_pdf.py`
 maps CFF glyph names from PyMuPDF's text trace back to positioned characters.
+Compare independent extractors for nonstandard ligatures too. A `T_h` glyph
+can be returned as only `T`, silently changing “The” to “Te” and “Thomas” to
+“Tomas”. Recover the verified glyph as a complete letter pair and audit every
+occurrence against the source, preserving its style.
+
 Use verified small-cap variants for semantic small-cap spans and superior variants
 for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
