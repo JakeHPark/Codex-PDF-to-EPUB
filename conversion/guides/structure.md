@@ -541,6 +541,13 @@ call and entry streams independently across page boundaries. A comma followed
 by digits in a quantity is not evidence of a raised note number: verify its
 baseline and the corresponding entry before turning it into a link.
 
+A second paragraph of a footnote may be indented like a new entry yet have no
+new symbol. Verify the printed marker and corresponding body call before
+splitting it into another note. A quotation that opens that paragraph is prose,
+not a damaged marker. Likewise, a carried note can precede a new local note on
+the next page. Reconcile these continuations before assigning consecutive EPUB
+numbers, and document any replacement of page-local symbols with those numbers.
+
 Keep punctuation adjacent to a superscript reference separate from the marker
 itself. A source may print a colon after a note call, for example
 `Sen’s⁷: even …`. When replacing an OCR marker and its neighboring characters,
