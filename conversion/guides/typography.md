@@ -160,6 +160,13 @@ roman `A`, `a`, `who` and `is` can score as slanted, while `not`, `are`, `do`
 and `all` may carry genuine contrastive emphasis. Keep occurrence-specific
 positive and negative decisions, including complete title boundaries.
 
+Keep reviewed style overrides scoped to their source occurrences. A one-word
+book title can also be an ordinary word elsewhere, and a title inside an italic
+quotation may deliberately be roman. Extending an override to repeated text
+requires reviewing those occurrences and their surrounding styles. After
+reconstructing bibliography entries, apply title spans to the final entry
+boundaries and verify that author and publisher styling remains source-faithful.
+
 After application, require complete evidence-page coverage, high weighted token alignment, no leaked private-use markers, semantic `<em>` markup in packaged XHTML, and reader-rendered spot checks covering isolated emphasis, multiword titles, long italic passages, notes, and nearby roman controls. Running heads may be detected in the page image, but they should remain unmatched because the builder removes them before formatting alignment.
 
 Marginal section numbers and ornamental boxes may be inserted into the first prose line by OCR. Remove them using a layout-specific pattern that requires the ornamental delimiter; do not delete ordinary Roman numerals appearing in prose.

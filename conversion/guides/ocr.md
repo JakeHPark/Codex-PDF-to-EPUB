@@ -41,6 +41,12 @@ For each page:
 - preserve block quotations and deliberate section breaks;
 - exclude blank divider pages and reverse-side bleed-through.
 
+Treat fixed header/footer coordinate bands as candidates for exclusion. Scan
+drift can place complete prose lines, list items and bibliography entries in
+the same band as running heads. Review the excluded text inventory against
+repeated furniture patterns and page pixels. Recover substantive lines with
+their original coordinates, then recheck paragraph and list continuations.
+
 Do not preserve a line-end hyphen merely because the fragment resembles a
 prefix. `pro-` + `ject`, `pre-` + `cisely`, and `ex-` + `planation` are ordinary
 words split for print. Review the reconstructed whole word and the original
