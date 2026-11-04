@@ -385,6 +385,11 @@ bracket checks, dates containing letters, and fused pronoun forms. The shared
 OCR layer repairs case-sensitive whole-token `Iam` to `I am`; leave `IAM`,
 `Iams` and substrings in legitimate words unchanged. A plausible dictionary word
 or matching pair of OCR errors does not establish that the scan was recovered.
+In first-person English statements, also review `Tam` as a possible misread
+`I am`, and a standalone `1` before a verb as a possible `I`. Check the pixels
+and grammar before repairing them. `Tam` can be a name, and a real numeral can
+introduce an exercise, measurement or list item. Check existing line-level
+overrides too, since an earlier override can reintroduce a corrected word.
 
 Flag whole-token `nota` in English prose as a possible fused `not a`, including
 across inline markup. Confirm the space against the source and sentence grammar;
