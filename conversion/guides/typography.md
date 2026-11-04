@@ -584,6 +584,11 @@ from its role: internal contractions and possessives are apostrophes; balanced
 single marks may delimit a nested quotation; a lone mark at the beginning of a
 quotation that later closes with `”` may be a damaged double opener; and a
 sentence-final mark above the baseline may be a numeric note reference.
+OCR tokens resembling registered trademark or copyright symbols can likewise
+conceal a raised reference number or ordinary closing punctuation. Check the source baseline and
+the note inventory before deleting such a token as noise. After recovering a
+reference, review its complete surrounding punctuation so a duplicate quote,
+bracket or residual numeral does not survive beside the new link.
 
 Use a quotation-stack audit and sentence context to find candidates, then use
 the rendered page and word geometry to decide ambiguous cases. Never globally

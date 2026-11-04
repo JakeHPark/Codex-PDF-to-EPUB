@@ -150,8 +150,11 @@ a hanging continuation alone determines the extent of the inset argument.
 
 Inset quotations can dominate a page. Do not estimate the body margin from the
 median of all long lines: enough inset lines can shift it inward and turn quoted
-paragraphs into body prose. Establish the outer text measure from verified
-full-width lines and neighboring pages, then identify each quotation as a region
+paragraphs into body prose. A modal edge can select the same wrong inset when
+ordinary body edges vary slightly with scan skew. Review pages with several
+full-width lines substantially left of the inferred margin. Establish the outer
+text measure from verified full-width lines and neighboring pages, then identify
+each quotation as a region
 before splitting its paragraphs. Dialogue indentation belongs inside that region;
 a short final line and a page boundary do not end the quotation. A short final
 italic word followed by a longer roman citation can also have a low italic
@@ -616,6 +619,12 @@ Reader support for semantic popup footnotes is inconsistent. If notes must alway
 CSS should explicitly keep the note section and note blocks visible. Source asterisks used only as print markers should not remain in the prose after the note has been structurally separated.
 
 ## Stranded footnote-marker punctuation
+
+A footer region can contain several independent notes even when OCR loses the
+second marker. Match every body symbol to its own source note opening. A small
+`f` or `t` immediately after closing punctuation can be a misread dagger. Preserve
+paragraphs and inset quotations inside each note instead of flattening the
+entire footer into one entry.
 
 Superscript note symbols may be OCRed as punctuation such as `!`, or as a combination such as `*!`. If later cleanup removes only the asterisk, it can leave a bizarre sentence ending such as `.!`. Confirm the source marker and preserve its note text, then remove the entire body marker before general punctuation cleanup. Scan the packaged EPUB for the stranded signature as a regression check.
 
