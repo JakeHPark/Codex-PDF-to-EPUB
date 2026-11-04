@@ -173,6 +173,14 @@ wrapped continuation appear indented. Inspect the ink at the apparent left
 margin before creating a new paragraph or block quotation; retain the whole
 source quotation and its citation in their verified structure.
 
+Review isolated single-line passages between inset quotations, especially
+when they end with a matching author/date citation. A short quotation can have
+the same left edge as ordinary first-line indentation and be separated from its
+neighbors by extra leading. A nearest-line distance threshold can therefore
+misclassify it as body prose. Compare the complete quotation sequence, margins
+and citations, retain a source-mapped role override when needed, and assert that
+all peer quotations share the intended container and reader indentation.
+
 A paragraph can end with a parenthetical citation whose final character is `)`,
 with no following full stop. Treat that as a possible complete boundary, not
 automatic evidence of a column/page continuation. Check source paragraph spacing

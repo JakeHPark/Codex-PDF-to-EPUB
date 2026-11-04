@@ -36,6 +36,14 @@ can be returned as only `T`, silently changing “The” to “Te” and “Thom
 “Tomas”. Recover the verified glyph as a complete letter pair and audit every
 occurrence against the source, preserving its style.
 
+When normalization expands one glyph into several characters, expand its style
+and source-position mapping at the same stage. A ligature or ellipsis must not
+remain one array element containing several characters if later repairs use
+character offsets. Otherwise a correct line-wrap or punctuation edit can delete
+neighboring letters. Assert one character per mapped element, preserve the
+original glyph coordinates separately, and compare complete text and emphasis
+after every length-changing transformation.
+
 Use verified small-cap variants for semantic small-cap spans and superior variants
 for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
