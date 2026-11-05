@@ -160,9 +160,21 @@ Word comparisons ignore punctuation and can miss defects shared by both OCR
 versions. Audit separators between aligned words separately, especially missing
 sentence dashes, hyphens substituted for dashes, genuine compounds turned into
 dashes, suspended compounds, and punctuation touching quotation marks. Review
-nested quotation openers and their matching closers together; replacing a
+the punctuation after each paragraph's final word separately, including chapter
+endings. A comparison restricted to word pairs inside a paragraph misses a lost
+terminal stop or question mark. Keep the next paragraph's opening quotation mark
+separate from the preceding paragraph's punctuation. Review nested quotation
+openers and their matching closers together; replacing a
 backtick alone can leave the closing single and double marks in reverse order.
 Distinguish apostrophes within the quotation from its closing delimiter.
+
+Keep the literal tokens alongside normalized alignment keys. Case folding,
+accent folding and removal of line-end hyphens can conceal incorrect capitals,
+lost diacritics and missing compound hyphens even when every word aligns.
+Review those literal differences separately against the scan. A line-end
+hyphen may belong to the word's spelling; token alignment alone cannot decide
+whether it should survive reflow. Exclude source small capitals from ordinary
+capitalization corrections only after checking their actual style and context.
 
 Reconcile every numeric note reference with its section's complete notes
 sequence. Assert the ordered reference list, not merely the existence of note
