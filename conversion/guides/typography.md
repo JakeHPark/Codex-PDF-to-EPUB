@@ -49,6 +49,15 @@ for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
 absence of a recognized glyph suffix is not proof of absent formatting.
 
+A digitally typeset PDF can synthesize italics by shearing its text matrix while
+using the same roman font for both styles. Inventory text transforms as well as
+font names; recover the slant from the glyph transform or quadrilateral and
+verify it against rendered roman and italic controls. Keep that classification
+independent of weight. When joining glyph traces to positioned text, account for
+rounding at coordinate boundaries and review unmatched characters rather than
+silently treating them as roman. Compare the complete character/style stream,
+including short words and the boundaries of titles, after reconstruction.
+
 Reconstructed scans can use opaque CID-keyed CFF fonts for both roman and italic
 ink, with raised numerals encoded inside ordinary-size glyphs. A font reported
 as `cid` may contain CFF data. Resolve the CFF charset's actual CID identities,
