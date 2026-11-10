@@ -187,6 +187,16 @@ limitation.
 
 ## Distinguish edition cuts from missing OCR lines
 
+Before extensive OCR, check printed folio continuity against physical page
+order, including preliminary Roman numerals. A scan can replace missing leaves
+with duplicate images of later pages while retaining a plausible total page
+count. Confirm jumps and duplicates against rendered pages; distinguish genuine
+blank leaves, unnumbered chapter openings and intentional numbering changes.
+Removing the duplicate does not recover the missing text. Record the gap and
+recover it from a verified matching edition when available, preserving its
+provenance and checking both adjoining passages and any notes or lists spanning
+the gap. Never join across missing leaves as though the prose were continuous.
+
 An older transcription may contain a passage absent from fresh OCR even though
 the authoritative scan still prints it. Before classifying that difference as
 an edition cut, inspect the source image, especially where consecutive text
