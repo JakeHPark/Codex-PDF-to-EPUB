@@ -44,6 +44,13 @@ neighboring letters. Assert one character per mapped element, preserve the
 original glyph coordinates separately, and compare complete text and emphasis
 after every length-changing transformation.
 
+When regenerating a heading from a chapter label and title, derive its emphasis
+from the retained title region. A text-diff alignment can accidentally transfer
+an italic discarded label into arbitrary letters of the new heading. Likewise,
+punctuation inserted immediately before a raised note must stay on the prose
+baseline rather than inherit the reference digit's superscript. Check both
+generated headings and punctuation beside note calls in the packaged style stream.
+
 Use verified small-cap variants for semantic small-cap spans and superior variants
 for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:

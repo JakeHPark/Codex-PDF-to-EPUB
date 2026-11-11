@@ -678,6 +678,11 @@ years, numbered figures and other genuine title numbers must survive.
 
 ## Running-head variants absorbed into prose
 
+Check page rotation and text direction before applying a top/bottom furniture
+cutoff. A landscape plate can put its running head along a side, where an
+ordinary portrait-page cutoff admits it into surrounding prose. Inventory that
+furniture separately, retain the plate, and verify both adjoining paragraph joins.
+
 Folio detection must include Roman numerals, including lowercase and OCR-mixed
 case forms such as `xv`/`Xv`, as well as Arabic numbers. Check original coordinates,
 page sequence and surrounding page furniture before excluding them; OCR reading
