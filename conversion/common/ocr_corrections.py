@@ -76,6 +76,13 @@ def apply_common_ocr_corrections(text: str) -> str:
     for damaged, restored in COMMON_TOKEN_REPLACEMENTS.items():
         text = re.sub(rf"\b{re.escape(damaged)}\b", restored, text)
 
+    # Fused English verb/article after a modal. Keep Bea (a personal name),
+    # standalone/foreign `bea`, and longer words intact.
+    text = re.sub(
+        r"\b((?:[Ww]ould|[Cc]ould|[Ss]hould|[Mm]ust|[Mm]ight|[Mm]ay|[Ww]ill|[Cc]an)\s+)bea\b",
+        r"\1be a", text,
+    )
+
     # A detached ordinary italic capital can look like an article. Restrict
     # this repair to the demonstrated abolition family, never arbitrary A + word.
     text = re.sub(r"\b([Aa])[ \t]+(bolition(?:ists?|ism))\b",

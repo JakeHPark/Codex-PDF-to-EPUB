@@ -5,6 +5,13 @@ from ocr_corrections import apply_common_ocr_corrections
 
 
 class CommonOcrCorrectionsTest(unittest.TestCase):
+    def test_bea_requires_modal_context_and_preserves_names(self):
+        source = 'would bea system; Could bea plan. may bea problem; Bea, call Bea. a beacon, bear, would beacons; bea'
+        expected = 'would be a system; Could be a plan. may be a problem; Bea, call Bea. a beacon, bear, would beacons; bea'
+        result = apply_common_ocr_corrections(source)
+        self.assertEqual(result, expected)
+        self.assertEqual(apply_common_ocr_corrections(result), result)
+
     def test_black_and_white_compound_requires_whole_token(self):
         source = 'black-andwhite; Black-andwhite. black-and-white black-andwhitefish'
         expected = 'black-and-white; Black-and-white. black-and-white black-andwhitefish'

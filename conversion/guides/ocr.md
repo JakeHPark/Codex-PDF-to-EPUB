@@ -216,7 +216,7 @@ Pay special attention to:
   `conversion/common/epub_quality.py` provides the shared detector;
 
 - fused words (`selfknowledge`, `Ihave`);
-- fused short phrases (`ina` for `in a`, `toa` for `to a`, `froma` for
+- fused short phrases (`bea` for `be a`, `ina` for `in a`, `toa` for `to a`, `froma` for
   `from a`, `isa` for `is a`, and starts such as `Isaw`/`Awax`), which should be repaired with
   case-preserving whole-word matches so substrings in names such as `Karenina`
   are not damaged. Review these in English prose before correction: names such
@@ -733,6 +733,11 @@ initials; test both punctuation boundaries and legitimate lookalikes.
 The shared OCR layer separates whole-token `asystem`/`Asystem` into
 `a system`/`A system`. Protect longer tokens and technical identifiers; this
 does not authorize splitting every word that contains `system`.
+
+For `bea`, the shared repair requires a preceding English modal verb, as in
+`would bea closed system` → `would be a closed system`. Review other contexts;
+preserve the personal name `Bea`, foreign text and longer words such as `beacon`
+or `bear`. A fused-word candidate is not permission for a substring replacement.
 
 The fused pronoun phrase `Itis` is repaired to `It is` in the shared OCR layer.
 Keep this an exact, whole-token rule and test punctuation boundaries plus
