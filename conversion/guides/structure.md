@@ -147,6 +147,11 @@ wrapping onto a hanging continuation line. Join each complete proposition,
 retain a separate block for the next one, and keep the following prose lead-in
 and displayed symbolic proportion distinct. Neither an indented first line nor
 a hanging continuation alone determines the extent of the inset argument.
+An absolute indent cutoff can split every line when both the proposition label
+and its hanging continuations sit beyond it. Verify the two local margins and
+label starts (for example, “Premise” and “Conclusion”); test complete proposition
+text in one packaged paragraph, while retaining separate adjacent propositions
+and genuine dialogue turns. Audit other displayed arguments after such a repair.
 
 Inset quotations can dominate a page. Do not estimate the body margin from the
 median of all long lines: enough inset lines can shift it inward and turn quoted
