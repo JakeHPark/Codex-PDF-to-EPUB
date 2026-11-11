@@ -161,6 +161,14 @@ At minimum, inspect:
 - bibliography and index samples;
 - any page whose extraction required a special repair.
 
+When locating reader pages by text, distinguish the actual section from its
+contents entry and repeated heading in the notes. Check that mapped ranges
+are nonempty and ordered. Image-only equations and illustrations may leave no
+searchable text in a reader PDF; include their pages through verified neighboring
+blocks or a complete bounded section, rather than relying on formula-text
+searches. Reconcile the selected visual pages with the object inventory before
+recording the review as complete.
+
 ## Keep source filenames out of EPUB metadata
 
 Do not embed source-PDF filenames, local paths, download-site labels or temporary

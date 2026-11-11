@@ -44,6 +44,23 @@ neighboring letters. Assert one character per mapped element, preserve the
 original glyph coordinates separately, and compare complete text and emphasis
 after every length-changing transformation.
 
+Remove deliberately suppressed, zero-character elements from the working map
+before computing text offsets; keep their omission evidence separately. An
+empty element shifts array indexes just as an unexpanded multi-character glyph
+does. Assert that concatenating the mapped characters exactly reproduces each
+normalized block before assigning styles, scripts, links or note references.
+
+Older electronic transcriptions can mix native letters with tiny images for
+accented Greek, fractions or logical negation. Inventory visible image placements
+even when ordinary prose extracts cleanly. Reunite same-baseline text fragments,
+replace only image-covered synthetic gaps, and recover each inline glyph's role
+before paragraph joining. Fraction images can increase line spacing without
+starting a new paragraph. A missing or substituted unembedded Symbol font can
+also make a renderer less reliable than the encoded glyph identity; compare
+independent extraction, native image glyphs and a matching edition before
+choosing Unicode. Preserve unresolved source variants rather than silently
+modernizing scholarly text.
+
 When regenerating a heading from a chapter label and title, derive its emphasis
 from the retained title region. A text-diff alignment can accidentally transfer
 an italic discarded label into arbitrary letters of the new heading. Likewise,
