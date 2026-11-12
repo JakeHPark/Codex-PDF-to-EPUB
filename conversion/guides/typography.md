@@ -118,15 +118,23 @@ ordinary kerning, italic corrections and mathematical notation are negative
 controls. Keep each reviewed insertion tied to its source characters rather than
 guessing word boundaries from a dictionary.
 
+Preserve verified encoded word spaces when reconstructing positioned lines;
+do not discard them and infer every separator from bounding-box gaps. Slanted
+text and tight justification can leave little or no geometric gap despite a
+real encoded space. Reconcile both explicit spaces and reviewed geometric
+insertions, and check full sentences with punctuation and spacing intact.
+
 Small raster or vector rules can carry text semantics: a repeated-author dash,
 a deliberately obscured word, or an underscore in a URL. Recover these from their
 positions and context before treating tiny graphics as disposable decoration.
 Validate the reconstructed citation or link as a whole.
 
-Dedicated rule fonts can also map ordinary letters to visible punctuation.
-Inspect repeated glyphs against the rendered page before recovering an em dash
-from such a font. Bind the mapping to the verified font and glyph, preserve its
-real spaces, and retain ordinary prose letters as negative controls. Adjacent em
+Custom PDF font encodings can map ordinary letters or accented characters to
+visible punctuation, bullets or spacing controls. Inspect every distinct suspect
+glyph in context against the rendered page before decoding it. Bind each mapping
+to the verified font and glyph; distinguish real diacritics from encoding aliases
+and visible note symbols from invisible indentation controls. Preserve real
+spaces and ordinary prose letters as negative controls. Adjacent em
 and en rules can deliberately form a longer continuous dash. Check their ink
 before applying a duplicate-dash repair.
 
