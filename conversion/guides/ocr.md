@@ -215,6 +215,13 @@ Pay special attention to:
   repairs to the builder. `find_period_word_spacing_issues` in
   `conversion/common/epub_quality.py` provides the shared detector;
 
+- digits inside otherwise alphabetic abbreviations, such as `G.1.` for `G.I.`
+  or `R.1.` for `R.I.`. An abbreviation exception in a period-spacing audit
+  does not establish that its letters are correct. Check the source and the
+  named institution, place or term; search the entire book for related
+  letter/digit confusions. Keep verified repairs contextual, since numbered
+  technical identifiers can legitimately mix letters, digits and periods;
+
 - fused words (`selfknowledge`, `Ihave`);
 - fused short phrases (`bea` for `be a`, `ina` for `in a`, `toa` for `to a`, `froma` for
   `from a`, `isa` for `is a`, and starts such as `Isaw`/`Awax`), which should be repaired with
