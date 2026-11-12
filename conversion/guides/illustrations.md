@@ -68,6 +68,15 @@ to each responsive inline image; do not hotlink assets. Retain enough resolution
 to enlarge dense panels. Document when tables remain images rather than
 searchable, accessible HTML tables.
 
+When a verified semantic table is too wide for comfortable reflow, labelled row
+records can preserve its selectable content. Keep each row key and every
+column/value association explicit; reconcile all cells, including blank or
+no-data states. Retain original column footnotes once rather than duplicating
+their calls in every repeated convenience label. Keep a multiline row heading
+intact and each outcome label with its first value, using both modern and legacy
+break controls. Do not keep an entire long record unbreakable merely to avoid
+an orphaned label. Inspect the actual paginated result after applying these rules.
+
 For a small illustration embedded in a sentence, verify the horizontal gap and
 the surrounding words as well as vertical overlap. Its rectangle can touch the
 preceding line while its actual insertion point lies between quotation marks on
