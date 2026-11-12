@@ -85,6 +85,13 @@ bullets beside the printed numbers. Compare reference typography with the
 published PDF when the repository's citation markup has lost title emphasis
 or reordered bibliographic fields.
 
+Inspect a prose-styled wrapper’s descendants before mapping it to a paragraph.
+A `div` with a paragraph-like class can contain a complete ordered list or
+other block structure. Preserve that structure in a section or neutral wrapper;
+do not create invalid `p` containers around lists or tables. Reconcile the
+contained items independently and inspect their numbering in the reader, since
+plain text extraction can hide an invalid wrapper’s effect on list markers.
+
 Check CSS overrides before equating tag names with visible emphasis. A `font`
 shorthand declaration can reset an `em` element to roman while changing only
 its face or size; another class can make an ordinary span italic. Recover the
