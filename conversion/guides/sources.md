@@ -53,6 +53,13 @@ flag generic or missing descriptions for review rather than inventing facts.
 Use responsive image CSS so illustrations fit the reading viewport without
 distortion.
 
+Establish the saved HTML's character encoding before parsing it. A file without
+a charset declaration can contain valid UTF-8 that a parser guesses as a legacy
+encoding, corrupting dashes, minus signs, accented names and Greek letters.
+Compare representative decoded characters with the source and pass the verified
+encoding explicitly or parse already-decoded Unicode. Audit for mojibake after
+packaging; do not repair it by replacing arbitrary character sequences globally.
+
 Semantic HTML can still contain an OCR-derived transcription. When the user
 identifies OCR errors or the text demonstrates them, review the complete prose
 under the OCR rules while preserving its useful markup. Do not mistake valid
@@ -375,6 +382,17 @@ then rebuild local citation targets and return links. Rejoin DOI fragments using
 the complete identifier as independent evidence; do not apply prose hyphen
 removal or generic spacing substitutions to identifiers. Verify each reference's
 text, numbering, italic titles and links separately from the main prose.
+
+Check citation identity as well as fragment resolution. A publisher's author–year
+link can resolve to a real bibliography entry for a different author, year or
+coauthor group. Reconcile each occurrence with its visible citation and surrounding
+author names; distinguish a sole-author work from a joint work of the same year.
+Review year suffixes and shorthand continuations separately. When one source link
+covers several cited years, provide a verified target for each work while keeping
+the original visible wording. Check the complete bibliography against the printed
+edition when a cited coauthor is absent from its structured author fields; do not
+change citation prose merely to agree with damaged metadata. Keep reviewed target
+repairs and occurrence-specific return links in the book recipe.
 
 A saved journal page may retain a table number and caption with only “view
 inline” or “view popup” links, leaving the actual cells out of the file. Zero
