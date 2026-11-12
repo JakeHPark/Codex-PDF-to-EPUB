@@ -91,6 +91,14 @@ placing the float at the next safe paragraph boundary; do not force the reader
 to resume mid-sentence in a new paragraph after a picture. Keep continued table
 panels adjacent and label them as continuations, not as new tables.
 
+Find that boundary in the complete ordered block stream, including across blank
+leaves and chapter dividers. A search limited to neighboring physical pages can
+miss the next block and wrongly send an illustration to the end of the ebook.
+Keep the figure's owning section separate from its insertion boundary: an image
+anchored just before the next chapter still belongs at the end of its own chapter.
+Require an explicit disposition when no anchor is found; a silent end-of-book
+fallback is not source evidence. Check every figure's actual packaged section.
+
 For table crops, detect and keep every wrapped caption line as caption text,
 even when the PDF changes fonts after the bold table number. Start the image at
 the first table header/data row (or its top rule), never at a caption
@@ -265,6 +273,15 @@ in a reader, because character counts can pass even when two text streams have
 been interleaved.
 
 ## Illustrated exercise lists and numbered subsection titles
+
+Inventory difficulty symbols and their labels independently of exercise photos.
+A single embedded bitmap may combine a photograph and a rating band while the
+label remains live PDF text. Split at the verified photo/band boundary, retain
+all whole and fractional symbols, and keep each band with its selectable label.
+Review the actual crop interiors: the last dense pixel row may belong to the
+symbols rather than the photo. Check other image objects for duplicated slivers
+of the same band. A truncated label is a source-review candidate even if it no
+longer matches the usual label text; exact-label counts alone miss such cases.
 
 For textbooks, inventory every printed list marker and reconstruct each complete
 item before sorting it into reading order. Two adjacent descriptions may share
