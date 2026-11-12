@@ -276,6 +276,20 @@ OCR; recover missing regions with their own coordinates and provenance, then
 review them in reading order. Exact coverage of the original hidden word stream
 alone cannot establish completeness against the printed book.
 
+Treat interrupted OCR caches as untrusted. File existence is not a completion
+signal: an interrupted worker can leave a header-only TSV, an empty but valid
+JSON result, or an undecodable page image. Validate the cached image and parsed
+rows before resuming, compare empty or unusually sparse pages with the scan,
+and regenerate incomplete results. Write completed caches atomically and rerun
+downstream coverage checks after recovery; otherwise later alignment may force
+references onto unrelated text to compensate for missing pages.
+
+When using an older OCR reading to repair a word, preserve the complete phrase.
+A witness token may recover the noun correctly while omitting a short fused
+prefix such as `to`, `not`, `is` or `most`. Compare the full positioned region
+and its neighbors before replacing a fused token; lexical agreement with one
+part does not authorize dropping the remaining words.
+
 Two OCR readings can omit the same short standalone line, including the last
 word of a paragraph or a punctuation-heavy example. Compare the page pixels
 with the combined positioned coverage as well. A residual-ink row inventory

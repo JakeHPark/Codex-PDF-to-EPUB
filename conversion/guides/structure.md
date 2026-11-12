@@ -528,6 +528,17 @@ such as `1972.` can begin a new physical line without beginning a new reference.
 Keep it with the complete preceding entry and assert the ordered reference
 identifiers, not only the number of entries.
 
+Review internal paragraph breaks in each complete note as well as entry boundaries.
+An indented continuation inside a bibliographic parenthesis, after `p.` or `pp.`,
+or between an author’s initials and surname can be a wrapped citation. Indentation
+and a preceding full stop or colon do not establish a new paragraph in these
+contexts. Repair OCR bracket/initial errors before using punctuation balance as
+evidence for reflow. Join the source-confirmed continuation, while preserving genuine
+follow-up paragraphs, inset quotations, enumerated statements and signatures.
+Audit the whole note section after finding one such split; inspect both the
+exported text and the reader layout, since character coverage can pass despite
+an incorrect paragraph boundary.
+
 Never leave a printed footnote embedded between ordinary prose paragraphs.
 
 Chapter-opening pages can carry a symbolic note attached to the title, byline,
