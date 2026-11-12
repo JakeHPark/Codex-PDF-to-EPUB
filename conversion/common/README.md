@@ -37,7 +37,10 @@ the configuration directory; a check can set `cwd` explicitly.
 
 The runner performs ZIP/XML/manifest/spine/navigation/fragment and basic
 metadata/cover-declaration checks, the strict shared packaged audit, and a fresh
-Calibre text export. It then runs book-specific commands sequentially without a
+Calibre text export. It validates direct TOC labels and nested-list structure with
+`navigation.validate_toc(root)`, including nonempty labels and destinations;
+this does not independently parse a reader’s TOC or compare a legacy NCX.
+It then runs book-specific commands sequentially without a
 shell. Each successful command must create a **new** JSON report; the runner
 deletes its old report first. Commands receive these argument placeholders:
 `{epub}`, `{reader_text}`, `{work_dir}`, `{config_dir}`. Use argument arrays,
@@ -208,6 +211,15 @@ and returns a whitespace-normalized plain label without explicit EPUB
 emphasis text, ordinary digits and unclassified superscripts, and leaves the
 heading unchanged. Identify note calls before using it; it cannot recognize
 an unmarked citation digit. Tests: `test_navigation.py`.
+
+`navigation.py:validate_toc(root)` accepts an ElementTree/lxml navigation root
+and returns its linked-entry count. It requires a semantic TOC, one direct list,
+direct nonempty link/branch labels and at most one nested list per entry.
+Accessible image alternatives count as labels. It rejects paragraph wrappers
+that readers may silently ignore. `release.container_check` calls it; reader
+parser comparison and NCX/tree equivalence remain book-specific checks.
+Regressions, including valid span branches and image labels:
+`python3 -m unittest conversion.common.test_navigation conversion.common.test_release`.
 
 | Module / API | Contract | Required review | Tests |
 | --- | --- | --- | --- |

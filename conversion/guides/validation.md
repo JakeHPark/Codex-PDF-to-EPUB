@@ -103,6 +103,15 @@ An EPUB is a ZIP container with strict requirements:
 
 Verify ZIP integrity, member order, compression rules, manifest references, spine references, XML parsing, and navigation targets.
 
+Check navigation semantics as well as descendant link targets. In an EPUB 3 TOC,
+each `li` needs a direct `a` (or a direct `span` for an unlinked branch), followed
+by its optional nested `ol`. Wrapping the link in a `p` can display correctly in
+the visible contents while readers parse blank labels and destinations. Verify
+all labels, destinations, hierarchy and order through an independent reader TOC
+parser. For readers needing legacy navigation, generate an NCX from the same
+verified tree, declare its media type and spine association, and compare both
+trees entry for entry. A resolving XHTML link alone cannot pass this check.
+
 When repairing a corrupt EPUB, preserve a copy before changing the archive.
 A truncated compressed entry may still yield its complete original contents:
 accept such recovery only when the uncompressed length and original CRC both

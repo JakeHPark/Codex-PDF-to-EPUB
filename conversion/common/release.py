@@ -19,8 +19,10 @@ import zipfile
 
 try:
     from .package_audit import audit_epub
+    from .navigation import validate_toc
 except ImportError:
     from package_audit import audit_epub
+    from navigation import validate_toc
 
 GATES = (
     'edition_coverage', 'text_structure', 'textual_sanity', 'second_pass',
@@ -107,6 +109,12 @@ def container_check(epub):
         spine = opf.findall('.//' + OPF + 'spine/' + OPF + 'itemref')
         require(spine and all(e.get('idref') in manifest for e in spine), 'Invalid spine')
         require(any('nav' in e.get('properties', '').split() for e in items), 'Missing EPUB navigation')
+        for item in items:
+            if 'nav' in item.get('properties', '').split():
+                try:
+                    require(validate_toc(roots[destinations[item.get('id')]]) > 0, 'Empty linked TOC')
+                except ValueError as exc:
+                    raise ReleaseError(str(exc)) from exc
         covers = [e for e in items if 'cover-image' in e.get('properties', '').split()]
         require(len(covers) == 1, 'Expected one cover image')
         first = roots.get(destinations[spine[0].get('idref')])

@@ -42,7 +42,7 @@ class ReleaseTests(unittest.TestCase):
             'EPUB/package.opf': '<package xmlns="http://www.idpf.org/2007/opf" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Book</dc:title><dc:creator>Author</dc:creator><dc:language>en</dc:language><dc:identifier>urn:test</dc:identifier></metadata><manifest><item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/><item id="image" href="cover.png" media-type="image/png" properties="cover-image"/><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="text" href="text.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="cover"/><itemref idref="text"/></spine></package>',
             'EPUB/cover.xhtml': f'<html xmlns="{x}"><body><img src="cover.png" alt="Cover"/></body></html>',
             'EPUB/cover.png': b'fixture-image',
-            'EPUB/nav.xhtml': f'<html xmlns="{x}"><body><nav><a href="text.xhtml#{"missing" if bad_link else "opening"}">Start</a></nav></body></html>',
+            'EPUB/nav.xhtml': f'<html xmlns="{x}"><body><nav xmlns:epub="http://www.idpf.org/2007/ops" epub:type="toc"><ol><li><a href="text.xhtml#{"missing" if bad_link else "opening"}">Start</a></li></ol></nav></body></html>',
             'EPUB/text.xhtml': f'<html xmlns="{x}"><body><p id="opening">{text}</p></body></html>',
         }
         with zipfile.ZipFile(self.epub, 'w') as z:
@@ -157,6 +157,16 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(self.release()[1]['status'], 'fail')
         with self.assertRaisesRegex(ReleaseError, 'not a pass'):
             verify(p)
+
+    def test_paragraph_wrapped_navigation_rejected_in_package(self):
+        with zipfile.ZipFile(self.epub) as z:
+            files={name:z.read(name) for name in z.namelist()}
+        nav=files['EPUB/nav.xhtml'].decode().replace('<li><a','<li><p><a').replace('</a></li>','</a></p></li>')
+        files['EPUB/nav.xhtml']=nav.encode()
+        with zipfile.ZipFile(self.epub,'w') as z:
+            for name,data in files.items():z.writestr(name,data)
+        with self.assertRaisesRegex(ReleaseError,'direct a/span'):
+            container_check(self.epub)
 
 
 if __name__ == '__main__':
