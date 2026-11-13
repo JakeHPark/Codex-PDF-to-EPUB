@@ -59,6 +59,15 @@ pixels, captions and overlaid labels before rotating. Keep folios and running
 heads outside the artwork's ownership as well as outside the prose: an otherwise
 complete crop can accidentally include a detached page number on a rotated leaf.
 
+Check the visible PDF crop box and clipping paths before treating extracted
+coordinates or raw bitmap bounds as the printed object. A photograph can be
+placed at full height but visibly clipped into a shorter panel; neighboring-page
+running heads and hidden production slugs can also survive in the text stream.
+Map coordinates between the media box, crop box and rendered image explicitly.
+Recover the visible panel with its overlaid labels, compare all crop edges, and
+account separately for hidden/off-page text. Do not discard a whole font merely
+because production slugs use it: the same face can carry real diagram labels.
+
 Use semantic HTML tables where row/column associations and merged headers can
 be reconstructed and checked against the source. For complex statistical tables
 or diagrams, a verified high-resolution crop is preferable to guessing cells or
@@ -88,8 +97,11 @@ punctuation with the image without baking that punctuation into its pixels.
 Keep short figures and tables together with their captions when they fit a
 reader page, and discourage a break immediately after a caption. Verify this in
 a paginated reader; adjacent XHTML elements alone do not prevent an orphaned
-caption. Preserve block separators in serialized XHTML too: a caption followed
-by a list or table must not fuse with its first item in a reader's text export.
+caption. For a long figure that spans reader pages, allow its earlier panels to
+paginate but keep the final panel with its caption using modern and legacy
+break controls. Recheck after text or heading repairs: a small reflow change can
+strand a previously attached caption. Preserve block separators in serialized
+XHTML too: a caption followed by a list or table must not fuse with its first item in a reader's text export.
 Check the complete exported object, including nested list introductions and
 cell boundaries, rather than relying solely on its visual appearance.
 

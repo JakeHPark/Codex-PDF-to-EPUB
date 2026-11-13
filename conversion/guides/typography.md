@@ -36,6 +36,12 @@ can be returned as only `T`, silently changing “The” to “Te” and “Thom
 “Tomas”. Recover the verified glyph as a complete letter pair and audit every
 occurrence against the source, preserving its style.
 
+Carry source font evidence into captions, illustration credits, table notes and
+signatures as well as body paragraphs. A caption assembled from plain joined
+strings silently loses italic titles and bold labels even when prose styles
+are correct. Include these separate streams in both positive emphasis and Roman
+boundary comparisons; a validator covering only body blocks is incomplete.
+
 When normalization expands one glyph into several characters, expand its style
 and source-position mapping at the same stage. A ligature or ellipsis must not
 remain one array element containing several characters if later repairs use

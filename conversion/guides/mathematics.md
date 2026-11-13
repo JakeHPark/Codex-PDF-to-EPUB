@@ -218,6 +218,12 @@ as one outlined expression; for a verified Planck-constant construction,
 recover `ℏ` as a single semantic symbol. Never leave a detached bar beside an
 italic h. Check all occurrences of the same glyph construction.
 
+For native combining accents, bind each mark to its verified base glyph before
+ordering a text run. Kerning can place the next letter's left edge before the
+base letter's right edge, so sorting a relocated accent by that right edge can
+attach it to the next letter. Test the resulting Unicode sequence as well as
+its appearance; a dot above V in oxygen-uptake notation must remain on V.
+
 Keep punctuation belonging to the surrounding sentence outside inline math
 assets, including a following comma, colon, semicolon, or full stop. Preserve
 punctuation internal to mathematical expressions. Formula images must use black
