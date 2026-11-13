@@ -170,6 +170,15 @@ scan's own OCR is independent evidence, not automatically correct: inspect the
 printed pixels before accepting disagreements involving digits, names, wording,
 or punctuation. Keep verified repairs in the reproducible book builder.
 
+A clean typeset transcription may systematically omit the original emphasis or
+an entire chart while preserving fluent prose. Compare typography and the object
+inventory independently; native fonts certify only the transcription's styling.
+Recover missing material from a verified matching edition and record its source.
+Do not discard short OCR paragraphs merely by length when aligning witnesses:
+a short anatomical name or sentence continuation can be substantive. Check
+unmatched fragments against adjacent lines and pixels before calling them
+folios or declaring the corresponding transcription word extraneous.
+
 Word comparisons ignore punctuation and can miss defects shared by both OCR
 versions. Audit separators between aligned words separately, especially missing
 sentence dashes, hyphens substituted for dashes, genuine compounds turned into

@@ -613,6 +613,13 @@ A caption missing from the figure inventory can otherwise be appended to the
 last prose paragraph in another column. Assign caption ownership from the
 source geometry and validate that the label occurs only inside its figure.
 
+Caption rectangles can overlap the final letters of neighboring prose when
+text wraps around a photograph. Retain character IDs and check the complete
+words on both sides of each boundary. Where verified PDF drawing order keeps
+captions in a separate text run, use that run together with geometry and fonts
+to establish ownership; drawing order alone is not a general reading-order rule.
+An apparently intact caption is insufficient if its selection clipped body text.
+
 ## Panel and caption ownership
 
 The full rectangle of an instructional panel includes its heading, introductory
