@@ -314,6 +314,11 @@ modes on hanging notes: one mode may turn the entire number column into a
 vertical nonsense token, while a region-specific uniform-block pass recovers
 the individual labels. Verify the labels and continuations against the scan.
 
+Heavy underlining can also make both a hidden text layer and fresh OCR omit
+an entire table category heading while retaining its bullets. Check every
+visible heading and category-to-item association against pixels; recover those
+labels separately, using a reviewed crop when the underline touches the type.
+
 For multicolumn books, assign lines to column regions using the actual column
 starts on each page, allowing scan drift and hanging list indents. A fixed page
 centre can fall inside a column, especially on alternating recto/verso scans.
