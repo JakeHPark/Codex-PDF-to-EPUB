@@ -138,6 +138,19 @@ Use three levels of repair:
 
 Keep exact substitutions visible in a dictionary or correction file. Avoid broad dictionary-based “spell correction”; it can damage names, quotations, dialect, archaic spelling, and technical language.
 
+Use OCR language data and spelling dictionaries appropriate to the actual text.
+Preserve grammatical hyphens as well as lexical compounds: French inversions
+such as `a-t-il` and `demande-t-elle` can be damaged inside one OCR token or at
+a physical wrap. Review both cases, including punctuation mistaken for a letter
+or hyphen. Dictionary acceptance of the separate fragments does not prove a
+correct join (`beau coup` versus `beaucoup`). Keep occurrence-level decisions
+and legitimate phrases as controls; do not translate English cleanup rules
+into blanket substitutions in another language.
+When testing a dictionary candidate, remove only the active print-wrap hyphen,
+preserving any other grammatical hyphens: `pas-` + `sait-il` becomes
+`passait-il`, not `passaitil`. A word's final `-il` does not justify keeping
+an unrelated syllabic wrap earlier in that word.
+
 Low confidence or disagreement between OCR readings triggers source review. It
 does not authorize converting a prose word into a mathematical image. Recover
 the reading as text; see [the prose/math boundary rules](mathematics.md#keep-prose-out-of-mathematical-assets)

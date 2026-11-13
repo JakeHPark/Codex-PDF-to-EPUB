@@ -283,6 +283,14 @@ JSON files, and exits nonzero for unresolved findings. `--inventory` only
 collects candidates; it is not a release pass. This does not replace container,
 source-coverage or reader validation. Tests: `test_package_audit.py`.
 
+Some punctuation candidates use English lexical assumptions. In French, for
+example, a sequence before `s’en` can trigger the missing-possessive detector
+despite an intact, valid apostrophe. The audit does not infer the passage's
+language or suppress these matches automatically. Review each fingerprint in
+its language and retain its source context; do not alter correct foreign prose
+to satisfy an English heuristic. Supplement the audit with the appropriate
+language's spelling, punctuation and quotation-continuation checks.
+
 ## Reviewed note recovery
 
 [endnote_recovery.py](endnote_recovery.py) provides `load_reviewed_records`,

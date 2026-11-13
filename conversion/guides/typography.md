@@ -742,6 +742,13 @@ narrow nonbreaking space. Do not apply an English space-before-exclamation rule
 globally to French passages or multilingual books. Preserve notation, verse
 indentation and deliberate typography where those spaces have a role.
 
+Preserve French guillemets and their nonbreaking interior spaces. A quotation
+continued through several paragraphs can repeat its opening guillemet without
+closing each paragraph; dialogue turns can also share one enclosing pair.
+Review the complete speech and the following narrator paragraph before adding
+or removing a delimiter. Distinguish those conventions from an unmistakable
+printed stray closer or missing final closer, and record any editorial repair.
+
 Audit spaces beside lexical hyphens separately from sentence dashes. A wrapped
 compound such as `blue- stocking` may need `blue-stocking`, while a stray hyphen
 between ordinary words may need removal and a clause dash may need an em dash.
