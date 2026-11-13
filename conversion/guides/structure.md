@@ -346,6 +346,14 @@ Each navigable section should normally have:
 - deliberate scene breaks as a semantic or styled divider;
 - stable identifiers for notes and links.
 
+For books, start each chapter, appendix and standalone preliminary section on a
+new reader page by default. Use separate spine documents or explicit chapter-only
+`break-before: page` with `page-break-before: always` for older readers. A heading
+and a working navigation link alone do not create a page break. Keep exercise
+and other internal subheadings in the normal flow. Verify every major opening
+in a paginated reader export, including its preceding transition; text and TOC
+checks cannot prove pagination. Preserve compact dedication groups together.
+
 HTML `blockquote` elements sometimes serve only as print-size wrappers around
 bibliographies or entire quotation anthologies. Classify their contents before
 copying the tag: retain reading lists as lists/sections, and group independent
