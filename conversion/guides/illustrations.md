@@ -52,6 +52,17 @@ with text and ruling lines, vector diagrams, and labels placed over images.
 Record each object's source page, bounding rectangle, caption, and reading-order
 position. Account for rotated landscape pages and multipage continuations.
 
+For music instruction, inventory score excerpts and exercise patterns separately
+from ordinary diagrams. Preserve complete notation at source resolution,
+including tempo words above the staff, fingering, dynamics, accidentals, ledger
+lines and explanatory keys. Recover surrounding instructions, captions and work
+credits as selectable text. A short tempo word is part of the score, not an
+extra caption line; a composer credit can be split into several OCR containers
+on the same baseline. Check numbering against the visible pages: OCR can miss
+an entire score and its caption while recognizing neighboring examples cleanly.
+Review inline time signatures, metronome note values and pitch accidentals
+separately from prose and mathematical equations.
+
 Distinguish PDF page rotation, image-placement transforms and native bitmap
 orientation. An extracted bitmap may already be upright even when its PDF page
 is rotated; applying the page rotation again turns it sideways. Check the actual
@@ -93,6 +104,10 @@ the next line. Reject an association that would place the image over existing
 letters. Reconcile every occurrence, including repeated identical signs, and
 check the words on both sides in the reader. Keep immediately following
 punctuation with the image without baking that punctuation into its pixels.
+Preserve these inline objects through later link and typography rewrites:
+serializing a paragraph through text alone can silently discard image glyphs.
+Reconcile their occurrence count and positions after those rewrites, and check
+the actual rendered symbols, not merely unused manifest assets or alt text.
 
 Keep short figures and tables together with their captions when they fit a
 reader page, and discourage a break immediately after a caption. Verify this in
@@ -102,6 +117,16 @@ paginate but keep the final panel with its caption using modern and legacy
 break controls. Recheck after text or heading repairs: a small reflow change can
 strand a previously attached caption. Preserve block separators in serialized
 XHTML too: a caption followed by a list or table must not fuse with its first item in a reader's text export.
+If a reader treats `figcaption` as inline text, put its selectable caption in a
+block paragraph inside the semantic wrapper and recheck adjacent prose. Preserve
+the required direct-link structure of navigation entries when fixing analogous
+export spacing; see the navigation checks in the validation guide.
+Some readers ignore fragmentation controls on a `figure` or ordinary block
+wrapper. For a complete object verified to fit one page, a responsive
+`inline-block` wrapper can provide an atomic fallback. Do not apply this to
+oversized multipanel material. Reconcile each rendered image with its entire
+caption and credit on the same page; a total image count cannot detect a credit
+or the beginning of a caption stranded on an adjacent page.
 Check the complete exported object, including nested list introductions and
 cell boundaries, rather than relying solely on its visual appearance.
 

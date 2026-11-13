@@ -32,6 +32,13 @@ quote interpretation or use the shared TSV reader, and reconcile physical word
 rows before calculating ownership, crop boundaries or styles. A swallowed row
 can resemble a giant word and hide an otherwise clean page's prose or diagrams.
 
+In hOCR, inventory every word-bearing line container, including `ocr_caption`,
+`ocr_header` and `ocr_textfloat`, rather than selecting only `ocr_line`.
+Recognizers can assign ordinary body lines and genuine captions to these other
+classes. Classify ownership from page geometry and pixels afterwards; an OCR
+class name is not authority to omit text. Reconcile all recognized word rows
+with retained text, headings, graphic interiors and reviewed exclusions.
+
 For each page:
 
 - Remove running heads and isolated printed page numbers.
