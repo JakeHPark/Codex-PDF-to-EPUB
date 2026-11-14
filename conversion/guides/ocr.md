@@ -761,8 +761,11 @@ the standalone prose `a//` form; broader readings need source review. Audit
 asymmetric spaces beside lexical slashes, especially after physical line
 joining (`stolen/ hidden` → source-verified `stolen/hidden`). A slash may instead
 be a damaged letter, and symmetric verse separators, mathematical division,
-paths and URLs must retain their intended spacing. Do not globally delete slash
-spaces or turn all slash strokes into letters.
+paths and URLs must retain their intended spacing. Paired phonetic delimiters
+also need protection: `/ng/ in the sound` must retain the word space after its
+closing slash. Identify the complete notation before applying lexical-slash
+spacing repairs. Do not globally delete slash spaces or turn all slash strokes
+into letters.
 
 During a final OCR pass, flag angle brackets embedded inside apparent words,
 unlikely `ii` clusters, and isolated substitutions such as `ol` in `one ol`.

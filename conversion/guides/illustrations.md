@@ -63,6 +63,13 @@ an entire score and its caption while recognizing neighboring examples cleanly.
 Review inline time signatures, metronome note values and pitch accidentals
 separately from prose and mathematical equations.
 
+Verify each score's owning exercise from its lyrics, pattern labels and actual
+instructions. Like photographs, a score can float before its own heading or
+after the following exercise has begun in another column. Move it to a complete
+block boundary within the verified exercise; separate nearby patterns when
+their labels associate them with different instruction parts. A correct crop
+and page order do not establish correct exercise ownership.
+
 Distinguish PDF page rotation, image-placement transforms and native bitmap
 orientation. An extracted bitmap may already be upright even when its PDF page
 is rotated; applying the page rotation again turns it sideways. Check the actual
@@ -573,6 +580,14 @@ before ordering lines vertically. Tiny baseline differences between words and
 ellipsis dots must not reorder a sentence. Column boundaries should prevent
 cross-column merging only on pages that actually use those columns; full-width
 display text and introductory matter need their own reading-order regions.
+
+Use each page's verified gutter when assigning font fragments to columns.
+Facing pages can shift both text columns: a cutoff copied from the opposite
+page may send the final bold or italic word of a left-column line into the
+right column. Reunite fragments within the correct column before interpreting
+indents or paragraphs. Review fragments near both gutter edges, and validate
+complete sentences on both sides; complete character coverage alone cannot
+detect this reading-order error.
 
 ## Recover complete emphasis blocks, lists, and diagram labels
 

@@ -51,6 +51,14 @@ strings silently loses italic titles and bold labels even when prose styles
 are correct. Include these separate streams in both positive emphasis and Roman
 boundary comparisons; a validator covering only body blocks is incomplete.
 
+A PDF's ToUnicode map can incorrectly turn printed capitals into lowercase,
+including ordinary caption openings and credited names. Compare suspicious
+case with the actual font encoding and embedded glyph identities, then verify
+the printed shapes. For a verified simple font, its native uppercase glyph can
+resolve a conflicting lowercase text mapping. Scope recovery to that font and
+encoding; do not capitalize captions by vocabulary or override valid custom
+encodings. Audit every occurrence of the faulty mapping, including small type.
+
 When normalization expands one glyph into several characters, expand its style
 and source-position mapping at the same stage. A ligature or ellipsis must not
 remain one array element containing several characters if later repairs use
