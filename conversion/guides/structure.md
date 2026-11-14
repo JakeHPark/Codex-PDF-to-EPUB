@@ -794,6 +794,10 @@ legitimate numbered content.
 Replace linked print-page references with reader-independent wording such as
 `here`, preserving the verified destination. Consume the whole page range,
 not just its first number, and handle references in both inline text and tails.
+An extracted link can contain the following closing bracket, sentence punctuation
+or interword space. Replace only the page-label characters, preserving those
+neighbors even when the expression spans multiple text/link runs; trimming and
+replacing the entire anchor can lose punctuation or fuse the next sentence.
 Recheck reader-exported text after changing link labels. Preserve page numbers
 that are substantive historical or bibliographic information rather than
 navigation instructions.

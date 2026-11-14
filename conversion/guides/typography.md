@@ -36,6 +36,15 @@ can be returned as only `T`, silently changing “The” to “Te” and “Thom
 “Tomas”. Recover the verified glyph as a complete letter pair and audit every
 occurrence against the source, preserving its style.
 
+Different PDF font resources can share one misleading family name, and an
+extractor can merge their roman, bold and italic text into a single reported
+font run. Inspect the original resource identities before accepting that result.
+For Type 3 subsets, repeated identical letter-glyph programs can help identify
+the same face across resources; shared punctuation alone cannot establish a
+match. Calibrate each proposed face against rendered bold, italic and roman
+controls, retain character-level mappings and review unmatched runs. Verify
+roman neighbors as well as emphasized terms after transferring the styles.
+
 Carry source font evidence into captions, illustration credits, table notes and
 signatures as well as body paragraphs. A caption assembled from plain joined
 strings silently loses italic titles and bold labels even when prose styles

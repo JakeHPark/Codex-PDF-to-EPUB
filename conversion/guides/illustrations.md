@@ -137,6 +137,13 @@ placing the float at the next safe paragraph boundary; do not force the reader
 to resume mid-sentence in a new paragraph after a picture. Keep continued table
 panels adjacent and label them as continuations, not as new tables.
 
+Inventory every numbered table caption before grouping continued panels. A
+chapter can contain several tables, so chapter membership alone cannot establish
+continuation. Reconcile each panel with its own caption and column headers;
+check that a later comparison table has not inherited the preceding table's
+labels. When reconstructing wide tables as labelled records, keep every source
+row, its diagrams, and the distinctions between its fields.
+
 Find that boundary in the complete ordered block stream, including across blank
 leaves and chapter dividers. A search limited to neighboring physical pages can
 miss the next block and wrongly send an illustration to the end of the ebook.
@@ -608,6 +615,12 @@ Transparent cutouts can render black in ebook readers. Keep all unmasked
 artwork at native resolution and inspect the packaged assets in a reader.
 
 ## Shaded panels, intrusive rules, and interrupted lists
+
+Use a verified panel's background/frame geometry to establish its text ownership,
+independently of the majority font style. A quotation panel can mix roman, bold
+and italic paragraphs; changes in emphasis do not end the quotation or turn
+each physical line into a separate block. Preserve its paragraph boundaries
+and compare the complete panel with the surrounding prose after reflow.
 
 Border strokes and shaded backgrounds can become convincing OCR tokens such as
 `I`, `J`, `|`, `^`, or stray punctuation inside an otherwise readable paragraph.
