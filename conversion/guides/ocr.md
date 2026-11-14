@@ -507,6 +507,11 @@ Keep verse, headings, lists and genuine quotations outside this joining rule.
 
 ## Sentence dashes represented by ordinary hyphens
 
+Review isolated hyphen tokens inside otherwise continuous prose, particularly
+at line edges or beside annotations. A small scan/annotation mark can become
+a false dash. Check the pixels before deleting it or expanding it to an em dash;
+preserve genuine sentence dashes, minus signs and suspended compounds.
+
 OCR may reduce sentence dashes to ASCII hyphens, and the source itself may use
 ordinary hyphens for sentence punctuation. Do not replace all hyphens globally. Inventory hyphenated
 tokens with their surrounding clauses, distinguishing lexical compounds,
