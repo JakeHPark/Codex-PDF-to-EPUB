@@ -406,6 +406,11 @@ can also become a dash, numeral or punctuation. A filter that requires a shared
 word stem, skips symbols or accepts any substring can conceal these defects.
 Include omitted/mismatched tokens and compare meaningful word coverage as well
 as character coverage. Review the source region before applying each repair.
+Include low-confidence mixed symbol/letter tokens and digit/letter confusions
+in quantities or ordinals; a dictionary-only pass can miss both. Audit ordinary
+period and dash tokens against positioned word gaps too: a speck far beyond a
+short printed line can survive as plausible punctuation. Review the complete
+cluster, since deleting one false asterisk can leave another false dash beside it.
 Retain pure insertion/deletion candidates, including numeric-only continuation
 lines on otherwise populated pages. Reconcile each stream’s reading order
 before declaring text missing: interleaved hidden-OCR rows can produce false
@@ -543,6 +548,9 @@ can produce ordinary-looking punctuation as well as unusual Unicode characters.
 Include a full stop followed by a separated colon or semicolon (`stocks. ;`)
 even when neither symbol looks unusual on its own. Compare their source positions:
 a tiny mark far beyond a short printed line can be noise rather than punctuation.
+Also review exclamations before lower-case continuations: OCR can append a false
+`!` to an intact word ending in `l` (`verbal! distinctions`). Inspect the complete
+phrase; emphatic dialogue and titles ending in `!` are legitimate lookalikes.
 Flag these for source-image review, including occurrences in the middle of a
 paragraph; do not inspect only paragraph endings. Include symbols fused to a
 word, such as an equals sign or underscore prefixed to an OCR token. A nearby

@@ -148,6 +148,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
         ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+[,;:]|,{2,}"),
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
+        ("exclamation before lowercase", r"(?<=\w)![ \t]+(?=[a-z])"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),
         ("punctuation interrupts hyphenated word", r"\b[A-Za-z]+[-¬][ \t\r\n]*(?:[,;:!|][ \t\r\n]*)+(?=[A-Za-z])"),

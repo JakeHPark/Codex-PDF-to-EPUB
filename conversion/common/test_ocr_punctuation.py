@@ -19,6 +19,13 @@ class OCRPunctuationTests(unittest.TestCase):
    self.assertIn('embedded exclamation mark',{i['reason'] for i in find_ocr_punctuation_issues(text)})
   for text in ['Stop! Next.', 'n! + 1', 'Wow!—yes', 'Really?!']:
    self.assertNotIn('embedded exclamation mark',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+ def test_exclamation_before_lowercase_is_review_only(self):
+  for text in ['verbal! distinctions', 'ritual! demands', 'Star! with Julie Andrews', 'Stop! he cried.']:
+   before=text
+   self.assertIn('exclamation before lowercase',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+   self.assertEqual(text,before)
+  for text in ['verbal distinctions', 'Stop! Now go.', 'n! + 1', '“Stop!” he cried.']:
+   self.assertNotIn('exclamation before lowercase',{i['reason'] for i in find_ocr_punctuation_issues(text)})
  def test_failure_classes(self):
   text="in ' sentiment; person, . lazy. and active ২ how™ strange"
   reasons={i['reason'] for i in find_ocr_punctuation_issues(text)}
