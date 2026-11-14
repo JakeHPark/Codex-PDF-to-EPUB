@@ -419,6 +419,13 @@ or at large font sizes rather than shrinking or clipping the text.
 
 ## Generated versus extracted headings
 
+Audit compound section labels for inconsistent spacing, including in navigation
+and cross-references. When the source establishes a convention such as `B. 1.`,
+apply it consistently to peer labels rather than preserving an extraction such
+as `B.2.`. Limit repairs to verified section identifiers; protect decimals,
+author initials and technical notation. Check leading whitespace and inline
+markup so the same label is normalized in both the heading and contents.
+
 If a chapter title is generated from metadata, strip the printed title from extracted body text. Check that it appears exactly once in a reader export.
 
 Reconcile the removed title regions with the actual generated wording and
