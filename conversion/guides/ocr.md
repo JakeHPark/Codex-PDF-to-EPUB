@@ -540,6 +540,9 @@ Audit the entire packaged text for symbols with no plausible role in their
 surrounding prose, including isolated copyright or degree signs, angle brackets,
 and clusters such as a full stop followed by a dash and semicolon. Scan noise
 can produce ordinary-looking punctuation as well as unusual Unicode characters.
+Include a full stop followed by a separated colon or semicolon (`stocks. ;`)
+even when neither symbol looks unusual on its own. Compare their source positions:
+a tiny mark far beyond a short printed line can be noise rather than punctuation.
 Flag these for source-image review, including occurrences in the middle of a
 paragraph; do not inspect only paragraph endings. Include symbols fused to a
 word, such as an equals sign or underscore prefixed to an OCR token. A nearby

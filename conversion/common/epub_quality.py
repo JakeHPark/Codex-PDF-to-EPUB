@@ -146,7 +146,7 @@ def find_ocr_punctuation_issues(text: str) -> list[dict]:
         ("possible of misread as ol", r"(?<![\w-])ol(?![\w-])"),
         ("comma before possible sentence start", r",\s+(?:[A-Z][a-z]+\b|[AI]\b)"),
         ("isolated apostrophe", r"(?<!\S)['‘’](?!\S)"),
-        ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+,|,{2,}"),
+        ("conflicting punctuation", r"[,;:]\s*\.|[.!?][”’\"')\]]*[ \t]+[,;:]|,{2,}"),
         ("period before lowercase", r"(?<!\.)\.(?!\.)\s+[a-z]"),
         ("trademark symbol", r"[™℠]"),
         ("internal word symbol", r"(?<=[A-Za-z])[*^](?=[ \t]*[A-Za-z])"),

@@ -66,6 +66,13 @@ class OCRPunctuationTests(unittest.TestCase):
   for text in ['The occasion arose. ,', 'He said “No!” , then left.', 'Done? ,']:
    self.assertIn('conflicting punctuation',{i['reason'] for i in find_ocr_punctuation_issues(text)})
   self.assertEqual(find_ocr_punctuation_issues('For example, e.g., a comma. Then 3.14.'),[])
+ def test_colon_semicolon_after_terminal_punctuation(self):
+  for text in ['growth stocks. ;', 'their products. :', 'He said “No!” ;', 'Done?\t:']:
+   before=text
+   self.assertIn('conflicting punctuation',{i['reason'] for i in find_ocr_punctuation_issues(text)})
+   self.assertEqual(text,before)  # Detection must never rewrite source punctuation.
+  for text in ['stocks; bonds', 'Products: goods.', '3.14; 2.71', 'See vol. 2; chapter 3.']:
+   self.assertNotIn('conflicting punctuation',{i['reason'] for i in find_ocr_punctuation_issues(text)})
  def test_valid_forms_are_only_candidates(self):
   self.assertTrue(find_ocr_punctuation_issues('Mr. smith; বাংলা ২'))
  def test_apostrophe_at_block_edge(self):
