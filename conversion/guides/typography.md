@@ -36,6 +36,13 @@ can be returned as only `T`, silently changing “The” to “Te” and “Thom
 “Tomas”. Recover the verified glyph as a complete letter pair and audit every
 occurrence against the source, preserving its style.
 
+A positioned XML text span can report the font of its first run while combining
+several actual faces. Inheriting that span family can spread bold or italics into
+ordinary following words even when the text matches perfectly. Reconcile styles
+against native character font resources across the entire retained prose stream;
+check both emphasized words and their regular neighbors. A validator comparing
+only with the builder’s span-derived styles reproduces the same mistake.
+
 Different PDF font resources can share one misleading family name, and an
 extractor can merge their roman, bold and italic text into a single reported
 font run. Inspect the original resource identities before accepting that result.
