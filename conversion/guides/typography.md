@@ -525,6 +525,12 @@ and complete label spans after structural assembly.
 
 ## Recover meaningful underlining
 
+Review partial-word underline runs against the source pixels. A hand-drawn
+stroke may stop inside the last glyph or begin after the first glyph’s midpoint,
+so geometric character tests can truncate an intended whole-word underline.
+Audit the same failure throughout the work and restore only source-confirmed
+word boundaries; preserve deliberate prefix or substring underlining.
+
 When OCR produces underscores in prose, inspect the source for underlining
 before deleting them. If the author uses underlining to identify advice or
 another meaningful category, recover the complete source-supported underline
