@@ -19,6 +19,12 @@ relationships. Use semantic text with emphasis and superscript/subscript markup
 for simple notation when the source glyphs and baselines can be verified.
 Treat mathematical powers, isotope numbers, and note references as distinct
 roles; a raised digit is not sufficient evidence for a note link.
+This remains true when the digit happens to match an existing bibliography entry:
+`R²`, a squared parenthesized quantity and unit exponents must not acquire citation
+links. A unit exponent and a following reference can occupy one uninterrupted
+raised font run, such as `kg/m²` followed immediately by reference `535`. Split
+their semantic roles using the complete expression and source context, preserve
+each character's original style, and test both the power and citation separately.
 Repeated logical variables may be mapped to ordinary text fonts or OCRed as
 `Xi`, `Yi`, or `Z:` when the source has `X₁`, `Y₁`, `Z₁`. Verify the entire
 parallel series and script baselines, including roman digit shapes. Preserve

@@ -635,6 +635,12 @@ links. Keep comma/range separators at the same raised level as citation numerals
 remove layout-only gaps within the citation cluster without changing neighboring
 prose spacing.
 
+Preserve inserted bibliography labels such as `302a` as complete identifiers.
+An integer-only parser can silently fold the inserted entry into its predecessor
+while still reporting every expected numeric label. Reconcile the ordered full
+label sequence, including suffixes, separately from the numeric range. Keep
+independently numbered foreword and main bibliographies in distinct link domains.
+
 Reader support for semantic popup footnotes is inconsistent. If notes must always be visible, render them as ordinary block content, for example:
 
 ```html

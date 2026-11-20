@@ -161,6 +161,14 @@ spaces and ordinary prose letters as negative controls. Adjacent em
 and en rules can deliberately form a longer continuous dash. Check their ink
 before applying a duplicate-dash repair.
 
+Detached accent glyphs in digitally typeset PDFs need positional recovery too.
+Extraction order can put an acute, diaeresis or ring after the wrong letter, or
+several words away. Pair the accent with the base vowel using their horizontal
+centres and baselines, then compose the verified Unicode character; do not attach
+it mechanically to the previous extracted character. A ring may use a smaller
+symbol font than its base letter. Keep real degree signs and neighboring names
+as negative controls, and retain the original coordinates and pairing decisions.
+
 When classifying small digits by baseline, exclude whitespace-only spans from
 reference-baseline estimates. A PDF may position a separator at the preceding
 superscript's height even though the surrounding words remain on the body
