@@ -790,6 +790,13 @@ spacer characters by horizontal position can insert spaces inside valid words.
 
 ## Print references and navigation leftovers
 
+Treat PDF hyperlink rectangles as hints, not semantic link boundaries or proof
+of a correct destination. They can cover unrelated prose, split a word or point
+to an obsolete page anchor in a PDF made from another ebook. Recover the complete
+reference from the joined text and verify its named section, figure or definition
+against the target content. Rebuild faulty internal links without changing the
+surrounding prose, and distinguish repeated figure numbers in separate appendices.
+
 Parse whole print-page reference expressions, including comma-separated and
 `and`-joined references as well as ranges. Give each distinct destination a
 reader-independent link label and check that no residual number remains after
