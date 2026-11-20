@@ -141,7 +141,12 @@ assert "<p>7. Progress Without Subtraction</p>" not in text
 assert "Apparently everywhere" in text
 ```
 
-Also scan for suspicious paragraph boundaries where a paragraph ends without terminal punctuation and the next begins in lowercase.
+Also flag narrative paragraphs ending without terminal punctuation, whether the
+following paragraph begins in lowercase or with a capital. A plausible complete
+sentence can already lack its full stop in the source. Review the rendered
+source and the complete paragraph before making a narrow editorial repair;
+headings, verse, signatures and display labels can legitimately be unpunctuated.
+Separately check whether a lowercase next opening indicates a broken continuation.
 
 ### Reader-level round trip
 
