@@ -418,6 +418,19 @@ catch text that was wrongly excluded from the prose inventory.
 
 ## Image-led books and designed quotation pages
 
+For visual teaching books, consider a hybrid reading edition: reflow ordinary
+explanations while retaining complete diagrams, speech-bubble conversations,
+comparisons and worksheets as composed illustrations. Fonts alone cannot
+establish ownership: ordinary body type can label an axis or complete a diagram,
+while a small parenthetical qualification can belong to prose. Close ownership
+over complete text rows and paragraphs before cropping, including shifted inline
+font fragments. Reconcile every source fragment once, and separately check that
+recovering a marginal note has not clipped a neighboring bubble or frame.
+Keep parallel comparison labels with their respective columns. Extracting
+“before” and “after” as consecutive prose paragraphs can reverse their order
+because of small baseline differences, or strand both on the reader page before
+the comparison. Check these associations in the paginated reader too.
+
 Inspect how images are actually stored before promising direct photo extraction.
 A PDF can consist entirely of one JPEG per page, even when the prose looks
 cleanly typeset. In that case there are no separate original photograph objects
@@ -553,6 +566,13 @@ caption block. Update left/right-page directions to meaningful plate or panel
 references when the original arrangement no longer exists.
 
 ## Excess margins around extracted illustrations
+
+Before trimming margins, flag ink touching a crop edge. Native text rectangles
+can underestimate transformed lettering, so a crop can lose letters despite
+containing every reported text box. Review a padded source view, extend only the
+affected edge, and recheck ownership of any newly included prose. Do not trim a
+clipped letter into an apparently tidy edge. Reject empty crops created from
+hidden/clipped PDF text or a proposed region containing only white paper.
 
 After splitting neighboring illustrations, audit the outer margins of every
 final crop, including the assembled result of a stitched image. Trim verified

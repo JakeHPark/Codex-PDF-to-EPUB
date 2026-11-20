@@ -91,6 +91,12 @@ punctuation inserted immediately before a raised note must stay on the prose
 baseline rather than inherit the reference digit's superscript. Check both
 generated headings and punctuation beside note calls in the packaged style stream.
 
+An oversized inline letter can sit above the surrounding heading baseline while
+the extractor reports the ordinary words on both sides as one wide text span.
+Recover its insertion point from native character positions rather than placing
+it in a separate paragraph or concatenating the spans by their top coordinates.
+Check the complete heading, including spaces and the following continuation.
+
 Use verified small-cap variants for semantic small-cap spans and superior variants
 for superscripts; reconcile numeric references with the complete notes sequence
 and validate every forward and return link. Not every font exposes these names:
