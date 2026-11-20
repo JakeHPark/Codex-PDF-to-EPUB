@@ -807,6 +807,16 @@ a space. Confirm ambiguous cases from source context and other occurrences in
 the book. Preserve a reviewed decision and test each resulting form rather than
 trying to repair already-fused compounds with a broad spelling dictionary.
 
+A familiar prefix is not evidence for retaining a wrap hyphen: `pre-` +
+`viously`, `mid-` + `dle`, and `well-` + `ness` are syllabic breaks. Compare
+complete words and verified compounds, including negative examples for any
+prefix heuristic. Identify URL context from an actual scheme/domain, not a
+slash alone: a slash-separated phrase can contain an ordinary wrapped word.
+Within a verified URL/DOI field, recover the continuous address without print
+spacing while reviewing ambiguous hyphens separately.
+Keep punctuation and spaces separating multiple addresses outside that cleanup;
+two URLs separated by a semicolon must remain distinct text and link targets.
+
 Once an English book's unspaced em-dash convention is verified, remove extraction
 whitespace beside its sentence dashes after physical line joining, including in
 captions. A dash at the end of a printed line must not inherit a space before

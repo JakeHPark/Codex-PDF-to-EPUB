@@ -169,6 +169,19 @@ table in reading order. Compare the caption, crop top/bottom, and neighboring
 text against the rendered PDF page to catch caption fragments and section text
 leaking across those boundaries.
 
+Group caption baselines before testing continuation indents: a lowered subscript
+or raised symbol within a line must not masquerade as a new caption line. A side
+caption can widen below the adjacent artwork; check for its continued sentence
+and credit beneath the panel rather than enforcing its initial column edge.
+Audit leftover caption/diagram typefaces in the recovered prose for leaked tails
+or labels, using context to distinguish them from legitimate body text.
+
+Inventory vector-only panels as well as raster fragments. A caption spanning
+several stacked panels may begin beside the first and continue alongside the
+last; the caption's complete vertical extent can establish their association.
+Check every panel/frame and its labels against the source, since accounting for
+every embedded raster image can still omit an entire vector illustration.
+
 Font-reported text rectangles may understate visible label ink, especially for
 transformed or bold labels in vector diagrams. A crop that includes every text
 box can still lose a final letter. Check rendered ink and allow independent
@@ -274,6 +287,12 @@ interleaves two independent sentences and can split list items. Identify a
 sidebar from its complete text block, sustained narrow width, smaller type,
 and position relative to the main text column. Small type alone is insufficient;
 figure labels, captions, table cells, and footnotes can share that font.
+
+Shaded panels may use filled curves rather than PDF rectangle objects; exclude
+whole-page backgrounds when identifying them. For a contextual panel spanning
+two columns, its bottom-of-page position follows both prose columns. Sorting it
+after the left column alone can put it before the right-hand section it explains.
+Resolve its semantic anchor after reconstructing both columns.
 
 Estimate prose-column edges from repeated ordinary line extents. Whole-page OCR
 may fuse a body line with a margin note, making extreme endpoints misleading.

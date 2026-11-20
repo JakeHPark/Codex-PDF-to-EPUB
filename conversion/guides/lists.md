@@ -52,6 +52,13 @@ hyphen followed by a detached suffix. Check the final item-to-prose transition
 across page turns as well as the numbered starts. A four-digit year followed by
 a full stop is normally sentence text, not a list marker: constrain ordinal
 detection and source-check digit-initial paragraph splits.
+
+Recalibrate those margins when a continuation moves to another column or page;
+requiring the same physical column can strand the rest of an item as one-line
+paragraphs. A line starting `7.` can also finish a preceding `Chapter`, and
+`p. 235` can continue a citation. Verify the preceding stream before declaring
+either a new item.
+
 Empty physical-page anchors between consecutive items do not end their semantic
 list. Skip such anchors when grouping peers, and preserve their correct source
 ownership when moving an item into the shared list.
