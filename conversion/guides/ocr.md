@@ -746,6 +746,13 @@ source glyphs, including repeated occurrences elsewhere in the book. Preserve
 initials, abbreviations, variables and genuine foreign words as controls;
 short-token disagreement is a review trigger, never a global substitution.
 
+Review isolated vertical-stroke tokens (`I`, `l`, `1`, or `|`) inside otherwise
+continuous prose, including at physical line ends. Gutter or scan-edge marks
+can become extra words, as in `think I of closing` for `think of closing`.
+Check grammar, original coordinates and pixels; preserve genuine first-person
+pronouns, numerals, initials and notation. Search the entire book for the same
+intrusion class rather than deleting all isolated strokes.
+
 Flag apparent words beginning with a slash, such as `/ocal`, `/ess` or `“/t`,
 words beginning with a backslash (including literal `\n` inside prose),
 and words ending abruptly in `]`, such as `If]`. Italic `l` or capital `I`
