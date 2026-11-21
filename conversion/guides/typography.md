@@ -58,6 +58,15 @@ strings silently loses italic titles and bold labels even when prose styles
 are correct. Include these separate streams in both positive emphasis and Roman
 boundary comparisons; a validator covering only body blocks is incomplete.
 
+For phonetic alphabets, inventory the embedded font's actual encoding as well
+as extracted Unicode. A legacy IPA font can map small-cap or turned letters to
+ordinary ASCII `I`, `E`, or `Z`, so checking only replacement characters and
+private-use code points misses the corruption. Recover verified symbols from
+the glyph identities, check them against the work's phonetic keys and rendered
+examples, and constrain each substitution to that font. Preserve ordinary
+letters in prose and citations, and review symbol-specific roman/italic faces
+independently of the surrounding slash delimiters.
+
 A PDF's ToUnicode map can incorrectly turn printed capitals into lowercase,
 including ordinary caption openings and credited names. Compare suspicious
 case with the actual font encoding and embedded glyph identities, then verify

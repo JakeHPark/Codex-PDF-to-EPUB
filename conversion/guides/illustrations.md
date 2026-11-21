@@ -63,6 +63,22 @@ an entire score and its caption while recognizing neighboring examples cleanly.
 Review inline time signatures, metronome note values and pitch accidentals
 separately from prose and mathematical equations.
 
+Check the displayed polarity of extracted stencil/image-mask artwork against
+the rendered PDF. A correctly decoded one-bit payload can still show white
+notation on black because its standalone export has lost the PDF's paint-mask
+semantics. Recover the verified polarity on a white background, retain the
+native pixel dimensions, and compare the complete staff, lyrics and dynamics.
+Also inventory native text beside a bitmap: external anatomical labels and
+their leader lines can belong to the same illustration even when they lie
+outside the bitmap rectangle. Capture that complete compound object at the
+bitmap's effective resolution, excluding its separately recovered caption.
+
+For parallel photo or score panels, infer common rows with a small,
+source-calibrated positional tolerance before ordering left to right. Tiny
+differences in their top coordinates can otherwise reverse two panels in the
+same row. Verify the complete order against printed panel letters and captions;
+do not substitute PDF image-resource order for visible reading order.
+
 Verify each score's owning exercise from its lyrics, pattern labels and actual
 instructions. Like photographs, a score can float before its own heading or
 after the following exercise has begun in another column. Move it to a complete
