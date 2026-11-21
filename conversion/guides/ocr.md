@@ -669,6 +669,12 @@ verified occurrence. Allow reviewed mathematical notation, editorial fragments,
 and brackets spanning intentionally separate blocks; do not insert closers or
 replace letters globally merely to balance a count.
 
+An apparent unmatched opener can also be a previous reader's pencil mark,
+including a curved stroke beside a paragraph or a hand-drawn enclosure around
+words. Compare its shape and placement with the printed punctuation before
+adding a closer. Exclude annotation strokes from the transcription rather than
+completing them into authored parentheses.
+
 A damaged text layer can collect closing parentheses from several list entries
 into one symbol-only row at an unrelated position. Before discarding a cluster
 as scan noise, compare nearby unmatched openers with the pixels. Restore each

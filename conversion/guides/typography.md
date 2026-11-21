@@ -364,6 +364,13 @@ the single joined word in the ebook. Record these positional decisions and
 exclude marginal annotations; neither a global emphasis vocabulary nor an
 unconstrained fuzzy match is an acceptable substitute.
 
+Calibrate pixel-style evidence separately for each printed typeface and size,
+including sidebar prose and fine-print notes. A threshold that distinguishes
+serif body italics can falsely classify ordinary sans-serif words or damaged
+small print. Include short words and capitals in the controls: their letter
+shapes can defeat an otherwise useful slant score. Review complete spans and
+their roman neighbors; use source-located overrides when a face is unreliable.
+
 Treat explicit XHTML `br` elements as line boundaries during punctuation audits
 and as barriers during prose-spacing repairs. Concatenating verse lines without
 a separator can invent defects such as `dark.When`; inserting a space into the
