@@ -139,6 +139,14 @@ including material absent from the reference. Validate coverage against that
 source separately from comparison with the secondary transcription, so shared
 omissions or reference-only text cannot pass unnoticed.
 
+An older web-derived EPUB can preserve clean paragraphs and emphasis while
+losing particular punctuation characters throughout the text. If missing dashes
+have fused clauses or collapsed numeric ranges, search the entire reading stream
+for that failure class, including preliminaries and bibliography. Word-splitting
+candidates can help, but valid compounds, names and URLs are negative controls;
+restore separators only in individually reviewed contexts. Do not treat this as
+permission to run broad OCR spelling replacements on reliable digital prose.
+
 For digital PDFs, reconcile the complete retained character stream and italic
 stream with packaged XHTML, after documented ligature, whitespace and verified
 line-break transformations. Keep separate coverage checks for notes and objects;
