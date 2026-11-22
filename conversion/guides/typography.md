@@ -75,6 +75,15 @@ resolve a conflicting lowercase text mapping. Scope recovery to that font and
 encoding; do not capitalize captions by vocabulary or override valid custom
 encodings. Audit every occurrence of the faulty mapping, including small type.
 
+The same defect can map visible punctuation to whitespace. If sentence stops
+disappear disproportionately in one face, inspect its encoded character codes,
+ToUnicode entries, advances and rendered glyphs before blaming paragraph joins.
+Word-only coverage cannot detect this loss. Recover the verified punctuation
+through a font-specific mapping, audit every occurrence in that face, and retain
+the original coordinates and raw extraction separately. Distinct advances can
+help identify a misencoded stop when its width differs from a genuine space;
+width alone is not a general rule for replacing spaces with punctuation.
+
 When normalization expands one glyph into several characters, expand its style
 and source-position mapping at the same stage. A ligature or ellipsis must not
 remain one array element containing several characters if later repairs use
