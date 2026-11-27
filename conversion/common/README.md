@@ -240,7 +240,8 @@ boundaries cannot be proven correct by classifier counts.
 
 `find_emphasis_issues(root, known_phrases=())` inspects semantic `em`/`i` and
 `strong`/`b` across text/tail nodes. It reports partly styled words, isolated
-emphasized words, roman outliers in mostly emphasized blocks, dash boundaries
+emphasized words, isolated emphasized numeric labels after a roman word
+(such as `week` followed by bold `1:`), roman outliers in mostly emphasized blocks, dash boundaries
 and one-to-three short roman words between
 emphasized spans. Supply source-verified complete italic phrases to detect
 incomplete occurrences. `br`, images, code and math are barriers. It does not

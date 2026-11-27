@@ -89,6 +89,16 @@ def find_emphasis_issues(root, *, known_phrases=()):
                 flags = [c[index] for c in cs[match.start():match.end()]]
                 if any(flags) and not all(flags):
                     add(block, text, *match.span(), 'partial-word emphasis', style)
+            # A label's number can be a style outlier even when none of its
+            # letters are emphasized: week <strong>1:</strong>, for example.
+            # Keep this a review candidate; intentional label styles survive.
+            for match in re.finditer(r"([^\W\d_]+)[ \t\u00a0]+(\d+)(?=[ \t\u00a0]*(?:[:)]|\.(?!\d)))", text):
+                start, end = match.span(2)
+                number = cs[start:end]
+                label = cs[match.start(1):match.end(1)]
+                if (any(c[index] for c in number) and not any(c[3] for c in number)
+                        and not any(c[index] for c in label)):
+                    add(block, text, start, end, 'isolated emphasized numeric label', style)
             # Review every isolated styled word; vocabulary cannot decide which
             # of two identically spelled occurrences genuinely has emphasis.
             for i, match in enumerate(words):

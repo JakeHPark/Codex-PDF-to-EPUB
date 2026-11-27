@@ -545,6 +545,13 @@ style on the whole word. Keep legitimate internal emphasis when source-verified.
 
 ## Parallel list label formatting
 
+Audit digits and their punctuation as well as words. A fragment such as
+`week` followed by bold `1:` can escape a letter-only emphasis check even
+when every peer entry is regular. Compare the complete label and all peer
+items against source evidence; retain intentional numeric emphasis and normalize
+source inconsistencies only when that editorial change is authorized. Test
+fully regular, fully emphasized and linked note-number controls separately.
+
 Audit every list for inconsistent emphasis among parallel entries. Compare the
 number, run-in label, and explanatory prose separately; one or two labels in a
 different bold/italic style are suspicious even when their words are complete.

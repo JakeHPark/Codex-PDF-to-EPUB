@@ -29,6 +29,24 @@ class InlineAuditTests(unittest.TestCase):
         issues=self.issues('<p><em>This entire heading needs complete</em> emphasis</p>')
         self.assertIn('roman outlier in mostly emphasized block', {i['reason'] for i in issues})
 
+    def test_numeric_label_style_outliers(self):
+        for markup, token, style in [
+            ('<li>week <strong>1:</strong> jump and hold</li>', '1', 'bold'),
+            ('<p>Phase <em>12</em>: continue.</p>', '12', 'italic'),
+        ]:
+            issues = [i for i in self.issues(markup) if i['reason']=='isolated emphasized numeric label']
+            self.assertEqual([(i['token'], i['style']) for i in issues], [(token, style)])
+        for markup in [
+            '<li>week 1: jump and hold</li>',
+            '<li><strong>week 1:</strong> jump and hold</li>',
+            '<p><em>Phase 12:</em> continue.</p>',
+            '<p>Use at least <strong>1.5</strong> times the width.</p>',
+            '<p>week <code><strong>1:</strong></code> jump</p>',
+            '<p>week <math><strong>1:</strong></math> jump</p>',
+            '<p xmlns:epub="http://www.idpf.org/2007/ops">Note <a epub:type="noteref"><strong>1</strong></a>. Text.</p>',
+        ]:
+            self.assertFalse(any(i['reason']=='isolated emphasized numeric label' for i in self.issues(markup)), markup)
+
     def test_semantic_barriers_and_inheritance(self):
         self.assertEqual(self.issues('<p><code>a//b</code><math>x</math></p>'), [])
         self.assertFalse(any(i['reason']=='partial-word emphasis' for i in self.issues('<p><em>whole<strong>word</strong></em></p>') if i['style']=='italic'))
