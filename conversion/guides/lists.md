@@ -59,6 +59,20 @@ paragraphs. A line starting `7.` can also finish a preceding `Chapter`, and
 `p. 235` can continue a citation. Verify the preceding stream before declaring
 either a new item.
 
+A printed run-in sequence can become a semantic ordered list when an
+explicit exercise or procedure introduces consecutive markers and each item
+is a self-contained step. Keep the introductory clause, item wording,
+punctuation and emphasis. Keep parenthesized enumerations inside prose when
+they are grammatically part of the sentence or the author is describing
+several points without giving a procedure.
+
+At a page turn that follows a list, compare the new line’s indent against
+both the ordinary prose margin and the hanging item margin on the **new**
+page. Recalibrate for alternating left and right margins. An unpunctuated
+bullet can be complete. A complete bullet followed by an indented prose
+opening is a list boundary even if numbering resumes elsewhere. Check that
+the next prose paragraph stays complete as well as outside the list.
+
 Empty physical-page anchors between consecutive items do not end their semantic
 list. Skip such anchors when grouping peers, and preserve their correct source
 ownership when moving an item into the shared list.
