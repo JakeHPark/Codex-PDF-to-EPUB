@@ -14,6 +14,8 @@ Use Codex to convert PDFs to EPUBs, complete with an instruction set containing 
 
 ## Examples
 
+For a runnable example with self-contained source material, see [the Studio Notes recipe](conversion/recipes/README.md). It demonstrates two-column OCR, recovery from a highlighted scan, carrying forward formatting from an earlier EPUB, and cropping a musical example.
+
 The example EPUBs live on a [separate branch](https://github.com/JakeHPark/Codex-PDF-to-EPUB/tree/examples), stored with Git LFS. The local `examples/` directory is ignored by the main branch and can be checked out separately:
 
 ```sh

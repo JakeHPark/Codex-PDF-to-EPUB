@@ -14,6 +14,7 @@ or actual proofreading.
 | [AGENTS.md](../AGENTS.md) | Operating contract, source/feature routing, release gates, output naming and maintenance policy. |
 | This README | Pipeline ordering, source-specific execution and evidence handoffs. |
 | [common/README.md](common/README.md) | Actual shared APIs, defaults, limitations, dependencies and test commands. |
+| [recipes/README.md](recipes/README.md) | Runnable example with original source material and book-specific checks. |
 | [guides/sources.md](guides/sources.md) | Authority, comparative editions, HTML/EPUB recovery, outlined text and academic papers. |
 | [guides/ocr.md](guides/ocr.md) | Scan recovery, damaged text layers, conservative corrections and scholarly diacritics. |
 | [guides/structure.md](guides/structure.md) | Boundaries, paragraphs, headings, dialogue, notes, indexes and references. |

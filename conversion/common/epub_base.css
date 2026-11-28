@@ -1,0 +1,16 @@
+body { font-family: serif; line-height: 1.4; margin: 0 5%; }
+h1 { font-size: 1.65em; line-height: 1.2; }
+h2 { font-size: 1.2em; line-height: 1.25; }
+h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+p { margin: .7em 0; }
+ol, ul { padding-left: 1.6em; }
+li { margin: .45em 0; }
+figure { margin: 1.25em 0; break-inside: avoid; page-break-inside: avoid; }
+img { display: block; max-width: 100%; height: auto; margin: .5em auto; }
+figcaption { font-size: .9em; }
+blockquote { margin: 1em; }
+.cover { margin: 0; }
+.cover img { width: 100%; max-width: 100%; height: auto; }
+nav ol { list-style: none; padding-left: 0; }
+nav ol ol { padding-left: 1em; }
+[hidden] { display: none; }

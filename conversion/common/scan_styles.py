@@ -38,3 +38,18 @@ def measure_word(image, bbox, *, threshold=155, background_margin=45):
         "gain": round(scores[best] / scores[0] - 1, 4),
         "ink_pixels": count,
     }
+
+
+def yellow_highlight_witness(image, *, min_fraction=0.0005):
+    """Return an OCR-only red-channel image when saturated yellow is present.
+
+    Calibrate the threshold against the source. For warm paper or colored
+    artwork, compare this witness with the original and ordinary OCR. Retain
+    the original image for crop and layout evidence.
+    """
+    rgb = np.asarray(image.convert('RGB'))
+    red, green, blue = rgb.transpose(2, 0, 1).astype(np.int16)
+    yellow = (red - blue > 50) & (green - blue > 22) & (red > 105)
+    if yellow.mean() <= min_fraction:
+        return None
+    return rgb[:, :, 0].copy()

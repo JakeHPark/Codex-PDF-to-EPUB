@@ -8,7 +8,7 @@ each book recipe, and validate the packaged result with book-specific evidence.
 ## Dependencies and tests
 
 Use Python 3. Most helpers use the standard library. Pixel analysis also needs
-Pillow; OCR hOCR parsing needs lxml; `scan_styles.py` needs NumPy; digital font
+Pillow. EPUB packaging and OCR hOCR parsing need lxml. `scan_styles.py` needs NumPy. Digital font
 inspection needs fontTools and a compatible PyMuPDF document supplied by the
 caller. Batch recovery invokes external Poppler and Tesseract executables.
 `common/tessdata/eng.traineddata` supplies the bundled English OCR model;
@@ -23,6 +23,31 @@ python3 -m unittest discover -s conversion/common -p 'test_*.py'
 Focused tests are listed below. Modules use both repository-qualified and
 sibling imports; use discovery from the root, or explicitly provide the root
 and `conversion/common` on `PYTHONPATH` when invoking an individual test.
+
+## EPUB assembly
+
+Use `epub_tools.doc(title, language='en')` and `epub_tools.el(tag, text)` to
+create XHTML, then call `epub_tools.package(work, output, title, authors,
+documents, headings, assets=(), ...)`. Pass the documents as an ordered mapping
+from root-level XHTML filenames to document elements. Pass TOC entries as
+`(href, label, depth)` triples starting at depth 1. Declare image and font files
+relative to `work`; provide a JPEG or PNG via `cover_asset` (default `cover.png`).
+An optional `work/base-style.css` replaces the bundled default stylesheet.
+`extra_css` appends book-specific styles. Ensure the output directory exists.
+
+The helper writes the cover page and both navigation formats, assembles the
+spine and manifest, and returns the finished ZIP’s SHA-256. Pass a timezone-aware
+`modified` datetime when a rebuild should reproduce the same bytes under the
+same Python and compression runtime. Pass an `identifier` when there is a
+known publication identifier. The fallback derives one from the book metadata.
+
+New builders can import from `conversion.common.epub_tools`. To migrate a
+local copy of the older packager, remove the unused `cover_lines` argument and
+use keywords for subtitle, date, stylesheet additions, and the cover path.
+Run the container, cover, and reader checks after migration.
+
+[Runnable example](../recipes/README.md) ·
+`python3 -m unittest discover -s conversion/common -p 'test_epub_tools.py'`
 
 ## Release runner
 
@@ -204,6 +229,13 @@ multilingual punctuation-spacing rules.
 Tests: `test_prose_spacing.py`.
 
 ## Formatting evidence and semantic spans
+
+`scan_styles.yellow_highlight_witness(image, min_fraction=0.0005)` returns a
+grayscale red-channel array when a PIL image contains enough saturated yellow,
+or `None` for ordinary paper. Use the returned image as a second OCR witness
+and compare it to the original pixels. Calibrate on the actual scan, especially
+for tinted paper and color illustrations. This helper leaves the source image
+intact.
 
 `navigation.py:heading_label(heading)` accepts an ElementTree or lxml heading
 and returns a whitespace-normalized plain label without explicit EPUB
